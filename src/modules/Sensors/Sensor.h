@@ -13,9 +13,10 @@ public:
     sensor.temp = 0;
     sensor.humi = 0;
     sensor.soil = 0;
-    sensor.par = 1000;
+    sensor.par = 0;
     sensor.vpd = 0;
     sensor.co2 = 0;
+    sensor.light = 0;
     sensor.soilTemp = 0;
     sensor.soilPoten = 0;
   };
@@ -35,7 +36,7 @@ public:
   {
     switch (num)
     {
-    case 0: 
+    case 0:
       return sensor.temp;
     case 1:
       return sensor.humi;

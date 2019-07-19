@@ -6,3 +6,6 @@
 .vscode/launch.json
 .vscode/*
 .idea/*
+/cmake-build-debug
+/CMakeLists.txt
+/CMakeListsPrivate.txt
