@@ -11,7 +11,7 @@ public:
     cmdSize = 0;
     size = 0;
   };
-  
+
   static Communication *instance()
   {
     if (!s_instance)
@@ -212,7 +212,7 @@ private:
       {
         mpuCom.println(ChannelHanler::instance()->JsonIrrigation(start_ch, number));
       }
-      
+
       else if(cmd.startsWith("setpoint"))
       {
         mpuCom.println(ChannelHanler::instance()->JsonAdvanceSetpoint(start_ch, number));
@@ -225,7 +225,7 @@ private:
       {
         mpuCom.println(ChannelHanler::instance()->JsonAdvanceSetbound(start_ch, number));
       }
-      
+
     }
     //{datetime, }
     else if (res.startsWith("datetime"))
@@ -267,7 +267,7 @@ private:
       ChannelHanler::instance()->Update(ch);
       mpuCom.println("UPD-MANUAL-" + String(ch));
     }
-    
+
     //{timer,1,1,20-60,90-150,200-260}
     else if (res.startsWith("timer"))
     {
@@ -310,7 +310,7 @@ private:
       rom_channel[ch - 1].irrigation.par_acc = mode[9];
       rom_channel[ch - 1].irrigation.descent_rate = mode[10];
       rom_channel[ch - 1].irrigation.limit_time = mode[11];
-      
+
       EEPROM_Manager::Update(ch);
       ChannelHanler::instance()->Update(ch);
       mpuCom.println("UPD-IRR-" + String(ch));
@@ -331,7 +331,7 @@ private:
     //   rom_channel[ch - 1].dfirrigation.paracc = mode[3];
     //   rom_channel[ch - 1].dfirrigation.working = mode[4];
     //   rom_channel[ch - 1].dfirrigation.descent = mode[5];
-      
+
     //   EEPROM_Manager::Update(ch);
     //   // ChannelHanler::instance()->Update(ch);
     //   mpuCom.println("UPD-DFIRR-" + String(ch));
@@ -359,7 +359,7 @@ private:
       rom_channel[ch - 1].setpoint.sensor_setpoint = mode[8];
       rom_channel[ch - 1].setpoint.sensor_flag = (int)mode[9] == 1 ? true : false;
       rom_channel[ch - 1].setpoint.timer_flag = (int)mode[10] == 1 ? true : false;
-      
+
       int i = 0;
       while (i < 11)
       {
@@ -405,7 +405,7 @@ private:
       rom_channel[ch - 1].advsbt.sensor_setpoint = mode[9];
       rom_channel[ch - 1].advsbt.sensor_flag = (int)mode[10] == 1 ? true : false;
       rom_channel[ch - 1].advsbt.timer_flag = (int)mode[11] == 1 ? true : false;
-      
+
       int i = 0;
       while (i < 12)
       {
@@ -449,7 +449,7 @@ private:
       rom_channel[ch - 1].advsb.sensor_setpoint = mode[7];
       rom_channel[ch - 1].advsb.sensor_flag = (int)mode[8] == 1 ? true : false;
       rom_channel[ch - 1].advsb.timer_flag = (int)mode[9] == 1 ? true : false;
-      
+
       int i = 0;
       while (i < 10)
       {
@@ -471,7 +471,7 @@ private:
       ChannelHanler::instance()->Update(ch);
       mpuCom.println("UPD-ADVSB-" + String(ch));
     }
-    
+
     else if (res.startsWith("clear-memory"))
     {
       EEPROM.write(EEPROM_Manager::init_byte, 0);

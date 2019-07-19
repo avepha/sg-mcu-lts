@@ -21,5 +21,5 @@ String version = "1.0.4";
 #define valvePin 5
 
 
-HardwareSerial &mpuCom = Serial;
+HardwareSerial &mpuCom = Serial1;
 HardwareSerial &sensorCom = Serial2;
