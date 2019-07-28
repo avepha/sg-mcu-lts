@@ -1,9 +1,6 @@
 #include <Task.h>
 extern TaskManager taskManager;
-
-
-
-
+  
 class Sensor : public Task
 {
 public:
@@ -71,43 +68,7 @@ private:
   }
   virtual void OnUpdate(uint32_t delta_time)
   {
-    while (sensorCom.available())
-    {
-      if (sensorCom.read() == '{')
-      {
-        int size = 0;
-        while (true)
-        {
-          if (sensorCom.available())
-          {
-            char ch = sensorCom.read();
-            if (ch == '}')
-            {
-              res[size] = '\0';
-              String resData = res;
-              int bucketSize = 10;
-              float sensorBucket[bucketSize];
-              ExtractDataFloat(sensorBucket, 9, resData);
-              sensor.temp = sensorBucket[0];
-              sensor.humi = sensorBucket[1];
-              sensor.vpd = sensorBucket[2];
-              sensor.soilTemp = sensorBucket[3];
-              sensor.soil = sensorBucket[4];
-              sensor.soilPoten = sensorBucket[5];
-              sensor.co2 = sensorBucket[6];
-              sensor.light = sensorBucket[7];
-              sensor.par = sensorBucket[8];
-              break;
-            }
-            else
-            {
-              res[size] = ch;
-              size++;
-            }
-          }
-        }
-      }
-    }
+    
   }
 
   String PrintSensor()
