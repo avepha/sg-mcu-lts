@@ -157,11 +157,6 @@ class EEPROM_Manager
     }
     static void Update(int channel)
     {
-        // Serial.println("size: " + String(rom_channel[channel - 1].timer_size));
-        // for(int i = 0 ; i < rom_channel[channel - 1].timer_size; i++){
-        //     Serial.print( String(rom_channel[channel - 1].timer_list[i].st) + "-" + String(rom_channel[channel - 1].timer_list[i].en) + " ");
-        // }
-        // Serial.println();
         EEPROM.put(channel_list[channel - 1], rom_channel[channel - 1]);
         Commit();
     }
