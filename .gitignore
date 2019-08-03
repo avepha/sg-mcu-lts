@@ -4,3 +4,6 @@
 .vscode
 !.vscode/extensions.json
 .idea/*
+/CMakeLists.txt
+/CMakeListsPrivate.txt
+/cmake-build-debug/
