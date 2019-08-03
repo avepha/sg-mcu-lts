@@ -1,15 +1,32 @@
 #include "header.h"
-
+#include <Task.h>
+#include <Wire.h>
+#include <EEPROM.h>
 #include "endpoint.h"
 
-void setup()
-{
+TaskManager comCoreTask;
+TaskManager mainCoreTask;
 
+void loop1(void *pvParameters) {
+  while (1) {
+    comCoreTask.Loop();
+    delay(5);
+  }
 }
 
 void loop()
 {
-  
+  mainCoreTask.Loop();
+}
+
+void setup()
+{
+  Serial.begin(115200);
+
+  EndPoint* endpoint = new EndPoint();
+  comCoreTask.StartTask(endpoint);
+
+  xTaskCreatePinnedToCore(loop1, "loop1", 4096, NULL, 1, NULL, COMCORE);
 }
 
 // int CH_ON = HIGH;

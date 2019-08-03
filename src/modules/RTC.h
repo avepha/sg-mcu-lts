@@ -34,7 +34,6 @@ class RTC : public Task
 
     String GetDateString()
     {
-
         String str = String(now.year()) + "-" +
                      AddZero(now.month()) + String(now.month()) + "-" +
                      AddZero(now.day()) + String(now.day());

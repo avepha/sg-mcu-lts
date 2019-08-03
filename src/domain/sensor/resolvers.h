@@ -1,0 +1,4 @@
+class SensorResolvers: public Resolvers
+{
+
+}
