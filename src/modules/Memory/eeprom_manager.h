@@ -122,11 +122,10 @@ class EEPROM_Manager
     {
 
 #if !defined(ARDUINO_ARCH_AVR)
-        // EEPROM.begin(EEPROM_SIZE);
         EEPROM.begin(2048);
 #endif
         byte init;
-        EEPROM.put(init_byte, 1);
+//        EEPROM.put(init_byte, 1);
         Commit();
         EEPROM.get(init_byte, init);
         mpuCom.println("INFO-MEMCHSIZE :" + String(sizeof(data_table_s)));
