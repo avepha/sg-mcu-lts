@@ -1,122 +1,61 @@
-#include "header.h"
-#include <Task.h>
+#include <Arduino.h>
 #include <Wire.h>
 #include <EEPROM.h>
+#include <TaskScheduler.h>
+#include <ArduinoJson.h>
+
+#define VERSION "1.0.0"
+#define PROJECT "SMART-FARM"
+#define UPLOADDATE String(__DATE__) + " " + String(__TIME__)
+#define COMCORE 0
+#define MAINCORE 1
+
+#include "validationError.h"
 #include "endpoint.h"
 
-TaskManager comCoreTask;
-TaskManager mainCoreTask;
+HardwareSerial &entryPort = Serial;
+HardwareSerial &sensorCom = Serial2;
+
+EndPoint* endpoint;
+
+void loop1(void *pvParameters);
+void setup()
+{
+  Serial.begin(115200);
+  entryPort.begin(115200);
+
+//  combineResolver
+
+  endpoint = new EndPoint(&entryPort);
+  xTaskCreatePinnedToCore(loop1, "loop1", 4096, NULL, 1, NULL, COMCORE);
+}
 
 void loop1(void *pvParameters) {
-  while (1) {
-    comCoreTask.Loop();
-    delay(5);
+  while (true) {
+    String jsonString = endpoint->embrace();
+    if (jsonString == "NULL") {
+      endpoint->unleash((new InvalidJsonFormatError())->toJsonString());
+      continue;
+    }
+
+    StaticJsonDocument<1024> json;
+    DeserializationError error = deserializeJson(json, jsonString);
+    if (error){
+      endpoint->unleash((new InvalidJsonFormatError())->toJsonString());
+      continue;
+    }
+
+    if (json["topic"].isNull() || json["method"].isNull() || json["data"].isNull()){
+      endpoint->unleash((new InvalidRequestFormatError())->toJsonString());
+      continue;
+    }
+
+    serializeJsonPretty(json, entryPort);
+    //endpoint->unleash(RequestResolver(json));
   }
 }
 
 void loop()
 {
-  mainCoreTask.Loop();
+
 }
-
-void setup()
-{
-  Serial.begin(115200);
-
-  EndPoint* endpoint = new EndPoint();
-  comCoreTask.StartTask(endpoint);
-
-  xTaskCreatePinnedToCore(loop1, "loop1", 4096, NULL, 1, NULL, COMCORE);
-}
-
-// int CH_ON = HIGH;
-// int CH_OFF = LOW;
-// String MCU_STATE = "NRDY";
-
-// struct timer_s
-// {
-//   uint16_t st;
-//   uint16_t en; // end or working depend CH_ON timer mode
-// };
-
-// struct sensor_s
-// {
-//   float soil;
-//   float vpd;
-//   float ec;
-//   float ph;
-//   float water;
-//   float temp;
-//   float humi;
-//   float co2;
-//   float light;
-//   float soilTemp;
-//   float soilPoten;
-//   boolean floating;
-//   float par;
-// };
-
-// #include "modules/Control/Factory/Control.h"
-// Control *channel[CHANNEL_NUMBER];
-// //
-// int ChannelGpio[6] = {32, 33, 25, 26};
-// int ChannelStatus[6] = {LOW, LOW, LOW, LOW};
-
-// void DigitalWrite(int ch, int status)
-// {
-//   digitalWrite(ChannelGpio[ch], status);
-//   ChannelStatus[ch] = status;
-// }
-
-// String BoardInfo()
-// {
-//   String str = "INFOBOARD-VERSION" + String(VERSION) + "\r\n";
-//   str += "INFOPROJECT-NAME " + String(PROJECT) + "\r\n";
-//   str += "INFODATE-" + String(UPLOADDATE) + "\r\n";
-//   return str;
-// }
-
-// //General module
-// #include "./modules/Memory/eeprom_manager.h"
-// // #include "./modules/DateTime.h"
-// #include "./modules/RTC.h"
-
-// #include "./modules/Sensors/Sensor.h"
-// #include "./modules/Sensors/ParAcc.h"
-// #include "modules/Control/Factory/ControlFactory.h"
-// #include "./modules/ChannelHandler.h"
-// #include "./modules/Memory/MemoryCheck.h"
-
-// #include "./modules/Communication.h"
-
-// #include "./modules/Helper/Puppet.h"
-// #include "./modules/Button/ResetWifi.h"
-
-// #include "./modules/Helper/pingMessage.h"
-
-// void setup()
-// {
-//   Serial.begin(115200);
-//   Wire.begin();
-
-//   mpuCom.begin(115200);
-//   sensorCom.begin(9600);
-
-//   EEPROM_Manager::InitEEPROM();
-
-//   taskManager.StartTask(RTC::instance());
-//   taskManager.StartTask(Sensor::instance());
-//   taskManager.StartTask(ParAcc::instance());
-//   taskManager.StartTask(Communication::instance());
-//   taskManager.StartTask(PingMessage::instance());
-
-//   ChannelHanler::instance();
-
-//   MCU_STATE = "RDY";
-//   mpuCom.println(MCU_STATE);
-// }
-
-// void loop()
-// {
-//   taskManager.Loop();
-// }
