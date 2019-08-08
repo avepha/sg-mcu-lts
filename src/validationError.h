@@ -16,6 +16,7 @@ public:
   String topic;
   String message;
   String code;
+
   String toJsonString() {
     StaticJsonDocument<200> doc;
     doc["topic"] = topic;
@@ -24,7 +25,6 @@ public:
 
     String jsonString;
     serializeJson(doc, jsonString);
-
     return jsonString;
   }
 };
