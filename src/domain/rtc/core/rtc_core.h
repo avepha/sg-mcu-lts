@@ -10,6 +10,7 @@ class RtcCore {
 public:
   RtcCore();
   DateTime getDate();
+  DateTime setDate(DateTime dt);
 
 private:
   DateTime now;

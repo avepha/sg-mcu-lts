@@ -10,4 +10,10 @@ RtcCore::RtcCore() {
 
 DateTime RtcCore::getDate() {
   return hwRtc.isrunning() ? hwRtc.now() : swRtc.now();
- }
+}
+
+DateTime RtcCore::setDate(DateTime dt) {
+  hwRtc.adjust(dt);
+  swRtc.adjust(dt);
+  return dt;
+}

@@ -7,8 +7,7 @@
 
 String DateTimeToIsoString(DateTime dt) {
   char isoString[25];
-  sprintf(isoString, "%d-%d-%dT%d:%d:%d", dt.year(), dt.month(), dt.day(), dt.hour(), dt.minute(), dt.second());
-
+  sprintf(isoString, "%d-%d-%d %d:%d:%d", dt.year(), dt.month(), dt.day(), dt.hour(), dt.minute(), dt.second());
   return isoString;
 }
 
