@@ -4,15 +4,13 @@
 #include <TaskScheduler.h>
 #include <ArduinoJson.h>
 
-
-
-
 #define VERSION "1.0.0"
 #define PROJECT "SMART-FARM"
 #define UPLOADDATE String(__DATE__) + " " + String(__TIME__)
 #define COMCORE 0
 #define MAINCORE 1
 
+#include "util/util.h"
 #include "combineContext.h"
 #include "combineResolvers.h"
 
@@ -23,13 +21,13 @@
 HardwareSerial &entryPort = Serial;
 HardwareSerial &sensorCom = Serial2;
 
-EndPoint* endpoint;
+EndPoint *endpoint;
 CombineResolvers *resolvers;
 CombineContext *context;
 
 void loop1(void *pvParameters);
-void setup()
-{
+
+void setup() {
   Serial.begin(115200);
   entryPort.begin(115200);
 
@@ -50,21 +48,20 @@ void loop1(void *pvParameters) {
 
     StaticJsonDocument<1024> json;
     DeserializationError error = deserializeJson(json, jsonString);
-    if (error){
+    if (error) {
       endpoint->unleash((new InvalidJsonFormatError())->toJsonString());
       continue;
     }
 
-    if (json["topic"].isNull() || json["method"].isNull() || json["data"].isNull()){
+    if (json["topic"].isNull() || json["method"].isNull() || json["data"].isNull()) {
       endpoint->unleash((new InvalidRequestFormatError())->toJsonString());
       continue;
     }
 
-//    endpoint->unleash(resolvers->dateResolvers.resolve(context));
+    endpoint->unleash(resolvers->execute(json.as<JsonObject>()));
   }
 }
 
-void loop()
-{
+void loop() {
 
 }

@@ -2,26 +2,25 @@
 // Created by Alfarie-MBP on 2019-08-08.
 //
 #include <ArduinoJson.h>
+#include "combineContext.h"
 #ifndef SG_MCU_RESOLVERS_H
 #define SG_MCU_RESOLVERS_H
 
 class Resolvers {
 public:
-  Resolvers(String name);
-  String name;
-  virtual String resolve(){
-    StaticJsonDocument<1024> json;
-    String jsonString;
-    json["topic"] = "default_resolver";
-    json["method"] = "query";
-    json["data"] = VERSION;
+  //TODO: what is appropriate date type should we return?
+  Resolvers(String , CombineContext *);
+  String getName() {return name;}
+  virtual String resolve() {return "NULL";}
+  virtual String resolve(JsonObject json) {return "NULL";}
 
-    serializeJson(json, jsonString);
-    return jsonString;
-  };
+protected:
+  String name;
+  CombineContext *context;
 };
 
-Resolvers::Resolvers(String name):name(name) {};
-
+Resolvers::Resolvers(String name, CombineContext *context) :
+  name(name),
+  context(context) {};
 
 #endif //SG_MCU_RESOLVERS_H

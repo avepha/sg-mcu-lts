@@ -3,8 +3,8 @@
 //
 #include "domain/rtc/context.h"
 
-#ifndef SG_MCU_COMBINECONTEXT_H
-#define SG_MCU_COMBINECONTEXT_H
+#ifndef SG_MCU_COMBINE_CONTEXT_H
+#define SG_MCU_COMBINE_CONTEXT_H
 
 
 class CombineContext {
@@ -15,7 +15,7 @@ public:
 
 CombineContext::CombineContext() {
   rtcContext = new RtcContext;
-}
+};
 
 
 #endif //SG_MCU_COMBINECONTEXT_H
