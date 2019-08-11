@@ -4,39 +4,50 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-#ifndef SG_MCU_JSON_H
-#define SG_MCU_JSON_H
+#ifndef SG_MCU_JSON_TOPIC_H
+#define SG_MCU_JSON_TOPIC_H
 
 
 class JsonTopic {
 public:
-  JsonTopic(String topic, String method, JsonObject data);
   JsonTopic(String topic, String method);
 
+  JsonTopic(String topic, String method, String data);
+
+  JsonTopic(String topic, String method, JsonObject data);
+
   String toString();
-  StaticJsonDocument<256> toStaticJsonObject();
+
+  StaticJsonDocument<1024> toStaticJsonObject();
+
 private:
   String topic;
   String method;
-  JsonObject data;
+  JsonObject dataJson;
+  String dataString;
 };
-JsonTopic::JsonTopic(String topic, String method):
+
+JsonTopic::JsonTopic(String topic, String method) :
     topic(topic),
-    method(method)
-    {};
+    method(method) {};
 
-JsonTopic::JsonTopic(String topic, String method, JsonObject data):
-  topic(topic),
-  method(method),
-  data(data) {};
+JsonTopic::JsonTopic(String topic, String method, String data) :
+    topic(topic),
+    method(method),
+    dataString(data) {};
 
-StaticJsonDocument<256> JsonTopic::toStaticJsonObject() {
-  StaticJsonDocument<256> json;
+JsonTopic::JsonTopic(String topic, String method, JsonObject data) :
+    topic(topic),
+    method(method),
+    dataJson(data) {};
+
+StaticJsonDocument<1024> JsonTopic::toStaticJsonObject() {
+  StaticJsonDocument<1024> json;
   json["topic"] = topic;
   json["method"] = method;
 
-  if (!data.isNull())
-    json["data"] = data;
+  if (!dataJson.isNull())
+    json["data"] = dataJson;
 
   return json;
 }
@@ -46,8 +57,10 @@ String JsonTopic::toString() {
   json["topic"] = topic;
   json["method"] = method;
 
-  if (!data.isNull())
-    json["data"] = data;
+  if (!dataJson.isNull())
+    json["data"] = dataJson;
+  else
+    json["data"] = dataString;
 
   String jsonString;
   serializeJson(json, jsonString);

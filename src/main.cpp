@@ -9,11 +9,11 @@
 #define UPLOADDATE String(__DATE__) + " " + String(__TIME__)
 #define COMCORE 0
 #define MAINCORE 1
+#define EEPROM_SIZE 4096
 
 #include "util/util.h"
 #include "combineContext.h"
 #include "combineResolvers.h"
-
 
 #include "validationError.h"
 #include "endpoint.h"
@@ -28,8 +28,10 @@ CombineContext *context;
 void loop1(void *pvParameters);
 
 void setup() {
+  EEPROM.begin(EEPROM_SIZE);
   Serial.begin(115200);
   entryPort.begin(115200);
+
 
   endpoint = new EndPoint(&entryPort);
   context = new CombineContext();

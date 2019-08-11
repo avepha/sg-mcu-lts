@@ -2,10 +2,13 @@
 // Created by Alfarie-MBP on 2019-08-08.
 //
 #include <RTClib.h>
-#include "../resolvers.h"
+
 #include "validationError.h"
 #include "combineContext.h"
-#include "util/RtcUtil.h"
+#include "util/util.h"
+
+#include "../resolvers.h"
+#include "./util/RtcUtil.h"
 
 #ifndef SG_MCU_RTC_RESOLVERS_H
 #define SG_MCU_RTC_RESOLVERS_H
@@ -21,18 +24,12 @@ public:
     }
 
     DateTime newDate(IsoStringToDateTime(json["data"]["date"]));
-
     context->rtcContext->core->setDate(newDate);
     DateTime dateTime = context->rtcContext->core->getDate();
 
-    StaticJsonDocument<1024> result;
-    String jsonString;
-    result["topic"] = "date_save";
-    result["method"] = "mutation";
-    result["data"] = DateTimeToIsoString(dateTime);
+    JsonTopic response(json["topic"], json["method"], DateTimeToIsoString(dateTime));
 
-    serializeJson(json, jsonString);
-    return jsonString;
+    return response.toString();
   };
 };
 
@@ -43,15 +40,9 @@ public:
 
   String resolve(JsonObject  reqJson) override {
     DateTime dateTime = context->rtcContext->core->getDate();
+    JsonTopic response(reqJson["topic"], reqJson["method"], DateTimeToIsoString(dateTime));
 
-    StaticJsonDocument<1024> json;
-    String jsonString;
-    json["topic"] = reqJson["topic"];
-    json["method"] = reqJson["method"];
-    json["data"] = DateTimeToIsoString(dateTime);
-
-    serializeJson(json, jsonString);
-    return jsonString;
+    return response.toString();
   };
 };
 

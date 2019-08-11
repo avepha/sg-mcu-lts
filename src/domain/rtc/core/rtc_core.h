@@ -14,7 +14,6 @@ public:
   DateTime setDate(DateTime dt);
 
 private:
-  DateTime now;
   RTC_DS1307 hwRtc;
   RTC_Millis swRtc;
 };
