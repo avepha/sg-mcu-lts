@@ -5,6 +5,8 @@
 #ifndef SG_MCU_INIT_H
 #define SG_MCU_INIT_H
 
+#define EEPROM_SIZE 4096
+
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <Unity.h>

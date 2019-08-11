@@ -1,6 +1,6 @@
 #include "../init.h"
 
-void q_sensor() {
+void q_sensor_check_correct_type() {
   JsonTopic topic("sensor", "query");
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
 
@@ -18,5 +18,5 @@ void q_sensor() {
 }
 
 void q_sensor_RUN_TEST() {
-  RUN_TEST(q_sensor);
+  RUN_TEST(q_sensor_check_correct_type);
 }

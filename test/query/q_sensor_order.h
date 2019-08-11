@@ -1,6 +1,6 @@
 #include "../init.h"
 
-void q_sensor_order() {
+void q_sensor_order_check_correct_type() {
   JsonTopic topic("sensor_order", "query");
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
 
@@ -18,5 +18,5 @@ void q_sensor_order() {
 }
 
 void q_sensor_order_RUN_TEST() {
-  RUN_TEST(q_sensor_order);
+  RUN_TEST(q_sensor_order_check_correct_type);
 }
