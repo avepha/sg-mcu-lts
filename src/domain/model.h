@@ -21,7 +21,6 @@ public:
 
     byte initValue = 0;
     EEPROM.get(INIT_ADDR, initValue);
-    Serial.print(initValue);
 
     if (initValue != EEPROM_MODEL_INITIALIZED) {
       EEPROM.put(WRITE_OP_ADDR, 1);

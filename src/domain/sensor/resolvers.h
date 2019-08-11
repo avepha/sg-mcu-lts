@@ -55,4 +55,22 @@ public:
   };
 };
 
+class query_sensor_order : public Resolvers {
+public:
+  explicit query_sensor_order(CombineContext *context) : Resolvers("sensor_order", context) {};
+
+  String resolve(JsonObject reqJson) override {
+    SensorSchema sensorNames = context->sensorContext->model->get();
+
+    StaticJsonDocument<256> data;
+    JsonArray names = data.createNestedArray("names");
+    for(int i = 0; i < sensorNames.name->length(); i++) {
+      names.add(sensorNames.name[i]);
+    }
+
+    JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    return topic.toString();
+  };
+};
+
 #endif //SG_MCU_RESOLVERS_H

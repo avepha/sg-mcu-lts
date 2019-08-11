@@ -2,6 +2,7 @@
 
 #include "query/q_date.h"
 #include "query/q_sensor.h"
+#include "query/q_sensor_order.h"
 
 
 #include "util/date_time.h"
@@ -15,6 +16,7 @@ void setup() {
   /* Query Test */
   q_date_RUN_TEST();
   q_sensor_RUN_TEST();
+  q_sensor_order_RUN_TEST();
 
   /* Mutation Test */
   m_date_save_RUN_TEST();

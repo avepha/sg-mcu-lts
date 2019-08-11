@@ -12,11 +12,11 @@ public:
   String execute(JsonObject);
 
 private:
-  static const byte HASH_SIZE = 2;
-
+  static const int QUERY_SIZE = 3;
+  static const int MUTATION_SIZE = 1;
   CombineContext *context;
-  Resolvers *mutation[HASH_SIZE];
-  Resolvers *query[HASH_SIZE];
+  Resolvers *mutation[MUTATION_SIZE];
+  Resolvers *query[QUERY_SIZE];
 };
 
 CombineResolvers::CombineResolvers(CombineContext *context):
@@ -24,6 +24,7 @@ CombineResolvers::CombineResolvers(CombineContext *context):
   {
     query[0] = new query_date(context);
     query[1] = new query_sensor(context);
+    query[2] = new query_sensor_order(context);
 
     mutation[0] = new mutation_date_save(context);
   };
@@ -31,14 +32,14 @@ CombineResolvers::CombineResolvers(CombineContext *context):
 
 String CombineResolvers::execute(JsonObject json) {
   if (json["method"] == "query") {
-    for(int i = 0 ; i < 2; i++) {
+    for(int i = 0 ; i < QUERY_SIZE; i++) {
       if (query[i]->getName() == json["topic"]) {
         return query[i]->resolve(json);
       }
     }
   }
   else if (json["method"] == "mutation") {
-    for(int i = 0 ; i < HASH_SIZE; i++) {
+    for(int i = 0 ; i < MUTATION_SIZE; i++) {
       if (mutation[i]->getName() == json["topic"]) {
         return mutation[i]->resolve(json);
       }
