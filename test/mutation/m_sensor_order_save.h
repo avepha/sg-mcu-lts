@@ -26,22 +26,22 @@ void m_sensor_order_save_check_correct_type() {
   TEST_ASSERT_GREATER_OR_EQUAL(1, m_sensor_order_save["data"]["writeOps"]);
 }
 
-//void m_date_save_throw_date_is_not_define() {
-//  StaticJsonDocument<64> data;
-//  JsonTopic m_date_save("sensor_order_save", "mutation", data.as<JsonObject>());
-//  String m_date_save_res = resolvers.execute(m_date_save.toStaticJsonObject().as<JsonObject>());
-//
-//  StaticJsonDocument<256> m_date_save_json;
-//  DeserializationError m_date_save_errpr = deserializeJson(m_date_save_json, m_date_save_res);
-//  if (m_date_save_errpr) {
-//    TEST_ASSERT_FALSE(m_date_save_errpr);
-//  }
-//
-//  TEST_ASSERT_TRUE(m_date_save_json["topic"] == "Error");
-//  TEST_ASSERT_TRUE(m_date_save_json["code"] == "invalid-input");
-//}
+void m_sensor_order_save_names_is_not_define() {
+  StaticJsonDocument<64> data;
+  JsonTopic m_sensor_order_save("sensor_order_save", "mutation", data.as<JsonObject>());
+  String m_sensor_order_save_res = resolvers.execute(m_sensor_order_save.toStaticJsonObject().as<JsonObject>());
+
+  StaticJsonDocument<256> m_sensor_order_save_json;
+  DeserializationError m_sensor_order_save_error = deserializeJson(m_sensor_order_save_json, m_sensor_order_save_res);
+  if (m_sensor_order_save_error) {
+    TEST_ASSERT_FALSE(m_sensor_order_save_error);
+  }
+
+  TEST_ASSERT_TRUE(m_sensor_order_save_json["topic"] == "Error");
+  TEST_ASSERT_TRUE(m_sensor_order_save_json["code"] == "invalid-input");
+}
 
 void m_sensor_order_save_RUN_TEST() {
   RUN_TEST(m_sensor_order_save_check_correct_type);
-//  RUN_TEST(m_date_save_throw_date_is_not_define);
+  RUN_TEST(m_sensor_order_save_names_is_not_define);
 }
