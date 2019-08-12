@@ -11,30 +11,37 @@
 #define SG_MCU_SENSOR_RESOLVERS_H
 
 // @mutation: date_save
-//class mutation_date_save : public Resolvers {
-//public:
-//  explicit mutation_date_save(CombineContext *context) : Resolvers("date_save", context) {};
-//
-//  String resolve(JsonObject json) override {
-//    if (json["data"]["date"].isNull()) {
-//      return (new InvalidInputError("Date is not specified"))->toJsonString();
-//    }
-//
-//    DateTime newDate(IsoStringToDateTime(json["data"]["date"]));
-//
-//    context->rtcContext->core->setDate(newDate);
-//    DateTime dateTime = context->rtcContext->core->getDate();
-//
-//    StaticJsonDocument<1024> result;
-//    String jsonString;
-//    result["topic"] = "date_save";
-//    result["method"] = "mutation";
-//    result["data"] = DateTimeToIsoString(dateTime);
-//
-//    serializeJson(json, jsonString);
-//    return jsonString;
-//  };
-//};
+class mutation_sensor_order_save : public Resolvers {
+public:
+  explicit mutation_sensor_order_save(CombineContext *context) : Resolvers("sensor_order_save", context) {};
+
+  String resolve(JsonObject reqJson) override {
+    if (reqJson["data"]["names"].isNull()) {
+      return (new InvalidInputError("Names field is not specified"))->toJsonString();
+    }
+    JsonArray names = reqJson["data"]["names"].as<JsonArray>();
+
+    SensorSchema sensorSchema = context->sensorContext->model->get();
+    for (int i = 0 ; i < names.size(); i++) {
+      String name = names[i].as<String>();
+      name.toCharArray(sensorSchema.names[i], name.length() + 1);
+    }
+
+    int writeOps = context->sensorContext->model->save(&sensorSchema);
+
+    delay(10);
+    SensorSchema newSchema = context->sensorContext->model->get();
+    StaticJsonDocument<1024> data;
+    data["writeOps"] = writeOps;
+    JsonArray newNames = data.createNestedArray("names");
+    for (int i = 0 ; i < sizeof(newSchema.names) / sizeof(newSchema.names[0]); i++) {
+      newNames.add(String(newSchema.names[i]));
+    }
+
+    JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    return topic.toString();
+  };
+};
 
 // @query: date
 class query_sensor : public Resolvers {
@@ -46,8 +53,8 @@ public:
     float *sensors = context->sensorContext->core->getSensors();
 
     StaticJsonDocument<256> data;
-    for(int i = 0; i < sensorNames.name->length(); i++) {
-      data[sensorNames.name[i]] = sensors[i];
+    for(int i = 0; i < sizeof(sensorNames.names) / sizeof(sensorNames.names[0]); i++) {
+      data[sensorNames.names[i]] = sensors[i];
     }
 
     JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
@@ -61,11 +68,12 @@ public:
 
   String resolve(JsonObject reqJson) override {
     SensorSchema sensorNames = context->sensorContext->model->get();
+    delay(10);
 
     StaticJsonDocument<256> data;
     JsonArray names = data.createNestedArray("names");
-    for(int i = 0; i < sensorNames.name->length(); i++) {
-      names.add(sensorNames.name[i]);
+    for(int i = 0; i < sizeof(sensorNames.names) / sizeof(sensorNames.names[0]); i++) {
+      names.add(sensorNames.names[i]);
     }
 
     JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());

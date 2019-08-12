@@ -1,0 +1,47 @@
+#include "../init.h"
+
+void m_sensor_order_save_check_correct_type() {
+  StaticJsonDocument<256> data;
+  JsonArray names = data.createNestedArray("names");
+  names.add("sensor_1");
+  names.add("sensor_2");
+
+  names.add("sensor_1");
+  names.add("sensor_2");
+
+  JsonTopic m_date_save("sensor_order_save", "mutation", data.as<JsonObject>());
+  String m_sensor_order_save_res = resolvers.execute(m_date_save.toStaticJsonObject().as<JsonObject>());
+
+  StaticJsonDocument<512> m_sensor_order_save;
+  DeserializationError m_sensor_order_save_err = deserializeJson(m_sensor_order_save, m_sensor_order_save_res);
+  if (m_sensor_order_save_err) {
+    TEST_ASSERT_FALSE(m_sensor_order_save_err);
+  }
+
+  TEST_ASSERT_TRUE(m_sensor_order_save["topic"] == "sensor_order_save");
+  TEST_ASSERT_TRUE(m_sensor_order_save["method"] == "mutation");
+  TEST_ASSERT_FALSE(m_sensor_order_save["data"]["names"].isNull());
+  TEST_ASSERT_TRUE(m_sensor_order_save["data"]["names"][0] == "sensor_1");
+  TEST_ASSERT_TRUE(m_sensor_order_save["data"]["names"][1] == "sensor_2");
+  TEST_ASSERT_GREATER_OR_EQUAL(1, m_sensor_order_save["data"]["writeOps"]);
+}
+
+//void m_date_save_throw_date_is_not_define() {
+//  StaticJsonDocument<64> data;
+//  JsonTopic m_date_save("sensor_order_save", "mutation", data.as<JsonObject>());
+//  String m_date_save_res = resolvers.execute(m_date_save.toStaticJsonObject().as<JsonObject>());
+//
+//  StaticJsonDocument<256> m_date_save_json;
+//  DeserializationError m_date_save_errpr = deserializeJson(m_date_save_json, m_date_save_res);
+//  if (m_date_save_errpr) {
+//    TEST_ASSERT_FALSE(m_date_save_errpr);
+//  }
+//
+//  TEST_ASSERT_TRUE(m_date_save_json["topic"] == "Error");
+//  TEST_ASSERT_TRUE(m_date_save_json["code"] == "invalid-input");
+//}
+
+void m_sensor_order_save_RUN_TEST() {
+  RUN_TEST(m_sensor_order_save_check_correct_type);
+//  RUN_TEST(m_date_save_throw_date_is_not_define);
+}

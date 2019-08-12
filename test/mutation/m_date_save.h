@@ -7,9 +7,9 @@ void m_date_save_check_correct_type() {
   String m_date_save_res = resolvers.execute(m_date_save.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<256> m_date_save_json;
-  DeserializationError m_date_save_errpr = deserializeJson(m_date_save_json, m_date_save_res);
-  if (m_date_save_errpr) {
-    TEST_ASSERT_FALSE(m_date_save_errpr);
+  DeserializationError m_date_save_error = deserializeJson(m_date_save_json, m_date_save_res);
+  if (m_date_save_error) {
+    TEST_ASSERT_FALSE(m_date_save_error);
   }
   
   TEST_ASSERT_TRUE(m_date_save_json["topic"] == "date_save");
