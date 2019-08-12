@@ -55,7 +55,7 @@ void loop1(void *pvParameters) {
       continue;
     }
 
-    if (json["topic"].isNull() || json["method"].isNull() || json["data"].isNull()) {
+    if (json["topic"].isNull() || json["method"].isNull()) {
       endpoint->unleash((new InvalidRequestFormatError())->toJsonString());
       continue;
     }
