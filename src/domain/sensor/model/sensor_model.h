@@ -24,8 +24,7 @@ struct SensorSchema {
       "ph",
       "no2",
   };
-};
-
+}; // total size: 240
 
 class SensorModel : public RomModel<SensorSchema> {
 public:

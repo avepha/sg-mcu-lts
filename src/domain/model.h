@@ -23,7 +23,7 @@ public:
     EEPROM.get(INIT_ADDR, initValue);
 
     if (initValue != EEPROM_MODEL_INITIALIZED) {
-      Serial.println("Create model " + String(modelName));
+      Serial.println("Create model " + String(modelName) + " size: " + String(sizeof(sch)));
       EEPROM.put(WRITE_OP_ADDR, 1);
       EEPROM.put(INIT_ADDR, EEPROM_MODEL_INITIALIZED);
       EEPROM.put(SCHEMA_ADDR, sch);
@@ -31,7 +31,7 @@ public:
       return;
     }
 
-    Serial.println("Get model " + String(modelName));
+    Serial.println("Get model " + String(modelName) + " size: " + String(sizeof(sch)));
     EEPROM.get(SCHEMA_ADDR, sch);
   };
 

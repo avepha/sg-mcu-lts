@@ -32,7 +32,6 @@ void setup() {
   Serial.begin(115200);
   entryPort.begin(115200);
 
-
   endpoint = new EndPoint(&entryPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
