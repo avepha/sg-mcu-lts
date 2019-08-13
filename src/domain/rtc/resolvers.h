@@ -1,19 +1,14 @@
-//
-// Created by Alfarie-MBP on 2019-08-08.
-//
 #include <RTClib.h>
 
 #include "validationError.h"
 #include "combineContext.h"
+#include "domain/resolvers.h"
 #include "util/util.h"
 
-#include "../resolvers.h"
 #include "./util/RtcUtil.h"
 
 #ifndef SG_MCU_RTC_RESOLVERS_H
 #define SG_MCU_RTC_RESOLVERS_H
-
-
 
 // @mutation: date_save
 class mutation_date_save : public Resolvers {

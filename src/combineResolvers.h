@@ -2,9 +2,10 @@
 #include "combineContext.h"
 #include "validationError.h"
 
-#include "./domain/rtc/resolvers.h"
-#include "./domain/sensor/resolvers.h"
-#include "./domain/nvmemory/resolvers.h"
+#include "domain/rtc/resolvers.h"
+#include "domain/sensor/resolvers.h"
+#include "domain/nvmemory/resolvers.h"
+#include "domain/precondition/resolvers.h"
 
 class CombineResolvers
 {
@@ -13,7 +14,7 @@ public:
   String execute(JsonObject);
 
 private:
-  static const int QUERY_SIZE = 3;
+  static const int QUERY_SIZE = 4;
   static const int MUTATION_SIZE = 3;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
@@ -27,6 +28,7 @@ CombineResolvers::CombineResolvers(CombineContext *context):
     query[0] = new query_date(context);
     query[1] = new query_sensor(context);
     query[2] = new query_sensor_order(context);
+    query[3] = new query_precondition(context);
 
     mutation[0] = new mutation_date_save(context);
     mutation[1] = new mutation_sensor_order_save(context);

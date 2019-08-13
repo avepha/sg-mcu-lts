@@ -16,8 +16,8 @@ public:
 };
 
 SensorContext::SensorContext() {
-  core = new SensorCore();
-  model = new SensorModel();
+  core = new SensorCore;
+  model = new SensorModel;
 }
 
 

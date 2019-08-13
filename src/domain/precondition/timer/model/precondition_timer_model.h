@@ -7,7 +7,8 @@
 #ifndef SG_MCU_PRECONDITION_TIMER_MODEL_H
 #define SG_MCU_PRECONDITION_TIMER_MODEL_H
 #define HOUR_IN_SECOND 3600
-const int PRECONDITION_TIMER_ROM_ADDR = 100;
+
+const int PRECONDITION_TIMER_ROM_ADDR = 300;
 
 struct PreConditionTimerSchema {
   int timer_size[8] = {2, 2, 2, 2, 2, 2, 2, 2}; // 16
