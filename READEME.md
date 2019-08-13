@@ -24,3 +24,4 @@
 1. Date ```{"topic": "date", "method": "query"}```    
 2. sensor ```{"topic": "sensor", "method": "query"}```
 3. sensor_order ```{"topic": "sensor_order", "method": "query"}```
+4. (T)criteria ```{"topic": "criteria", "method": "query", "data": {"index": 1}}```

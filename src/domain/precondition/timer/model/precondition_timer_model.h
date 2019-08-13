@@ -10,6 +10,7 @@
 
 const int PRECONDITION_TIMER_ROM_ADDR = 300;
 
+// TODO: revise this structure -> change from array to struct type
 struct PreConditionTimerSchema {
   int timer_size[8] = {2, 2, 2, 2, 2, 2, 2, 2}; // 16
   unsigned long timer[8][10][2] = {

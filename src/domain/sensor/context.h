@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-11.
-//
 #include "core/sensor_core.h"
 #include "model/sensor_model.h"
 
