@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-06.
-//
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #ifndef SG_MCU_VALIDATIONERROR_H

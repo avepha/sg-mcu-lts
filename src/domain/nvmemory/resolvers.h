@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-08.
-//
 #include <RTClib.h>
 
 #include "combineContext.h"

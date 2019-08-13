@@ -1,7 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-11.
-//
-
 #ifndef SG_MCU_SENSOR_CORE_H
 #define SG_MCU_SENSOR_CORE_H
 

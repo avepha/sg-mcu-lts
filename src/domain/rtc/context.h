@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-08.
-//
 #include "core/rtc_core.h"
 
 #ifndef SG_MCU_RTC_CONTEXT_H

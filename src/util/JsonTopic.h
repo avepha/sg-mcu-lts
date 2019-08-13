@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-11.
-//
 #include <Arduino.h>
 #include <ArduinoJson.h>
 

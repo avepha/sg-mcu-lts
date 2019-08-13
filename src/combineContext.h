@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-08.
-//
 #include "domain/rtc/context.h"
 #include "domain/sensor/context.h"
 #include "domain/precondition/context.h"

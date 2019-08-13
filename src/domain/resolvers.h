@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-08.
-//
 #include <ArduinoJson.h>
 #include "combineContext.h"
 #ifndef SG_MCU_RESOLVERS_H
