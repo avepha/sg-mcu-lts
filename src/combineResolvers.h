@@ -4,7 +4,7 @@
 
 #include "./domain/rtc/resolvers.h"
 #include "./domain/sensor/resolvers.h"
-#include "./domain/memory/resolvers.h"
+#include "./domain/nvmemory/resolvers.h"
 
 class CombineResolvers
 {
@@ -30,7 +30,7 @@ CombineResolvers::CombineResolvers(CombineContext *context):
 
     mutation[0] = new mutation_date_save(context);
     mutation[1] = new mutation_sensor_order_save(context);
-    mutation[2] = new mutation_clear_memory(context);
+    mutation[2] = new mutation_clear_nvmemory(context);
   };
 
 

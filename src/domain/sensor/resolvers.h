@@ -17,7 +17,8 @@ public:
 
   String resolve(JsonObject reqJson) override {
     if (reqJson["data"]["names"].isNull()) {
-      return (new InvalidInputError("Names field is not specified"))->toJsonString();
+      InvalidInputError err;
+      return err.toJsonString();
     }
     JsonArray names = reqJson["data"]["names"].as<JsonArray>();
 

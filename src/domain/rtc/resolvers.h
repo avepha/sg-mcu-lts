@@ -13,6 +13,8 @@
 #ifndef SG_MCU_RTC_RESOLVERS_H
 #define SG_MCU_RTC_RESOLVERS_H
 
+
+
 // @mutation: date_save
 class mutation_date_save : public Resolvers {
 public:
@@ -20,7 +22,8 @@ public:
 
   String resolve(JsonObject json) override {
     if (json["data"]["date"].isNull()) {
-      return (new InvalidInputError("Date is not specified"))->toJsonString();
+      InvalidInputError err;
+      return err.toJsonString();
     }
 
     DateTime newDate(IsoStringToDateTime(json["data"]["date"]));

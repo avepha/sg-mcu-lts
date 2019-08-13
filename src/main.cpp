@@ -44,19 +44,22 @@ void loop1(void *pvParameters) {
   while (true) {
     String jsonString = endpoint->embrace();
     if (jsonString == "NULL") {
-      endpoint->unleash((new InvalidJsonFormatError())->toJsonString());
+      InvalidJsonFormatError err;
+      endpoint->unleash(err.toJsonString());
       continue;
     }
 
     StaticJsonDocument<1024> json;
     DeserializationError error = deserializeJson(json, jsonString);
     if (error) {
-      endpoint->unleash((new InvalidJsonFormatError())->toJsonString());
+      InvalidJsonFormatError err;
+      endpoint->unleash(err.toJsonString());
       continue;
     }
 
     if (json["topic"].isNull() || json["method"].isNull()) {
-      endpoint->unleash((new InvalidRequestFormatError())->toJsonString());
+      InvalidRequestFormatError err;
+      endpoint->unleash(err.toJsonString());
       continue;
     }
 
@@ -65,5 +68,6 @@ void loop1(void *pvParameters) {
 }
 
 void loop() {
-
+  Serial.println("free heap: " + String(xPortGetFreeHeapSize()));
+  delay(1000);
 }

@@ -15,7 +15,7 @@
 
 {"topic": "date_save", "method": "mutation", "data": {"date": "2019-08-12T17:00:17.613Z"}}
 {"topic": "sensor_order_save", "method": "mutation", "data": {"names": ["sssssss", "sensor_2"]}}
-{"topic": "clear_memory", "method": "mutation"}
+{"topic": "clear_nvmemory", "method": "mutation"}
 
 ```
 

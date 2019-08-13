@@ -12,9 +12,9 @@
 #define SG_MCU_MEMORY_RESOLVERS_H
 
 // @mutation: date_save
-class mutation_clear_memory : public Resolvers {
+class mutation_clear_nvmemory : public Resolvers {
 public:
-  explicit mutation_clear_memory(CombineContext *context) : Resolvers("clear_memory", context) {};
+  explicit mutation_clear_nvmemory(CombineContext *context) : Resolvers("clear_nvmemory", context) {};
 
   String resolve(JsonObject json) override {
     for(int i = 0 ; i < EEPROM_SIZE; i++) {
