@@ -52,7 +52,7 @@ public:
       return response.toString();
     }
 
-    InvalidInputError err("No such the provided type.");
+    InvalidInputError err;
     return err.toJsonString();
   };
 };

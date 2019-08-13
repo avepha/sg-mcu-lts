@@ -1,5 +1,6 @@
 #include "mutation/m_date_save.h"
 #include "mutation/m_sensor_order_save.h"
+#include "mutation/m_precondition_save.h"
 
 #include "query/q_date.h"
 #include "query/q_sensor.h"
@@ -26,6 +27,7 @@ void setup() {
   /* Mutation Test */
   m_date_save_RUN_TEST();
   m_sensor_order_save_RUN_TEST();
+  m_precondition_save_RUN_TEST();
   /* Util Test */
   util_date_time_RUN_TEST();
 
