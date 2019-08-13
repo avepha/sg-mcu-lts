@@ -15,7 +15,7 @@ public:
 
 private:
   static const int QUERY_SIZE = 4;
-  static const int MUTATION_SIZE = 3;
+  static const int MUTATION_SIZE = 4;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
   Resolvers *query[QUERY_SIZE];
@@ -33,6 +33,7 @@ CombineResolvers::CombineResolvers(CombineContext *context):
     mutation[0] = new mutation_date_save(context);
     mutation[1] = new mutation_sensor_order_save(context);
     mutation[2] = new mutation_clear_nvmemory(context);
+    mutation[3] = new mutation_precondition_save(context);
   };
 
 
