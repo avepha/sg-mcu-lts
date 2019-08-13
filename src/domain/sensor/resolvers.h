@@ -27,11 +27,11 @@ public:
       name.toCharArray(sensorSchema.names[i], name.length() + 1);
     }
 
-    int writeOps = context->sensorContext->model->save(&sensorSchema);
+    int writeOps = context->sensorContext->model->save(sensorSchema);
 
     delay(10);
     SensorSchema newSchema = context->sensorContext->model->get();
-    StaticJsonDocument<1024> data;
+    StaticJsonDocument<300> data;
     data["writeOps"] = writeOps;
     JsonArray newNames = data.createNestedArray("names");
     for (int i = 0 ; i < sizeof(newSchema.names) / sizeof(newSchema.names[0]); i++) {

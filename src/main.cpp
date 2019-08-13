@@ -37,7 +37,7 @@ void setup() {
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
 
-  xTaskCreatePinnedToCore(loop1, "loop1", 4096, NULL, 1, NULL, COMCORE);
+  xTaskCreatePinnedToCore(loop1, "loop1", 4096 * 8, NULL, 1, NULL, COMCORE);
 }
 
 void loop1(void *pvParameters) {
