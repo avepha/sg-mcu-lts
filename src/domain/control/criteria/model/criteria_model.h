@@ -21,5 +21,4 @@ public:
   CriteriaModel() : RomModel(CRITERIA_ROM_ADDR, "CriteriaModel") {};
 };
 
-
 #endif //SG_MCU_CRITERIA_MODEL_H
