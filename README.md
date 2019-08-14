@@ -22,7 +22,7 @@
     ```{"topic": "precondition_save", "method": "mutation", "data": {"index": 0, "criteria": { "sensor": 2, "criteria": 77.33, "greater": false }}}```
 * criteria_save 
     ```{ "topic": "criteria_save", "method": "mutation", "data": { "index": 7, "criteria": { "sensor": 2, "criteria": 77.33, "greater": false } } }```
-* (t)timer_save
+* timer_save
    ```{"topic": "timer_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}```
 
 
