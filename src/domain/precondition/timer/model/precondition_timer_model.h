@@ -8,17 +8,10 @@ const int PRECONDITION_TIMER_ROM_ADDR = 300;
 
 // TODO: revise this structure -> change from array to struct type
 struct PreConditionTimerSchema {
-  int timer_size[8] = {2, 2, 2, 2, 2, 2, 2, 2}; // 16
-  unsigned long timer[8][10][2] = {
-      {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}},
-      {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}},
-      {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}},
-      {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}},
-      {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}},
-      {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}},
-      {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}},
-      {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}},
-  }; // 640
+  struct timer {
+    int size = 2;
+    unsigned long data[10][2] = {{6 * HOUR_IN_SECOND, 12 * HOUR_IN_SECOND}, {13 * HOUR_IN_SECOND, 18 * HOUR_IN_SECOND}};
+  } timers[8];
 }; // total size: 656
 
 class PreConditionTimerModel : public RomModel<PreConditionTimerSchema> {

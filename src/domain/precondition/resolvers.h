@@ -28,10 +28,10 @@ public:
       PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
       int size = json["data"]["timers"].size();
 
-      timerSchema.timer_size[index] = size;
+      timerSchema.timers[index].size = size;
       for(int i = 0 ; i < size; i++) {
-        timerSchema.timer[index][i][0] = json["data"]["timers"][i][0];
-        timerSchema.timer[index][i][1] = json["data"]["timers"][i][1];
+        timerSchema.timers[index].data[i][0] = json["data"]["timers"][i][0];
+        timerSchema.timers[index].data[i][1] = json["data"]["timers"][i][1];
       }
 
       int writeOps = context->preConditionContext->timerModel->save(timerSchema);
@@ -42,10 +42,10 @@ public:
       data["index"] = index;
       data["writeOps"] = writeOps;
       JsonArray timers = data.createNestedArray("timers");
-      for (int i = 0; i < newSchema.timer_size[index]; i++) {
+      for (int i = 0; i < newSchema.timers[index].size; i++) {
         JsonArray d_i = timers.createNestedArray();
-        d_i.add(newSchema.timer[index][i][0]);
-        d_i.add(newSchema.timer[index][i][1]);
+        d_i.add(newSchema.timers[index].data[i][0]);
+        d_i.add(newSchema.timers[index].data[i][1]);
       }
 
       JsonTopic response(json["topic"], json["method"], data.as<JsonObject>());
@@ -81,10 +81,10 @@ public:
       StaticJsonDocument<1024> data;
       data["index"] = index;
       JsonArray timers = data.createNestedArray("timers");
-      for (int i = 0; i < timerSchema.timer_size[index]; i++) {
+      for (int i = 0; i < timerSchema.timers[index].size; i++) {
         JsonArray d_i = timers.createNestedArray();
-        d_i.add(timerSchema.timer[index][i][0]);
-        d_i.add(timerSchema.timer[index][i][1]);
+        d_i.add(timerSchema.timers[index].data[i][0]);
+        d_i.add(timerSchema.timers[index].data[i][1]);
       }
 
       JsonTopic response(json["topic"], json["method"], data.as<JsonObject>());
