@@ -7,6 +7,7 @@
 #include "domain/nvmemory/resolvers.h"
 #include "domain/precondition/resolvers.h"
 #include "domain/control/criteria/resolvers.h"
+#include "domain/control/timer/resolvers.h"
 
 class CombineResolvers
 {
@@ -15,8 +16,8 @@ public:
   String execute(JsonObject);
 
 private:
-  static const int QUERY_SIZE = 5;
-  static const int MUTATION_SIZE = 5;
+  static const int QUERY_SIZE = 6;
+  static const int MUTATION_SIZE = 6;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
   Resolvers *query[QUERY_SIZE];
@@ -31,12 +32,14 @@ CombineResolvers::CombineResolvers(CombineContext *context):
     query[2] = new query_sensor_order(context);
     query[3] = new query_precondition(context);
     query[4] = new query_criteria(context);
+    query[5] = new query_timer(context);
 
     mutation[0] = new mutation_date_save(context);
     mutation[1] = new mutation_sensor_order_save(context);
     mutation[2] = new mutation_clear_nvmemory(context);
     mutation[3] = new mutation_precondition_save(context);
     mutation[4] = new mutation_criteria_save(context);
+    mutation[5] = new mutation_timer_save(context);
   };
 
 
