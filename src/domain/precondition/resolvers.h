@@ -52,6 +52,26 @@ public:
       return response.toString();
     }
 
+    if(!json["data"]["criteria"].isNull()) {
+      PreConditionCriteriaSchema criteriaSchema = context->preConditionContext->criteriaModel->get();
+      criteriaSchema.criterias[index].sensor = json["data"]["criteria"]["sensor"];
+      criteriaSchema.criterias[index].criteria = json["data"]["criteria"]["criteria"];
+      criteriaSchema.criterias[index].greater = json["data"]["criteria"]["greater"];
+
+      int writeOps = context->preConditionContext->criteriaModel->save(criteriaSchema);
+
+      PreConditionCriteriaSchema newCriteriaSchema = context->preConditionContext->criteriaModel->get();
+      StaticJsonDocument<1024> data;
+      data["index"] = index;
+      JsonObject criteria = data.createNestedObject("criteria");
+      criteria["sensor"] = newCriteriaSchema.criterias[index].sensor;
+      criteria["criteria"] = newCriteriaSchema.criterias[index].criteria;
+      criteria["greater"] = newCriteriaSchema.criterias[index].greater;
+
+      JsonTopic response(json["topic"], json["method"], data.as<JsonObject>());
+      return response.toString();
+    }
+
     InvalidInputError err;
     return err.toJsonString();
   };
@@ -73,8 +93,8 @@ public:
       return err.toJsonString();
     }
 
-    int index = json["data"]["index"].as<int>();
-    String type = json["data"]["type"].as<String>();
+    int index = json["data"]["index"];
+    String type = json["data"]["type"];
 
     if (type == "timer") {
       PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
@@ -92,7 +112,16 @@ public:
     }
 
     if (type == "criteria") {
+      PreConditionCriteriaSchema criteriaSchema = context->preConditionContext->criteriaModel->get();
+      StaticJsonDocument<1024> data;
+      data["index"] = index;
+      JsonObject criteria = data.createNestedObject("criteria");
+      criteria["sensor"] = criteriaSchema.criterias[index].sensor;
+      criteria["criteria"] = criteriaSchema.criterias[index].criteria;
+      criteria["greater"] = criteriaSchema.criterias[index].greater;
 
+      JsonTopic response(json["topic"], json["method"], data.as<JsonObject>());
+      return response.toString();
     }
 
     InvalidInputError err("No such the provided type.");
