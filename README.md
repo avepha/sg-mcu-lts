@@ -33,4 +33,4 @@
 * precondition for timer ```{"topic": "precondition", "method": "query", "data": {"type": "timer", "index": 0}}```
 * precondition for criteria ```{"topic": "precondition", "method": "query", "data": {"type": "criteria", "index": 0}}```
 * criteria ```{"topic": "criteria", "method": "query", "data": {"index": 1}}```
-* (t)timer ```{"topic": "timer", "method": "query", "data": {"index": 0}}```
+* timer ```{"topic": "timer", "method": "query", "data": {"index": 0}}```
