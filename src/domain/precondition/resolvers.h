@@ -12,7 +12,7 @@ public:
   explicit mutation_precondition_save(CombineContext *context) : Resolvers("precondition_save", context) {};
 
   String resolve(JsonObject reqJson) override {
-    if (reqJson["data"]["index"].isNull() || reqJson["data"]["timers"].isNull()) {
+    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull() || reqJson["data"]["timers"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
       return err.toJsonString();
     }
@@ -63,6 +63,7 @@ public:
       PreConditionCriteriaSchema newCriteriaSchema = context->preConditionContext->criteriaModel->get();
       StaticJsonDocument<1024> data;
       data["index"] = index;
+      data["writeOps"] = writeOps;
       JsonObject criteria = data.createNestedObject("criteria");
       criteria["sensor"] = newCriteriaSchema.criterias[index].sensor;
       criteria["criteria"] = newCriteriaSchema.criterias[index].criteria;
