@@ -27,6 +27,29 @@ void m_precondition_save_with_timer_param_check_correct_type() {
   TEST_ASSERT_GREATER_OR_EQUAL(1, jsonResult["data"]["writeOps"]);
 }
 
+void m_precondition_save_with_criteria_param_check_correct_type() {
+  StaticJsonDocument<256> data;
+  data["index"] = 0;
+  JsonObject criteria = data.createNestedObject("criteria");
+  criteria["sensor"] = 1;
+  criteria["criteria"] = 99.0;
+  criteria["greater"] = false;
+
+  JsonTopic topic("precondition_save", "mutation", data.as<JsonObject>());
+  String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
+  StaticJsonDocument<1024> jsonResult;
+  deserializeJson(jsonResult, topicResult);
+
+  TEST_ASSERT_TRUE(jsonResult["topic"] == "precondition_save");
+  TEST_ASSERT_TRUE(jsonResult["method"] == "mutation");
+  TEST_ASSERT_TRUE(jsonResult["data"]["index"] == 0);
+  TEST_ASSERT_GREATER_OR_EQUAL(1, jsonResult["data"]["writeOps"]);
+  TEST_ASSERT_FALSE(jsonResult["data"]["criteria"].isNull());
+  TEST_ASSERT_TRUE(jsonResult["data"]["criteria"]["sensor"] == 1);
+  TEST_ASSERT_TRUE(jsonResult["data"]["criteria"]["criteria"] == 99.0);
+  TEST_ASSERT_FALSE(jsonResult["data"]["criteria"]["greater"]);
+}
+
 void m_precondition_save_index_is_not_defined() {
   StaticJsonDocument<256> data;
   JsonArray timers = data.createNestedArray("timers");
@@ -70,6 +93,7 @@ void m_precondition_save_index_out_of_range() {
 
 void m_precondition_save_RUN_TEST() {
   RUN_TEST(m_precondition_save_with_timer_param_check_correct_type);
+  RUN_TEST(m_precondition_save_with_criteria_param_check_correct_type);
   RUN_TEST(m_precondition_save_index_is_not_defined);
   RUN_TEST(m_precondition_save_index_out_of_range);
 }

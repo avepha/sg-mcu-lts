@@ -10,11 +10,11 @@
 
 ## Command List
 ###Mutation
-* date_save 
+* date_save
     ```{"topic": "date_save", "method": "mutation", "data": {"date": "2019-08-12T17:00:17.613Z"}}```
 * sensor_order_save 
     ```{"topic": "sensor_order_save", "method": "mutation", "data": {"names": ["sssssss", "sensor_2"]}}```
-* clear_nvmemory 
+* clear_nvmemory
     ```{"topic": "clear_nvmemory", "method": "mutation"}```
 * precondition_save for timer
     ```{"topic": "precondition_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}```

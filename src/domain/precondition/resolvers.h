@@ -12,17 +12,17 @@ public:
   explicit mutation_precondition_save(CombineContext *context) : Resolvers("precondition_save", context) {};
 
   String resolve(JsonObject reqJson) override {
-    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull() || reqJson["data"]["timers"].isNull()) {
+    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
       return err.toJsonString();
     }
 
-    if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
+    if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
       InvalidInputError err("index out of range.");
       return err.toJsonString();
     }
 
-    int index = reqJson["data"]["index"].as<int>();
+    int index = reqJson["data"]["index"];
 
     if (!reqJson["data"]["timers"].isNull()) {
       PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
