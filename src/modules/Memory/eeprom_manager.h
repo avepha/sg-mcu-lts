@@ -122,11 +122,10 @@ class EEPROM_Manager
     {
 
 #if !defined(ARDUINO_ARCH_AVR)
-        // EEPROM.begin(EEPROM_SIZE);
         EEPROM.begin(2048);
 #endif
         byte init;
-        EEPROM.put(init_byte, 1);
+//        EEPROM.put(init_byte, 1);
         Commit();
         EEPROM.get(init_byte, init);
         mpuCom.println("INFO-MEMCHSIZE :" + String(sizeof(data_table_s)));
@@ -157,11 +156,6 @@ class EEPROM_Manager
     }
     static void Update(int channel)
     {
-        // Serial.println("size: " + String(rom_channel[channel - 1].timer_size));
-        // for(int i = 0 ; i < rom_channel[channel - 1].timer_size; i++){
-        //     Serial.print( String(rom_channel[channel - 1].timer_list[i].st) + "-" + String(rom_channel[channel - 1].timer_list[i].en) + " ");
-        // }
-        // Serial.println();
         EEPROM.put(channel_list[channel - 1], rom_channel[channel - 1]);
         Commit();
     }

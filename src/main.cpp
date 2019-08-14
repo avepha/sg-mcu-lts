@@ -79,7 +79,7 @@ void setup()
   taskManager.StartTask(Sensor::instance());
   taskManager.StartTask(ParAcc::instance());
   taskManager.StartTask(Communication::instance());
-  taskManager.StartTask(PingMessage::instance());
+//  taskManager.StartTask(PingMessage::instance());
 
   ChannelHanler::instance();
 
