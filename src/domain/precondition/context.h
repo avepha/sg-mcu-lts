@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-13.
-//
 #include "timer/model/precondition_timer_model.h"
 
 #ifndef SG_MCU_PRECONDITION_CONTEXT_H

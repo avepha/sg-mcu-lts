@@ -1,6 +1,3 @@
-//
-// Created by Alfarie-MBP on 2019-08-14.
-//
 #include "domain/model.h"
 
 #ifndef SG_MCU_CRITERIA_MODEL_H

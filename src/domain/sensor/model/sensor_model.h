@@ -1,7 +1,3 @@
-
-//
-// Created by Alfarie-MBP on 2019-08-11.
-//
 #include "domain/model.h"
 
 #ifndef SG_MCU_SENSOR_MODEL_H
