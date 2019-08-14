@@ -11,27 +11,27 @@ class mutation_precondition_save : public Resolvers {
 public:
   explicit mutation_precondition_save(CombineContext *context) : Resolvers("precondition_save", context) {};
 
-  String resolve(JsonObject json) override {
-    if (json["data"]["index"].isNull() || json["data"]["timers"].isNull()) {
+  String resolve(JsonObject reqJson) override {
+    if (reqJson["data"]["index"].isNull() || reqJson["data"]["timers"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
       return err.toJsonString();
     }
 
-    if (json["data"]["index"].as<int>() < 0 || json["data"]["index"].as<int>() > 7) {
+    if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
       InvalidInputError err("index out of range.");
       return err.toJsonString();
     }
 
-    int index = json["data"]["index"].as<int>();
+    int index = reqJson["data"]["index"].as<int>();
 
-    if (!json["data"]["timers"].isNull()) {
+    if (!reqJson["data"]["timers"].isNull()) {
       PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
-      int size = json["data"]["timers"].size();
+      int size = reqJson["data"]["timers"].size();
 
       timerSchema.timers[index].size = size;
       for(int i = 0 ; i < size; i++) {
-        timerSchema.timers[index].data[i][0] = json["data"]["timers"][i][0];
-        timerSchema.timers[index].data[i][1] = json["data"]["timers"][i][1];
+        timerSchema.timers[index].data[i][0] = reqJson["data"]["timers"][i][0];
+        timerSchema.timers[index].data[i][1] = reqJson["data"]["timers"][i][1];
       }
 
       int writeOps = context->preConditionContext->timerModel->save(timerSchema);
@@ -48,15 +48,15 @@ public:
         d_i.add(newSchema.timers[index].data[i][1]);
       }
 
-      JsonTopic response(json["topic"], json["method"], data.as<JsonObject>());
+      JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
       return response.toString();
     }
 
-    if(!json["data"]["criteria"].isNull()) {
+    if(!reqJson["data"]["criteria"].isNull()) {
       PreConditionCriteriaSchema criteriaSchema = context->preConditionContext->criteriaModel->get();
-      criteriaSchema.criterias[index].sensor = json["data"]["criteria"]["sensor"];
-      criteriaSchema.criterias[index].criteria = json["data"]["criteria"]["criteria"];
-      criteriaSchema.criterias[index].greater = json["data"]["criteria"]["greater"];
+      criteriaSchema.criterias[index].sensor = reqJson["data"]["criteria"]["sensor"];
+      criteriaSchema.criterias[index].criteria = reqJson["data"]["criteria"]["criteria"];
+      criteriaSchema.criterias[index].greater = reqJson["data"]["criteria"]["greater"];
 
       int writeOps = context->preConditionContext->criteriaModel->save(criteriaSchema);
 
@@ -68,7 +68,7 @@ public:
       criteria["criteria"] = newCriteriaSchema.criterias[index].criteria;
       criteria["greater"] = newCriteriaSchema.criterias[index].greater;
 
-      JsonTopic response(json["topic"], json["method"], data.as<JsonObject>());
+      JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
       return response.toString();
     }
 
@@ -82,19 +82,19 @@ class query_precondition : public Resolvers {
 public:
   explicit query_precondition(CombineContext *context) : Resolvers("precondition", context) {};
 
-  String resolve(JsonObject json) override {
-    if (json["data"]["type"].isNull() || json["data"]["index"].isNull()) {
+  String resolve(JsonObject reqJson) override {
+    if (reqJson["data"]["type"].isNull() || reqJson["data"]["index"].isNull()) {
       InvalidInputError err("type Or index field is not specified.");
       return err.toJsonString();
     }
 
-    if (json["data"]["index"].as<int>() < 0 || json["data"]["index"].as<int>() > 7) {
+    if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
       InvalidInputError err("index out of range.");
       return err.toJsonString();
     }
 
-    int index = json["data"]["index"];
-    String type = json["data"]["type"];
+    int index = reqJson["data"]["index"];
+    String type = reqJson["data"]["type"];
 
     if (type == "timer") {
       PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
@@ -107,7 +107,7 @@ public:
         d_i.add(timerSchema.timers[index].data[i][1]);
       }
 
-      JsonTopic response(json["topic"], json["method"], data.as<JsonObject>());
+      JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
       return response.toString();
     }
 
@@ -120,7 +120,7 @@ public:
       criteria["criteria"] = criteriaSchema.criterias[index].criteria;
       criteria["greater"] = criteriaSchema.criterias[index].greater;
 
-      JsonTopic response(json["topic"], json["method"], data.as<JsonObject>());
+      JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
       return response.toString();
     }
 

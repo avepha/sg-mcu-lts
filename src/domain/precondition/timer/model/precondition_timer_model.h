@@ -2,11 +2,13 @@
 
 #ifndef SG_MCU_PRECONDITION_TIMER_MODEL_H
 #define SG_MCU_PRECONDITION_TIMER_MODEL_H
+
+#ifndef  HOUR_IN_SECOND
 #define HOUR_IN_SECOND 3600
+#endif
 
 const int PRECONDITION_TIMER_ROM_ADDR = 300;
 
-// TODO: revise this structure -> change from array to struct type
 struct PreConditionTimerSchema {
   struct timer {
     int size = 2;

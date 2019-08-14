@@ -15,17 +15,17 @@ class mutation_date_save : public Resolvers {
 public:
   explicit mutation_date_save(CombineContext *context) : Resolvers("date_save", context) {};
 
-  String resolve(JsonObject json) override {
-    if (json["data"]["date"].isNull()) {
+  String resolve(JsonObject reqJson) override {
+    if (reqJson["data"]["date"].isNull()) {
       InvalidInputError err;
       return err.toJsonString();
     }
 
-    DateTime newDate(IsoStringToDateTime(json["data"]["date"]));
+    DateTime newDate(IsoStringToDateTime(reqJson["data"]["date"]));
     context->rtcContext->core->setDate(newDate);
     DateTime dateTime = context->rtcContext->core->getDate();
 
-    JsonTopic response(json["topic"], json["method"], DateTimeToIsoString(dateTime));
+    JsonTopic response(reqJson["topic"], reqJson["method"], DateTimeToIsoString(dateTime));
 
     return response.toString();
   };

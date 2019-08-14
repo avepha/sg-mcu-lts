@@ -9,7 +9,7 @@ public:
   Resolvers(String , CombineContext *);
   String getName() {return name;}
   virtual String resolve() {return "NULL";}
-  virtual String resolve(JsonObject json) {return "NULL";}
+  virtual String resolve(JsonObject reqJson) {return "NULL";}
 
 protected:
   String name;
