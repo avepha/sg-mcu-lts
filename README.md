@@ -18,7 +18,7 @@
     ```{"topic": "clear_nvmemory", "method": "mutation"}```
 * precondition_save for timer
     ```{"topic": "precondition_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}```
-* (t)precondition_save for criteria
+* precondition_save for criteria
     ```{"topic": "precondition_save", "method": "mutation", "data": {"index": 0, "criteria": { "sensor": 2, "criteria": 77.33, "greater": false }}}```
 * criteria_save 
     ```{ "topic": "criteria_save", "method": "mutation", "data": { "index": 7, "criteria": { "sensor": 2, "criteria": 77.33, "greater": false } } }```
@@ -31,6 +31,6 @@
 * sensor ```{"topic": "sensor", "method": "query"}```
 * sensor_order ```{"topic": "sensor_order", "method": "query"}```
 * precondition for timer ```{"topic": "precondition", "method": "query", "data": {"type": "timer", "index": 0}}```
-* (t)precondition for criteria ```{"topic": "precondition", "method": "query", "data": {"type": "criteria", "index": 0}}```
+* precondition for criteria ```{"topic": "precondition", "method": "query", "data": {"type": "criteria", "index": 0}}```
 * criteria ```{"topic": "criteria", "method": "query", "data": {"index": 1}}```
 * (t)timer ```{"topic": "timer", "method": "query", "data": {"index": 0}}```
