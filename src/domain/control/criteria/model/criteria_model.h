@@ -1,7 +1,7 @@
 #include "domain/model.h"
 
-#ifndef SG_MCU_CRITERIA_MODEL_H
-#define SG_MCU_CRITERIA_MODEL_H
+#ifndef SG_MCU_CONTROL_CRITERIA_MODEL_H
+#define SG_MCU_CONTROL_CRITERIA_MODEL_H
 
 const int CRITERIA_ROM_ADDR = 1000;
 
