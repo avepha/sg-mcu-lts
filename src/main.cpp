@@ -16,12 +16,14 @@
 #include "combineResolvers.h"
 
 #include "validationError.h"
-#include "endpoint.h"
+#include "deviceEndpoint.h"
+#include "sensorEndpoint.h"
 
 HardwareSerial &entryPort = Serial;
-HardwareSerial &sensorCom = Serial2;
+HardwareSerial &sensorPort = Serial2;
 
-EndPoint *endpoint;
+DeviceEndpoint *deviceEndpoint;
+SensorEndpoint *sensorEndpoint;
 CombineResolvers *resolvers;
 CombineContext *context;
 
@@ -31,8 +33,10 @@ void setup() {
   EEPROM.begin(EEPROM_SIZE);
   Serial.begin(115200);
   entryPort.begin(115200);
+  sensorPort.begin(9600);
 
-  endpoint = new EndPoint(&entryPort);
+  deviceEndpoint = new DeviceEndpoint(&entryPort);
+  sensorEndpoint = new SensorEndpoint(&sensorPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
 
@@ -41,32 +45,46 @@ void setup() {
 
 void loop1(void *pvParameters) {
   while (true) {
-    String jsonString = endpoint->embrace();
-    if (jsonString == "NULL") {
-      InvalidJsonFormatError err;
-      endpoint->unleash(err.toJsonString());
-      continue;
+    String jsonString;
+    bool isDataComing = deviceEndpoint->embrace(&jsonString);
+    if (isDataComing) {
+      StaticJsonDocument<1024> json;
+      DeserializationError error = deserializeJson(json, jsonString);
+      if (error) {
+        InvalidJsonFormatError err;
+        deviceEndpoint->unleash(err.toJsonString());
+        continue;
+      }
+
+      if (json["topic"].isNull() || json["method"].isNull()) {
+        InvalidRequestFormatError err;
+        deviceEndpoint->unleash(err.toJsonString());
+        continue;
+      }
+
+      deviceEndpoint->unleash(resolvers->execute(json.as<JsonObject>()));
     }
 
-    StaticJsonDocument<1024> json;
-    DeserializationError error = deserializeJson(json, jsonString);
-    if (error) {
-      InvalidJsonFormatError err;
-      endpoint->unleash(err.toJsonString());
-      continue;
-    }
+    byte bSensors[64];
+    int bSize = sensorEndpoint->embrace(bSensors);
 
-    if (json["topic"].isNull() || json["method"].isNull()) {
-      InvalidRequestFormatError err;
-      endpoint->unleash(err.toJsonString());
-      continue;
+    if (bSize > 0) {
+      context->nSensorContext->core->updateNSensor(bSensors, bSize);
     }
-
-    endpoint->unleash(resolvers->execute(json.as<JsonObject>()));
+    else if(bSize == -2) { //checksum error
+      NSensorInvalidCheckSumError err;
+      Serial.println(err.toJsonString());
+      deviceEndpoint->unleash(err.toJsonString());
+    }
+    else if(bSize == -3) { //timeout
+      NSensorTimeoutError err;
+      Serial.println(err.toJsonString());
+      deviceEndpoint->unleash(err.toJsonString());
+    }
   }
 }
 
 void loop() {
-  Serial.println("free heap: " + String(xPortGetFreeHeapSize()));
+//  Serial.println("free heap: " + String(xPortGetFreeHeapSize()));
   delay(1000);
 }

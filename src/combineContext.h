@@ -1,6 +1,7 @@
 #include "domain/rtc/context.h"
 #include "domain/sensor/context.h"
 #include "domain/precondition/context.h"
+#include "domain/nsensor/context.h"
 
 #include "domain/control/criteria/context.h"
 #include "domain/control/timer/context.h"
@@ -15,6 +16,7 @@ public:
   PreConditionContext *preConditionContext;
   CriteriaContext *criteriaContext;
   TimerContext *timerContext;
+  NSensorContext *nSensorContext;
   CombineContext();
 };
 
@@ -24,6 +26,7 @@ CombineContext::CombineContext() {
   preConditionContext = new PreConditionContext;
   criteriaContext = new CriteriaContext;
   timerContext = new TimerContext;
+  nSensorContext = new NSensorContext;
 };
 
 

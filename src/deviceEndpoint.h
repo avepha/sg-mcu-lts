@@ -1,23 +1,25 @@
-class EndPoint
+class DeviceEndpoint
 {
 public:
-  EndPoint(HardwareSerial* entryPoint);
+  DeviceEndpoint(HardwareSerial* entryPoint);
 
-  String embrace();
+  bool embrace(String *message);
   void unleash(String message);
 private:
   HardwareSerial *entryPoint;
 };
 
-EndPoint::EndPoint(HardwareSerial *entryPoint): entryPoint(entryPoint) {}
+DeviceEndpoint::DeviceEndpoint(HardwareSerial *entryPoint): entryPoint(entryPoint) {}
 
-void EndPoint::unleash(String message) {
+void DeviceEndpoint::unleash(String message) {
   entryPoint->println(message);
 }
 
-String EndPoint::embrace() {
-  while (!entryPoint->available())
+bool DeviceEndpoint::embrace(String *message) {
+  while (!entryPoint->available()) {
     delay(10);
+    return false;
+  }
 
   char raw[1024];
   int readIndex = 0;
@@ -30,8 +32,8 @@ String EndPoint::embrace() {
           char ch = (char)entryPoint->read();
           if (ch == '\n') {
             raw[readIndex] = '\0';
-            String message = raw;
-            return message;
+            *message = String(raw);
+            return true;
           }
           else {
             raw[readIndex++] = ch;
@@ -41,6 +43,6 @@ String EndPoint::embrace() {
     }
   }
 
-  return "NULL";
+  return false;
 }
 

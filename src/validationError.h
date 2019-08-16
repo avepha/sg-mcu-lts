@@ -3,7 +3,6 @@
 #ifndef SG_MCU_VALIDATIONERROR_H
 #define SG_MCU_VALIDATIONERROR_H
 
-
 class ValidationError {
 public:
   ValidationError(String code, String message):
@@ -45,6 +44,14 @@ public: explicit InvalidMethodError(String message = "Method is invalid") : Vali
 
 class InvalidInputError: public ValidationError {
 public: explicit InvalidInputError(String message = "Input is invalid") : ValidationError("invalid-input", message) {};
+};
+
+class NSensorInvalidCheckSumError: public ValidationError {
+public: explicit NSensorInvalidCheckSumError(String message = "NSensor checksum is invalid") : ValidationError("invalid-checksum-nsensor", message) {};
+};
+
+class NSensorTimeoutError: public ValidationError {
+public: explicit NSensorTimeoutError(String message = "NSensor is timeout") : ValidationError("nsensor-timeout", message) {};
 };
 
 #endif //SG_MCU_VALIDATIONERROR_H
