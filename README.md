@@ -25,12 +25,13 @@
 * timer_save
    ```{"topic": "timer_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}```
 
-
 ###Query
-* Date ```{"topic": "date", "method": "query"}```    
+* Date ```{"topic": "date", "method": "query"}```
 * sensor ```{"topic": "sensor", "method": "query"}```
 * sensor_order ```{"topic": "sensor_order", "method": "query"}```
 * precondition for timer ```{"topic": "precondition", "method": "query", "data": {"type": "timer", "index": 0}}```
 * precondition for criteria ```{"topic": "precondition", "method": "query", "data": {"type": "criteria", "index": 0}}```
 * criteria ```{"topic": "criteria", "method": "query", "data": {"index": 1}}```
 * timer ```{"topic": "timer", "method": "query", "data": {"index": 0}}```
+* (t) nsensors ```{"topic": "nsensors", "method": "query"}```
+* (t) nsensor ```{"topic": "nsensor", "method": "query", "data": {"index": 0}}```

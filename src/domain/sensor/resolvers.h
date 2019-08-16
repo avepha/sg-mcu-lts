@@ -20,6 +20,7 @@ public:
     JsonArray names = reqJson["data"]["names"].as<JsonArray>();
 
     SensorSchema sensorSchema = context->sensorContext->model->get();
+    sensorSchema.numberOfSensor = names.size();
     for (int i = 0 ; i < names.size(); i++) {
       String name = names[i].as<String>();
       name.toCharArray(sensorSchema.names[i], name.length() + 1);
@@ -32,7 +33,7 @@ public:
     StaticJsonDocument<300> data;
     data["writeOps"] = writeOps;
     JsonArray newNames = data.createNestedArray("names");
-    for (int i = 0 ; i < sizeof(newSchema.names) / sizeof(newSchema.names[0]); i++) {
+    for (int i = 0 ; i < newSchema.numberOfSensor; i++) {
       newNames.add(String(newSchema.names[i]));
     }
 
@@ -51,7 +52,7 @@ public:
     float *sensors = context->sensorContext->core->getSensors();
 
     StaticJsonDocument<256> data;
-    for(int i = 0; i < sizeof(sensorNames.names) / sizeof(sensorNames.names[0]); i++) {
+    for(int i = 0; i < sensorNames.numberOfSensor; i++) {
       data[sensorNames.names[i]] = sensors[i];
     }
 
@@ -70,7 +71,7 @@ public:
 
     StaticJsonDocument<256> data;
     JsonArray names = data.createNestedArray("names");
-    for(int i = 0; i < sizeof(sensorNames.names) / sizeof(sensorNames.names[0]); i++) {
+    for(int i = 0; i < sensorNames.numberOfSensor; i++) {
       names.add(sensorNames.names[i]);
     }
 

@@ -49,16 +49,20 @@ void m_timer_save_index_is_not_defined() {
 }
 
 void m_timer_save_index_out_of_range() {
-  StaticJsonDocument<64> data;
-  data["type"] = "timer";
+  StaticJsonDocument<256> data;
+  JsonArray timers = data.createNestedArray("timers");
+  JsonArray timer_0 = timers.createNestedArray();
+  timer_0.add(0);
+  timer_0.add(3600);
+
   data["index"] = -1;
-  JsonTopic topic("timer_save", "query", data.as<JsonObject>());
+  JsonTopic topic("timer_save", "mutation", data.as<JsonObject>());
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
   String result = resolvers.execute(json.as<JsonObject>());
 
   StaticJsonDocument<512> resJson;
   deserializeJson(resJson, result);
-
+  serializeJsonPretty(resJson, Serial);
   TEST_ASSERT_TRUE(resJson["topic"] == "Error");
   TEST_ASSERT_TRUE(resJson["code"] == "invalid-input");
   TEST_ASSERT_TRUE(resJson["message"] == "index out of range.");

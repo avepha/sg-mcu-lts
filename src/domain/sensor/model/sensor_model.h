@@ -6,6 +6,7 @@
 const int SENSOR_ROM_ADDR = 0;
 
 struct SensorSchema {
+  int numberOfSensor = 9;
   char names[12][20] = {
       "temperature",
       "humidity",
