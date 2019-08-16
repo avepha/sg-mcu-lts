@@ -4,6 +4,12 @@
 #ifndef SG_MCU_NSENSOR_CORE_H
 #define SG_MCU_NSENSOR_CORE_H
 
+
+struct NSensor {
+  float sensors[11] = {0};
+  unsigned long lastSeen = 0;
+};
+
 class NSensorCore {
 public:
   NSensorCore() {};
@@ -20,15 +26,16 @@ public:
     for(int i = 0 ; i < sensorBucketSize; i++) {
       nodes[station].sensors[i] = sensorBucket[i];
     }
-    
+
     nodes[station].lastSeen = millis();
   }
 
+  NSensor* getNSensor() {
+    return nodes;
+  }
+
 private:
-  struct NSensor {
-    float sensors[11] = {0};
-    unsigned long lastSeen = 0;
-  } nodes[8];
+  NSensor nodes[8];
 };
 
 #endif //SG_MCU_CORE_H

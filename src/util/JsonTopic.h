@@ -13,6 +13,8 @@ public:
 
   JsonTopic(String topic, String method, JsonObject data);
 
+  JsonTopic(String topic, String method, JsonArray data);
+
   String toString();
 
   StaticJsonDocument<1024> toStaticJsonObject();
@@ -21,6 +23,7 @@ private:
   String topic;
   String method;
   JsonObject dataJson;
+  JsonArray dataJsonArray;
   String dataString;
 };
 
@@ -38,6 +41,13 @@ JsonTopic::JsonTopic(String topic, String method, JsonObject data) :
     method(method),
     dataJson(data) {};
 
+JsonTopic::JsonTopic(String topic, String method, JsonArray data) :
+    topic(topic),
+    method(method),
+    dataJsonArray(data) {
+//  serializeJsonPretty(dataJsonArray, Serial);
+};
+
 StaticJsonDocument<1024> JsonTopic::toStaticJsonObject() {
   StaticJsonDocument<1024> json;
   json["topic"] = topic;
@@ -50,12 +60,14 @@ StaticJsonDocument<1024> JsonTopic::toStaticJsonObject() {
 }
 
 String JsonTopic::toString() {
-  StaticJsonDocument<1024> json;
+  StaticJsonDocument<2048> json;
   json["topic"] = topic;
   json["method"] = method;
 
   if (!dataJson.isNull())
     json["data"] = dataJson;
+  else if(!dataJsonArray.isNull())
+    json["data"] = dataJsonArray;
   else
     json["data"] = dataString;
 
