@@ -34,4 +34,5 @@
 * criteria ```{"topic": "criteria", "method": "query", "data": {"index": 1}}```
 * timer ```{"topic": "timer", "method": "query", "data": {"index": 0}}```
 * (t) nsensors ```{"topic": "nsensors", "method": "query"}```
-* (t) nsensor ```{"topic": "nsensor", "method": "query", "data": {"index": 0}}```
+* (t) nsensor ```{"topic": "nsensor", "method": "query", "data": {"index": 1}}```
+* (t) nsensor ```{"topic": "info", "method": "query"}```

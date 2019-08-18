@@ -4,7 +4,7 @@
 #include <TaskScheduler.h>
 #include <ArduinoJson.h>
 
-#define VERSION "1.0.0"
+#define VERSION "0.0.1"
 #define PROJECT "SMART-FARM"
 #define UPLOADDATE String(__DATE__) + " " + String(__TIME__)
 #define COMCORE 0

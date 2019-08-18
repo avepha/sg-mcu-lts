@@ -1,4 +1,3 @@
-#include <domain/sensor/resolvers.h>
 #include "combineContext.h"
 #include "validationError.h"
 
@@ -9,6 +8,7 @@
 #include "domain/precondition/resolvers.h"
 #include "domain/control/criteria/resolvers.h"
 #include "domain/control/timer/resolvers.h"
+#include "domain/info/resolvers.h"
 
 class CombineResolvers
 {
@@ -17,7 +17,7 @@ public:
   String execute(JsonObject);
 
 private:
-  static const int QUERY_SIZE = 8;
+  static const int QUERY_SIZE = 9;
   static const int MUTATION_SIZE = 6;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
@@ -36,6 +36,7 @@ CombineResolvers::CombineResolvers(CombineContext *context):
     query[5] = new query_timer(context);
     query[6] = new query_nsensors(context);
     query[7] = new query_nsensor(context);
+    query[8] = new query_info(context);
 
     mutation[0] = new mutation_date_save(context);
     mutation[1] = new mutation_sensor_order_save(context);
