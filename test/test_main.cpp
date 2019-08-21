@@ -13,7 +13,7 @@
 
 
 #include "util/date_time.h"
-
+#include "util/updateNSensor.h"
 
 void setup() {
   Serial.begin(115200);
@@ -36,9 +36,10 @@ void setup() {
   m_precondition_save_RUN_TEST();
   m_criteria_save_RUN_TEST();
   m_timer_save_RUN_TEST();
+
   /* Util Test */
   util_date_time_RUN_TEST();
-
+  util_updateNSensor_RUN_TEST();
   UNITY_END();
 }
 

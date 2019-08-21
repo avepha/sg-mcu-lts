@@ -62,7 +62,6 @@ void m_timer_save_index_out_of_range() {
 
   StaticJsonDocument<512> resJson;
   deserializeJson(resJson, result);
-  serializeJsonPretty(resJson, Serial);
   TEST_ASSERT_TRUE(resJson["topic"] == "Error");
   TEST_ASSERT_TRUE(resJson["code"] == "invalid-input");
   TEST_ASSERT_TRUE(resJson["message"] == "index out of range.");
