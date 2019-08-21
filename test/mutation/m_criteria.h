@@ -7,7 +7,7 @@ void m_criteria_save_with_timer_param_check_correct_type() {
   criteria["sensor"] = 1;
   criteria["criteria"] = 70.1;
   criteria["greater"] = true;
-  JsonTopic topic("criteria_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("criteria_save", "mutation", data.as<JsonObject>());
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -27,7 +27,7 @@ void m_criteria_save_index_is_not_specified() {
   criteria["sensor"] = 1;
   criteria["criteria"] = 70.1;
   criteria["greater"] = true;
-  JsonTopic topic("criteria_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("criteria_save", "mutation", data.as<JsonObject>());
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -44,7 +44,7 @@ void m_criteria_save_index_out_of_range() {
   criteria["sensor"] = 1;
   criteria["criteria"] = 70.1;
   criteria["greater"] = true;
-  JsonTopic topic("criteria_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("criteria_save", "mutation", data.as<JsonObject>());
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);

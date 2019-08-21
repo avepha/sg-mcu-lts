@@ -31,7 +31,7 @@ public:
       }
     }
 
-    JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonArray>());
+    JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonArray>());
     return response.toString();
   };
 };
@@ -65,7 +65,7 @@ public:
       sensorObj[sensorSchema.names[i]] = nodes[index].sensors[i];
     }
 
-    JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return response.toString();
   };
 };

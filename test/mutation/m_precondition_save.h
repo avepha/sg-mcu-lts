@@ -12,7 +12,7 @@ void m_precondition_save_with_timer_param_check_correct_type() {
   timer_1.add(7200);
   timer_1.add(10800);
 
-  JsonTopic topic("precondition_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("precondition_save", "mutation", data.as<JsonObject>());
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -35,7 +35,7 @@ void m_precondition_save_with_criteria_param_check_correct_type() {
   criteria["criteria"] = 99.0;
   criteria["greater"] = false;
 
-  JsonTopic topic("precondition_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("precondition_save", "mutation", data.as<JsonObject>());
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -61,7 +61,7 @@ void m_precondition_save_index_is_not_defined() {
   timer_1.add(7200);
   timer_1.add(10800);
 
-  JsonTopic topic("precondition_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("precondition_save", "mutation", data.as<JsonObject>());
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -75,7 +75,7 @@ void m_precondition_save_index_out_of_range() {
   StaticJsonDocument<64> data;
   data["type"] = "timer";
   data["index"] = -1;
-  JsonTopic topic("precondition", "query", data.as<JsonObject>());
+  JsonRequest topic("precondition", "query", data.as<JsonObject>());
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
 
   String result = resolvers.execute(json.as<JsonObject>());

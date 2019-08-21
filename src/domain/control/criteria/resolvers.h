@@ -42,7 +42,7 @@ public:
     criteria["criteria"] = newSchema.criterias[index].criteria;
     criteria["greater"] = newSchema.criterias[index].greater;
 
-    JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return topic.toString();
   };
 };
@@ -73,7 +73,7 @@ public:
     criteria["criteria"] = schema.criterias[index].criteria;
     criteria["greater"] = schema.criterias[index].greater;
 
-    JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return topic.toString();
   };
 };

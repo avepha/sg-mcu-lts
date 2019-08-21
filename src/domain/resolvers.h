@@ -10,6 +10,7 @@ public:
   String getName() {return name;}
   virtual String resolve() { return "NULL";}
   virtual String resolve(JsonObject reqJson) {return "NULL";}
+  virtual String resolve(JsonRequest *topic) {return "recieve json topic";}
 
 protected:
   String name;

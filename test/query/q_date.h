@@ -1,7 +1,7 @@
 #include "../init.h"
 
 void q_date_check_correct_type() {
-  JsonTopic topic("date", "query");
+  JsonRequest topic("date", "query");
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
 
   String result = resolvers.execute(json.as<JsonObject>());

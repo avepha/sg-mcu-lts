@@ -48,7 +48,7 @@ public:
         d_i.add(newSchema.timers[index].data[i][1]);
       }
 
-      JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+      JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
       return response.toString();
     }
 
@@ -69,7 +69,7 @@ public:
       criteria["criteria"] = newCriteriaSchema.criterias[index].criteria;
       criteria["greater"] = newCriteriaSchema.criterias[index].greater;
 
-      JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+      JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
       return response.toString();
     }
 
@@ -108,7 +108,7 @@ public:
         d_i.add(timerSchema.timers[index].data[i][1]);
       }
 
-      JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+      JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
       return response.toString();
     }
 
@@ -121,7 +121,7 @@ public:
       criteria["criteria"] = criteriaSchema.criterias[index].criteria;
       criteria["greater"] = criteriaSchema.criterias[index].greater;
 
-      JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+      JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
       return response.toString();
     }
 

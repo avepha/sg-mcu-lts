@@ -19,7 +19,7 @@ public:
     }
     EEPROM.commit();
 
-    JsonTopic response(reqJson["topic"], reqJson["method"], "SUCCESS");
+    JsonRequest response(reqJson["topic"], reqJson["method"], "SUCCESS");
     return response.toString();
   };
 };

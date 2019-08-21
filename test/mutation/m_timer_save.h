@@ -12,7 +12,7 @@ void m_timer_save_check_correct_type() {
   timer_1.add(7200);
   timer_1.add(10800);
 
-  JsonTopic topic("timer_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("timer_save", "mutation", data.as<JsonObject>());
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -38,7 +38,7 @@ void m_timer_save_index_is_not_defined() {
   timer_1.add(7200);
   timer_1.add(10800);
 
-  JsonTopic topic("timer_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("timer_save", "mutation", data.as<JsonObject>());
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -56,7 +56,7 @@ void m_timer_save_index_out_of_range() {
   timer_0.add(3600);
 
   data["index"] = -1;
-  JsonTopic topic("timer_save", "mutation", data.as<JsonObject>());
+  JsonRequest topic("timer_save", "mutation", data.as<JsonObject>());
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
   String result = resolvers.execute(json.as<JsonObject>());
 

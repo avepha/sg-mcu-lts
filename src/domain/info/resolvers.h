@@ -15,7 +15,7 @@ public:
   String resolve(JsonObject reqJson) override {
     StaticJsonDocument<128> data;
     data["version"] = VERSION;
-    JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return topic.toString();
   };
 };

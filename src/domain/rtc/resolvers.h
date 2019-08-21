@@ -25,7 +25,7 @@ public:
     context->rtcContext->core->setDate(newDate);
     DateTime dateTime = context->rtcContext->core->getDate();
 
-    JsonTopic response(reqJson["topic"], reqJson["method"], DateTimeToIsoString(dateTime));
+    JsonRequest response(reqJson["topic"], reqJson["method"], DateTimeToIsoString(dateTime));
 
     return response.toString();
   };
@@ -38,7 +38,7 @@ public:
 
   String resolve(JsonObject  reqJson) override {
     DateTime dateTime = context->rtcContext->core->getDate();
-    JsonTopic response(reqJson["topic"], reqJson["method"], DateTimeToIsoString(dateTime));
+    JsonRequest response(reqJson["topic"], reqJson["method"], DateTimeToIsoString(dateTime));
 
     return response.toString();
   };

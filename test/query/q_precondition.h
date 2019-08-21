@@ -3,7 +3,7 @@
 void q_precondition_type_is_not_defined() {
   StaticJsonDocument<64> data;
   data["index"] = 0;
-  JsonTopic topic("precondition", "query", data.as<JsonObject>());
+  JsonRequest topic("precondition", "query", data.as<JsonObject>());
   String result = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<512> resJson;
@@ -20,7 +20,7 @@ void q_precondition_type_is_not_defined() {
 void q_precondition_index_is_not_defined() {
   StaticJsonDocument<64> data;
   data["type"] = "timer";
-  JsonTopic topic("precondition", "query", data.as<JsonObject>());
+  JsonRequest topic("precondition", "query", data.as<JsonObject>());
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
   String result = resolvers.execute(json.as<JsonObject>());
 
@@ -39,7 +39,7 @@ void q_precondition_index_out_of_range() {
   StaticJsonDocument<64> data;
   data["type"] = "timer";
   data["index"] = -1;
-  JsonTopic topic("precondition", "query", data.as<JsonObject>());
+  JsonRequest topic("precondition", "query", data.as<JsonObject>());
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
 
   String result = resolvers.execute(json.as<JsonObject>());
@@ -59,7 +59,7 @@ void q_precondition_no_match_type() {
   StaticJsonDocument<64> data;
   data["type"] = "nomatch";
   data["index"] = 0;
-  JsonTopic topic("precondition", "query", data.as<JsonObject>());
+  JsonRequest topic("precondition", "query", data.as<JsonObject>());
   String result = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<512> resJson;
@@ -77,7 +77,7 @@ void q_precondition_with_timer_param_check_correct_type() {
   StaticJsonDocument<64> data;
   data["type"] = "timer";
   data["index"] = 0;
-  JsonTopic topic("precondition", "query", data.as<JsonObject>());
+  JsonRequest topic("precondition", "query", data.as<JsonObject>());
   String result = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<512> resJson;
@@ -96,7 +96,7 @@ void q_precondition_with_criteria_param_check_correct_type() {
   StaticJsonDocument<64> data;
   data["type"] = "criteria";
   data["index"] = 0;
-  JsonTopic topic("precondition", "query", data.as<JsonObject>());
+  JsonRequest topic("precondition", "query", data.as<JsonObject>());
   String result = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<512> resJson;

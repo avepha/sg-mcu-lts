@@ -1,7 +1,7 @@
 #include "../init.h"
 
 void q_sensor_check_correct_type() {
-  JsonTopic topic("sensor", "query");
+  JsonRequest topic("sensor", "query");
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
 
   String result = resolvers.execute(json.as<JsonObject>());

@@ -3,7 +3,7 @@
 void m_date_save_check_correct_type() {
   StaticJsonDocument<64> data;
   data["date"] = "2019-08-10T05:01:02";
-  JsonTopic m_date_save("date_save", "mutation", data.as<JsonObject>());
+  JsonRequest m_date_save("date_save", "mutation", data.as<JsonObject>());
   String m_date_save_res = resolvers.execute(m_date_save.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<256> m_date_save_json;
@@ -19,7 +19,7 @@ void m_date_save_check_correct_type() {
 
 void m_date_save_throw_date_is_not_define() {
   StaticJsonDocument<64> data;
-  JsonTopic m_date_save("date_save", "mutation", data.as<JsonObject>());
+  JsonRequest m_date_save("date_save", "mutation", data.as<JsonObject>());
   String m_date_save_res = resolvers.execute(m_date_save.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<256> m_date_save_json;

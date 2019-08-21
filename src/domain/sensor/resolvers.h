@@ -37,7 +37,7 @@ public:
       newNames.add(String(newSchema.names[i]));
     }
 
-    JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return topic.toString();
   };
 };
@@ -56,7 +56,7 @@ public:
       data[sensorNames.names[i]] = sensors[i];
     }
 
-    JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return topic.toString();
   };
 };
@@ -75,7 +75,7 @@ public:
       names.add(sensorNames.names[i]);
     }
 
-    JsonTopic topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return topic.toString();
   };
 };

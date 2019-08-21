@@ -5,15 +5,15 @@
 #define SG_MCU_JSON_TOPIC_H
 
 
-class JsonTopic {
+class JsonRequest {
 public:
-  JsonTopic(String topic, String method);
+  JsonRequest(String topic, String method, int reqId = 0);
 
-  JsonTopic(String topic, String method, String data);
+  JsonRequest(String topic, String method, String data, int reqId = 0);
 
-  JsonTopic(String topic, String method, JsonObject data);
+  JsonRequest(String topic, String method, JsonObject data, int reqId = 0);
 
-  JsonTopic(String topic, String method, JsonArray data);
+  JsonRequest(String topic, String method, JsonArray data, int reqId = 0);
 
   String toString();
 
@@ -25,30 +25,37 @@ private:
   JsonObject dataJson;
   JsonArray dataJsonArray;
   String dataString;
+  int reqId;
 };
 
-JsonTopic::JsonTopic(String topic, String method) :
-    topic(topic),
-    method(method) {};
-
-JsonTopic::JsonTopic(String topic, String method, String data) :
+JsonRequest::JsonRequest(String topic, String method, int reqId) :
     topic(topic),
     method(method),
-    dataString(data) {};
+    reqId(reqId)
+    {};
 
-JsonTopic::JsonTopic(String topic, String method, JsonObject data) :
+JsonRequest::JsonRequest(String topic, String method, String data, int reqId) :
     topic(topic),
     method(method),
-    dataJson(data) {};
+    dataString(data),
+    reqId(reqId)
+    {};
 
-JsonTopic::JsonTopic(String topic, String method, JsonArray data) :
+JsonRequest::JsonRequest(String topic, String method, JsonObject data, int reqId) :
     topic(topic),
     method(method),
-    dataJsonArray(data) {
-//  serializeJsonPretty(dataJsonArray, Serial);
-};
+    dataJson(data),
+    reqId(reqId)
+    {};
 
-StaticJsonDocument<2048> JsonTopic::toStaticJsonObject() {
+JsonRequest::JsonRequest(String topic, String method, JsonArray data, int reqId) :
+    topic(topic),
+    method(method),
+    dataJsonArray(data),
+    reqId(reqId)
+    {};
+
+StaticJsonDocument<2048> JsonRequest::toStaticJsonObject() {
   StaticJsonDocument<2048> json;
   json["topic"] = topic;
   json["method"] = method;
@@ -59,10 +66,11 @@ StaticJsonDocument<2048> JsonTopic::toStaticJsonObject() {
   return json;
 }
 
-String JsonTopic::toString() {
+String JsonRequest::toString() {
   StaticJsonDocument<2048> json;
   json["topic"] = topic;
   json["method"] = method;
+  json["reqId"] = reqId;
 
   if (!dataJson.isNull())
     json["data"] = dataJson;
@@ -75,6 +83,5 @@ String JsonTopic::toString() {
   serializeJson(json, jsonString);
   return jsonString;
 }
-
 
 #endif //SG_MCU_JSON_H

@@ -27,7 +27,6 @@ private:
 CombineResolvers::CombineResolvers(CombineContext *context):
   context(context)
   {
-    // TODO: revise data structure, turn array to map
     query[0] = new query_date(context);
     query[1] = new query_sensor(context);
     query[2] = new query_sensor_order(context);
@@ -48,6 +47,7 @@ CombineResolvers::CombineResolvers(CombineContext *context):
 
 
 String CombineResolvers::execute(JsonObject json) {
+
   if (json["method"] == "query") {
     for(int i = 0 ; i < QUERY_SIZE; i++) {
       if (query[i]->getName() == json["topic"]) {

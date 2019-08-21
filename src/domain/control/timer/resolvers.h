@@ -47,7 +47,7 @@ public:
       d_i.add(newSchema.timers[index].data[i][1]);
     }
 
-    JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return response.toString();
   };
 };
@@ -79,7 +79,7 @@ public:
       d_i.add(timerSchema.timers[index].data[i][1]);
     }
 
-    JsonTopic response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
+    JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
     return response.toString();
   };
 };
