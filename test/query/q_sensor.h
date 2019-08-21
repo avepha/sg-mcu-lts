@@ -2,9 +2,7 @@
 
 void q_sensor_check_correct_type() {
   JsonRequest topic("sensor", "query");
-  StaticJsonDocument<256> json = topic.toStaticJsonObject();
-
-  String result = resolvers.execute(json.as<JsonObject>());
+  String result = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<512> resJson;
   DeserializationError error = deserializeJson(resJson, result);

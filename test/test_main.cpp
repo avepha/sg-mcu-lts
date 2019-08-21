@@ -10,6 +10,7 @@
 #include "query/q_precondition.h"
 #include "query/q_criteria.h"
 #include "query/q_timer.h"
+#include "query/q_nsensor.h"
 
 
 #include "util/date_time.h"
@@ -29,6 +30,7 @@ void setup() {
   q_precondition_RUN_TEST();
   q_criteria_RUN_TEST();
   q_timer_RUN_TEST();
+  q_nsensor_RUN_TEST();
 
   /* Mutation Test */
   m_date_save_RUN_TEST();

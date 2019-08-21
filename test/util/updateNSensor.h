@@ -1,24 +1,6 @@
 #include "../init.h"
 #include "util/converter.h"
 
-void craftBytesArrayOfSensorPayload(byte sta, uint16_t *sensorBucket, int bucketSize, byte *payload) {
-  byte payloadSize = bucketSize * sizeof(uint16_t) + sizeof(byte) * 4;
-  payload[0] = 0xEE;
-  payload[1] = sta;
-  // payload[2-12] = sensor_payload
-  int indexPayload = 2;
-
-  for (int i = 0; i < bucketSize; i++) {
-    byte value[2];
-    Uint16ToBytes(sensorBucket[i], value);
-    memcpy(payload + indexPayload + sizeof(uint16_t) * i, value, 2);
-  }
-
-  payload[payloadSize - 1] = 0xEF;
-  // get only payload to calculate checksum
-  payload[payloadSize - 2] = modsum(payload + 1, payloadSize - 3);
-}
-
 void util_createAndRestorePayload() {
   int bucketSize = 7;
   uint16_t sensorBucket[bucketSize];
