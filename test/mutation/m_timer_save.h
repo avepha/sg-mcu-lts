@@ -1,7 +1,7 @@
 #include "../init.h"
 
 void m_timer_save_check_correct_type() {
-  StaticJsonDocument<256> data;
+  DynamicJsonDocument data(256);
   data["index"] = 0;
   JsonArray timers = data.createNestedArray("timers");
   JsonArray timer_0 = timers.createNestedArray();
@@ -12,23 +12,21 @@ void m_timer_save_check_correct_type() {
   timer_1.add(7200);
   timer_1.add(10800);
 
-  JsonRequest topic("timer_save", "mutation", data);
-  String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
-  StaticJsonDocument<1024> jsonResult;
-  deserializeJson(jsonResult, topicResult);
+  JsonRequest requestTopic("timer_save", "mutation", data);
+  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
 
-  TEST_ASSERT_TRUE(jsonResult["topic"] == "timer_save");
-  TEST_ASSERT_TRUE(jsonResult["method"] == "mutation");
-  TEST_ASSERT_TRUE(jsonResult["data"]["timers"][0][0].as<int>() == 0);
-  TEST_ASSERT_TRUE(jsonResult["data"]["timers"][0][1].as<int>() == 3600);
-  TEST_ASSERT_TRUE(jsonResult["data"]["timers"][1][0].as<int>() == 7200);
-  TEST_ASSERT_TRUE(jsonResult["data"]["timers"][1][1].as<int>() == 10800);
-  TEST_ASSERT_TRUE(jsonResult["data"]["index"] == 0);
-  TEST_ASSERT_GREATER_OR_EQUAL(1, jsonResult["data"]["writeOps"]);
+  TEST_ASSERT_TRUE(responseJson["topic"] == "timer_save");
+  TEST_ASSERT_TRUE(responseJson["method"] == "mutation");
+  TEST_ASSERT_TRUE(responseJson["data"]["timers"][0][0].as<int>() == 0);
+  TEST_ASSERT_TRUE(responseJson["data"]["timers"][0][1].as<int>() == 3600);
+  TEST_ASSERT_TRUE(responseJson["data"]["timers"][1][0].as<int>() == 7200);
+  TEST_ASSERT_TRUE(responseJson["data"]["timers"][1][1].as<int>() == 10800);
+  TEST_ASSERT_TRUE(responseJson["data"]["index"] == 0);
+  TEST_ASSERT_GREATER_OR_EQUAL(1, responseJson["data"]["writeOps"]);
 }
 
 void m_timer_save_index_is_not_defined() {
-  StaticJsonDocument<256> data;
+  DynamicJsonDocument data(256);
   JsonArray timers = data.createNestedArray("timers");
   JsonArray timer_0 = timers.createNestedArray();
   timer_0.add(0);
@@ -38,34 +36,29 @@ void m_timer_save_index_is_not_defined() {
   timer_1.add(7200);
   timer_1.add(10800);
 
-  JsonRequest topic("timer_save", "mutation", data);
+  JsonRequest requestTopic("timer_save", "mutation", data);
 
-  String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
-  StaticJsonDocument<1024> jsonResult;
-  deserializeJson(jsonResult, topicResult);
+  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
 
-  TEST_ASSERT_TRUE(jsonResult["topic"] == "Error");
-  TEST_ASSERT_TRUE(jsonResult["code"] == "invalid-input");
-  TEST_ASSERT_TRUE(jsonResult["message"] == "index or timers field is not specified.");
+  TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
+  TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
+  TEST_ASSERT_TRUE(responseJson["message"] == "index or timers field is not specified.");
 }
 
 void m_timer_save_index_out_of_range() {
-  StaticJsonDocument<256> data;
+  DynamicJsonDocument data(256);
   JsonArray timers = data.createNestedArray("timers");
   JsonArray timer_0 = timers.createNestedArray();
   timer_0.add(0);
   timer_0.add(3600);
 
   data["index"] = -1;
-  JsonRequest topic("timer_save", "mutation", data);
-  StaticJsonDocument<256> json = topic.toStaticJsonObject();
-  String result = resolvers.execute(json.as<JsonObject>());
+  JsonRequest requestTopic("timer_save", "mutation", data);
+  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
 
-  StaticJsonDocument<512> resJson;
-  deserializeJson(resJson, result);
-  TEST_ASSERT_TRUE(resJson["topic"] == "Error");
-  TEST_ASSERT_TRUE(resJson["code"] == "invalid-input");
-  TEST_ASSERT_TRUE(resJson["message"] == "index out of range.");
+  TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
+  TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
+  TEST_ASSERT_TRUE(responseJson["message"] == "index out of range.");
 }
 
 void m_timer_save_RUN_TEST() {

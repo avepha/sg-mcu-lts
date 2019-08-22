@@ -13,7 +13,7 @@ public:
 
   String toString();
 
-  StaticJsonDocument<2048> toStaticJsonObject();
+  DynamicJsonDocument toJson();
 
 private:
   String topic;
@@ -35,8 +35,8 @@ JsonRequest::JsonRequest(String topic, String method, JsonDocument data, String 
     reqId(reqId)
     {};
 
-StaticJsonDocument<2048> JsonRequest::toStaticJsonObject() {
-  StaticJsonDocument<2048> json;
+DynamicJsonDocument JsonRequest::toJson() {
+  DynamicJsonDocument json(2048);
   json["topic"] = topic;
   json["method"] = method;
   json["reqId"] = reqId == "" ? (char*)0 : reqId;
@@ -48,7 +48,7 @@ StaticJsonDocument<2048> JsonRequest::toStaticJsonObject() {
 }
 
 String JsonRequest::toString() {
-  StaticJsonDocument<2048> json;
+  DynamicJsonDocument json(2048);
   json["topic"] = topic;
   json["method"] = method;
   json["reqId"] = reqId;

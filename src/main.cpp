@@ -45,24 +45,31 @@ void setup() {
 
 void loop1(void *pvParameters) {
   while (true) {
-    String jsonString;
-    bool isDataComing = deviceEndpoint->embrace(&jsonString);
+    String requestString;;
+    bool isDataComing = deviceEndpoint->embrace(&requestString);
     if (isDataComing) {
-      StaticJsonDocument<1024> json;
-      DeserializationError error = deserializeJson(json, jsonString);
+      DynamicJsonDocument requestJson(1024);
+      DeserializationError error = deserializeJson(requestJson, requestString);
+
+      DynamicJsonDocument responseJson(2048);
+
       if (error) {
         InvalidJsonFormatError err;
-        deviceEndpoint->unleash(err.toJsonString());
-        continue;
+        responseJson = err.toJson();
       }
-
-      if (json["topic"].isNull() || json["method"].isNull()) {
+      else if (requestJson["topic"].isNull() || requestJson["method"].isNull()) {
         InvalidRequestFormatError err;
-        deviceEndpoint->unleash(err.toJsonString());
-        continue;
+        responseJson = err.toJson();
+      }
+      else {
+        responseJson = resolvers->execute(requestJson);
       }
 
-      deviceEndpoint->unleash(resolvers->execute(json.as<JsonObject>()));
+      responseJson["reqId"] = requestJson["reqId"];
+
+      String responseString;
+      serializeJson(responseJson, responseString);
+      deviceEndpoint->unleash(responseString);
     }
 
     byte bSensors[64];

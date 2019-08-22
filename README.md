@@ -33,6 +33,6 @@
 * precondition for criteria ```{"topic": "precondition", "method": "query", "data": {"type": "criteria", "index": 0}}```
 * criteria ```{"topic": "criteria", "method": "query", "data": {"index": 1}}```
 * timer ```{"topic": "timer", "method": "query", "data": {"index": 0}}```
-* (t) nsensors ```{"topic": "nsensors", "method": "query"}```
-* (t) nsensor ```{"topic": "nsensor", "method": "query", "data": {"index": 1}}```
-* (t) nsensor ```{"topic": "info", "method": "query"}```
+* nsensors ```{"topic": "nsensors", "method": "query"}```
+* nsensors (with sensor = false) ```{"topic": "nsensors", "method": "query", "data": {"withSensor": false}}```
+* nsensor ```{"topic": "nsensor", "method": "query", "data": {"index": 1}}```

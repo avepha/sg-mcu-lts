@@ -4,7 +4,6 @@
 #include "mutation/m_criteria.h"
 #include "mutation/m_timer_save.h"
 
-#include "query/meta_field.h"
 #include "query/q_date.h"
 #include "query/q_sensor.h"
 #include "query/q_sensor_order.h"
@@ -12,11 +11,10 @@
 #include "query/q_criteria.h"
 #include "query/q_timer.h"
 #include "query/q_nsensor.h"
+#include "query/q_nsensors.h"
 
-
-
-#include "util/date_time.h"
-#include "util/updateNSensor.h"
+#include "test_util/date_time.h"
+#include "test_util/updateNSensor.h"
 
 void setup() {
   Serial.begin(115200);
@@ -24,8 +22,6 @@ void setup() {
   delay(1000);
 
   UNITY_BEGIN();
-  /* Meta Filed */
-  meta_field_RUN_TEST();
 
   /* Query Test */
   q_date_RUN_TEST();
@@ -35,6 +31,7 @@ void setup() {
   q_criteria_RUN_TEST();
   q_timer_RUN_TEST();
   q_nsensor_RUN_TEST();
+  q_nsensors_RUN_TEST();
 
   /* Mutation Test */
   m_date_save_RUN_TEST();

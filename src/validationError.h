@@ -13,16 +13,28 @@ public:
   String topic;
   String message;
   String code;
+  String reqId = "";
 
   String toJsonString() {
-    StaticJsonDocument<200> doc;
-    doc["topic"] = topic;
-    doc["code"] = code;
-    doc["message"] = message;
+    DynamicJsonDocument json(200);
+    json["topic"] = topic;
+    json["code"] = code;
+    json["message"] = message;
+    json["reqId"] = reqId == "" ? (char*)0 : reqId;
 
     String jsonString;
-    serializeJson(doc, jsonString);
+    serializeJson(json, jsonString);
     return jsonString;
+  }
+
+  JsonDocument toJson() {
+    DynamicJsonDocument json(200);
+    json["topic"] = topic;
+    json["code"] = code;
+    json["message"] = message;
+    json["reqId"] = reqId == "" ? (char*)0 : reqId;
+
+    return json;
   }
 };
 

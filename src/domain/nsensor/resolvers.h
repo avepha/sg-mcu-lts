@@ -13,23 +13,42 @@ public:
   explicit query_nsensors(CombineContext *context) : Resolvers("nsensors", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    SensorSchema sensorSchema = context->sensorContext->model->get();
     NSensor *nodes = context->nSensorContext->core->getNSensor();
+    SensorSchema sensorSchema = context->sensorContext->model->get();
 
     DynamicJsonDocument data(2048);
-    for (int i = 0; i < 8; i++) {
-      if( millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0) {
-        JsonObject dataObj = data.createNestedObject();
-        dataObj["index"] = i;
-        dataObj["lastSeen"] = nodes[i].lastSeen;
-        dataObj["isAlive"] = millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0;
 
-        JsonObject sensorObj = dataObj.createNestedObject("sensors");
-        for(int j = 0; j < sensorSchema.numberOfSensor; j++) {
-          sensorObj[sensorSchema.names[j]] = nodes[i].sensors[j];
+    if (reqData["withSensor"].isNull() || reqData["withSensor"]) {
+      for (int i = 0; i < 8; i++) {
+        if( millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0) {
+          JsonObject dataObj = data.createNestedObject();
+          dataObj["index"] = i;
+          dataObj["lastSeen"] = nodes[i].lastSeen;
+          dataObj["isAlive"] = millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0;
+
+          JsonObject sensorObj = dataObj.createNestedObject("sensors");
+          for(int j = 0; j < sensorSchema.numberOfSensor; j++) {
+            sensorObj[sensorSchema.names[j]] = nodes[i].sensors[j];
+          }
         }
       }
     }
+    else if(reqData["withSensor"] == false) {
+      for (int i = 0; i < 8; i++) {
+        if( millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0) {
+          JsonObject dataObj = data.createNestedObject();
+          dataObj["index"] = i;
+          dataObj["lastSeen"] = nodes[i].lastSeen;
+          dataObj["isAlive"] = millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0;
+
+          JsonArray sensorObj = dataObj.createNestedArray("sensors");
+          for(int j = 0; j < sensorSchema.numberOfSensor; j++) {
+            sensorObj.add(nodes[i].sensors[j]);
+          }
+        }
+      }
+    }
+
 
     return data;
   };
@@ -41,7 +60,7 @@ public:
 
   JsonDocument resolve(JsonObject reqData) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
-      InvalidInputError err("index or timers field is not specified.");
+      InvalidInputError err("index field is not specified.");
       throw err;
     }
 

@@ -1,18 +1,12 @@
 #include "../init.h"
 
 void q_sensor_check_correct_type() {
-  JsonRequest topic("sensor", "query");
-  String result = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
+  JsonRequest requestTopic("sensor", "query");
+  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
 
-  StaticJsonDocument<512> resJson;
-  DeserializationError error = deserializeJson(resJson, result);
-  if (error) {
-    TEST_ASSERT_FALSE(error);
-  }
-
-  TEST_ASSERT_TRUE(resJson["topic"] == "sensor");
-  TEST_ASSERT_TRUE(resJson["method"] == "query");
-  TEST_ASSERT_FALSE(resJson["data"].isNull());
+  TEST_ASSERT_TRUE(responseJson["topic"] == "sensor");
+  TEST_ASSERT_TRUE(responseJson["method"] == "query");
+  TEST_ASSERT_FALSE(responseJson["data"].isNull());
 }
 
 void q_sensor_RUN_TEST() {
