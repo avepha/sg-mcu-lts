@@ -12,25 +12,25 @@ class mutation_timer_save : public Resolvers {
 public:
   explicit mutation_timer_save(CombineContext *context) : Resolvers("timer_save", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull() || reqJson["data"]["timers"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData.isNull() || reqData["index"].isNull() || reqData["timers"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
       throw err;
     }
 
-    if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
+    if (reqData["index"].as<int>() < 0 || reqData["index"].as<int>() > 7) {
       InvalidInputError err("index out of range.");
        throw err;
     }
 
-    int index = reqJson["data"]["index"].as<int>();
+    int index = reqData["index"].as<int>();
     TimerSchema timerSchema = context->timerContext->model->get();
-    int size = reqJson["data"]["timers"].size();
+    int size = reqData["timers"].size();
 
     timerSchema.timers[index].size = size;
     for(int i = 0 ; i < size; i++) {
-      timerSchema.timers[index].data[i][0] = reqJson["data"]["timers"][i][0];
-      timerSchema.timers[index].data[i][1] = reqJson["data"]["timers"][i][1];
+      timerSchema.timers[index].data[i][0] = reqData["timers"][i][0];
+      timerSchema.timers[index].data[i][1] = reqData["timers"][i][1];
     }
 
     int writeOps = context->timerContext->model->save(timerSchema);
@@ -56,18 +56,18 @@ class query_timer : public Resolvers {
 public:
   explicit query_timer(CombineContext *context) : Resolvers("timer", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;
     }
 
-    if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
+    if (reqData["index"] < 0 || reqData["index"] > 7) {
       InvalidInputError err("index out of range.");
       throw err;
     }
 
-    int index = reqJson["data"]["index"];
+    int index = reqData["index"];
     TimerSchema timerSchema = context->timerContext->model->get();
     DynamicJsonDocument data(1024);
     data["index"] = index;

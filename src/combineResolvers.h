@@ -54,7 +54,7 @@ String CombineResolvers::execute(JsonObject json) {
     for(int i = 0 ; i < QUERY_SIZE; i++) {
       if (query[i]->getName() == json["topic"]) {
         try {
-          JsonDocument data = query[i]->resolve(json);
+          JsonDocument data = query[i]->resolve(json["data"]);
           response["topic"] = json["topic"];
           response["method"] = json["method"];
           response["reqId"] = json["reqId"].isNull() ? 0 : json["reqId"];
@@ -76,7 +76,7 @@ String CombineResolvers::execute(JsonObject json) {
     for(int i = 0 ; i < MUTATION_SIZE; i++) {
       if (mutation[i]->getName() == json["topic"]) {
         try {
-          JsonDocument data =  mutation[i]->resolve(json);
+          JsonDocument data =  mutation[i]->resolve(json["data"]);
           response["topic"] = json["topic"];
           response["method"] = json["method"];
           response["reqId"] = json["reqId"].isNull() ? 0 : json["reqId"];

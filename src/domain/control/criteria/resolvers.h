@@ -12,23 +12,23 @@ class mutation_criteria_save : public Resolvers {
 public:
   explicit mutation_criteria_save(CombineContext *context) : Resolvers("criteria_save", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;
     }
 
-    if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
+    if (reqData["index"] < 0 || reqData["index"] > 7) {
       InvalidInputError err("index out of range.");
       throw err;
     }
 
-    int index = reqJson["data"]["index"];
+    int index = reqData["index"];
     CriteriaSchema schema = context->criteriaContext->model->get();
 
-    schema.criterias[index].sensor = reqJson["data"]["criteria"]["sensor"];
-    schema.criterias[index].criteria = reqJson["data"]["criteria"]["criteria"];
-    schema.criterias[index].greater = reqJson["data"]["criteria"]["greater"];
+    schema.criterias[index].sensor = reqData["criteria"]["sensor"];
+    schema.criterias[index].criteria = reqData["criteria"]["criteria"];
+    schema.criterias[index].greater = reqData["criteria"]["greater"];
 
     int writeOps = context->criteriaContext->model->save(schema);
 
@@ -51,18 +51,18 @@ class query_criteria : public Resolvers {
 public:
   explicit query_criteria(CombineContext *context) : Resolvers("criteria", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;
     }
 
-    if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
+    if (reqData["index"] < 0 || reqData["index"] > 7) {
       InvalidInputError err("index out of range.");
       throw err;
     }
 
-    int index = reqJson["data"]["index"];
+    int index = reqData["index"];
     CriteriaSchema schema = context->criteriaContext->model->get();
 
     DynamicJsonDocument data(256);

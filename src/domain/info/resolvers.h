@@ -12,7 +12,7 @@ class query_info : public Resolvers {
 public:
   explicit query_info(CombineContext *context) : Resolvers("info", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqData) override {
     DynamicJsonDocument data(128);
     data["version"] = VERSION;
     return data;

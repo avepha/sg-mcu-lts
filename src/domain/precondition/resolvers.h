@@ -11,27 +11,27 @@ class mutation_precondition_save : public Resolvers {
 public:
   explicit mutation_precondition_save(CombineContext *context) : Resolvers("precondition_save", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
       throw err;
     }
 
-    if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
+    if (reqData["index"] < 0 || reqData["index"] > 7) {
       InvalidInputError err("index out of range.");
       throw err;
     }
 
-    int index = reqJson["data"]["index"];
+    int index = reqData["index"];
 
-    if (!reqJson["data"]["timers"].isNull()) {
+    if (!reqData["timers"].isNull()) {
       PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
-      int size = reqJson["data"]["timers"].size();
+      int size = reqData["timers"].size();
 
       timerSchema.timers[index].size = size;
       for(int i = 0 ; i < size; i++) {
-        timerSchema.timers[index].data[i][0] = reqJson["data"]["timers"][i][0];
-        timerSchema.timers[index].data[i][1] = reqJson["data"]["timers"][i][1];
+        timerSchema.timers[index].data[i][0] = reqData["timers"][i][0];
+        timerSchema.timers[index].data[i][1] = reqData["timers"][i][1];
       }
 
       int writeOps = context->preConditionContext->timerModel->save(timerSchema);
@@ -51,11 +51,11 @@ public:
       return data;
     }
 
-    if(!reqJson["data"]["criteria"].isNull()) {
+    if(!reqData["criteria"].isNull()) {
       PreConditionCriteriaSchema criteriaSchema = context->preConditionContext->criteriaModel->get();
-      criteriaSchema.criterias[index].sensor = reqJson["data"]["criteria"]["sensor"];
-      criteriaSchema.criterias[index].criteria = reqJson["data"]["criteria"]["criteria"];
-      criteriaSchema.criterias[index].greater = reqJson["data"]["criteria"]["greater"];
+      criteriaSchema.criterias[index].sensor = reqData["criteria"]["sensor"];
+      criteriaSchema.criterias[index].criteria = reqData["criteria"]["criteria"];
+      criteriaSchema.criterias[index].greater = reqData["criteria"]["greater"];
 
       int writeOps = context->preConditionContext->criteriaModel->save(criteriaSchema);
 
@@ -81,19 +81,19 @@ class query_precondition : public Resolvers {
 public:
   explicit query_precondition(CombineContext *context) : Resolvers("precondition", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"]["type"].isNull() || reqJson["data"]["index"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData["type"].isNull() || reqData["index"].isNull()) {
       InvalidInputError err("type Or index field is not specified.");
       throw err;
     }
 
-    if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
+    if (reqData["index"].as<int>() < 0 || reqData["index"].as<int>() > 7) {
       InvalidInputError err("index out of range.");
       throw err;
     }
 
-    int index = reqJson["data"]["index"];
-    String type = reqJson["data"]["type"];
+    int index = reqData["index"];
+    String type = reqData["type"];
 
     if (type == "timer") {
       PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
