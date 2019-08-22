@@ -62,11 +62,8 @@ void loop1(void *pvParameters) {
         continue;
       }
 
-      int _f = millis();
       deviceEndpoint->unleash(resolvers->execute(json.as<JsonObject>()));
-      Serial.println("execution time: " + String(millis() - _f));
     }
-    
 
     byte bSensors[64];
     int bSize = sensorEndpoint->embrace(bSensors);

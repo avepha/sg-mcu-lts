@@ -4,6 +4,7 @@
 #include "mutation/m_criteria.h"
 #include "mutation/m_timer_save.h"
 
+#include "query/meta_field.h"
 #include "query/q_date.h"
 #include "query/q_sensor.h"
 #include "query/q_sensor_order.h"
@@ -11,6 +12,7 @@
 #include "query/q_criteria.h"
 #include "query/q_timer.h"
 #include "query/q_nsensor.h"
+
 
 
 #include "util/date_time.h"
@@ -22,6 +24,8 @@ void setup() {
   delay(1000);
 
   UNITY_BEGIN();
+  /* Meta Filed */
+  meta_field_RUN_TEST();
 
   /* Query Test */
   q_date_RUN_TEST();

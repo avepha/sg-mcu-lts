@@ -39,6 +39,7 @@ void m_timer_save_index_is_not_defined() {
   timer_1.add(10800);
 
   JsonRequest topic("timer_save", "mutation", data);
+
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);

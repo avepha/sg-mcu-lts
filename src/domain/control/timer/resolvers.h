@@ -18,12 +18,12 @@ public:
       throw err;
     }
 
-    if (reqData["index"].as<int>() < 0 || reqData["index"].as<int>() > 7) {
+    if (reqData["index"] < 0 || reqData["index"] > 7) {
       InvalidInputError err("index out of range.");
        throw err;
     }
 
-    int index = reqData["index"].as<int>();
+    int index = reqData["index"];
     TimerSchema timerSchema = context->timerContext->model->get();
     int size = reqData["timers"].size();
 
