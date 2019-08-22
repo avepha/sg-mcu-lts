@@ -12,7 +12,7 @@ class query_nsensors : public Resolvers {
 public:
   explicit query_nsensors(CombineContext *context) : Resolvers("nsensors", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqData) override {
     SensorSchema sensorSchema = context->sensorContext->model->get();
     NSensor *nodes = context->nSensorContext->core->getNSensor();
 
@@ -39,18 +39,18 @@ class query_nsensor : public Resolvers {
 public:
   explicit query_nsensor(CombineContext *context) : Resolvers("nsensor", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
       throw err;
     }
 
-    if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
+    if (reqData["index"].as<int>() < 0 || reqData["index"].as<int>() > 7) {
       InvalidInputError err("index out of range.");
       throw err;
     }
 
-    int index = reqJson["data"]["index"];
+    int index = reqData["index"];
     SensorSchema sensorSchema = context->sensorContext->model->get();
     NSensor *nodes = context->nSensorContext->core->getNSensor();
 

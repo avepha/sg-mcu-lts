@@ -12,12 +12,12 @@ class mutation_sensor_order_save : public Resolvers {
 public:
   explicit mutation_sensor_order_save(CombineContext *context) : Resolvers("sensor_order_save", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"]["names"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData["names"].isNull()) {
       InvalidInputError err;
       throw err;
     }
-    JsonArray names = reqJson["data"]["names"].as<JsonArray>();
+    JsonArray names = reqData["names"].as<JsonArray>();
 
     SensorSchema sensorSchema = context->sensorContext->model->get();
     sensorSchema.numberOfSensor = names.size();
@@ -46,7 +46,7 @@ class query_sensor : public Resolvers {
 public:
   explicit query_sensor(CombineContext *context) : Resolvers("sensor", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqData) override {
     SensorSchema sensorNames = context->sensorContext->model->get();
     float *sensors = context->sensorContext->core->getSensors();
 
@@ -63,7 +63,7 @@ class query_sensor_order : public Resolvers {
 public:
   explicit query_sensor_order(CombineContext *context) : Resolvers("sensor_order", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqData) override {
     SensorSchema sensorNames = context->sensorContext->model->get();
     delay(10);
 

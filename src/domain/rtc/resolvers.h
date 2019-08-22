@@ -16,13 +16,13 @@ class mutation_date_save : public Resolvers {
 public:
   explicit mutation_date_save(CombineContext *context) : Resolvers("date_save", context) {};
 
-  JsonDocument resolve(JsonObject reqJson) override {
-    if (reqJson["data"]["date"].isNull()) {
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData["date"].isNull()) {
       InvalidInputError err;
       throw err;
     }
 
-    DateTime newDate(IsoStringToDateTime(reqJson["data"]["date"]));
+    DateTime newDate(IsoStringToDateTime(reqData["date"]));
     context->rtcContext->core->setDate(newDate);
     DateTime dateTime = context->rtcContext->core->getDate();
 
@@ -38,7 +38,7 @@ class query_date : public Resolvers {
 public:
   explicit query_date(CombineContext *context) : Resolvers("date", context) {};
 
-  JsonDocument resolve(JsonObject  reqJson) override {
+  JsonDocument resolve(JsonObject reqData) override {
     DateTime dateTime = context->rtcContext->core->getDate();
 
     DynamicJsonDocument data(64);

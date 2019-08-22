@@ -26,7 +26,7 @@
    ```{"topic": "timer_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}```
 
 ###Query
-* Date ```{"topic": "date", "method": "query", "reqId": 16}```
+* Date ```{"topic": "date", "method": "query", "reqId": "16"}```
 * sensor ```{"topic": "sensor", "method": "query"}```
 * sensor_order ```{"topic": "sensor_order", "method": "query"}```
 * precondition for timer ```{"topic": "precondition", "method": "query", "data": {"type": "timer", "index": 0}}```

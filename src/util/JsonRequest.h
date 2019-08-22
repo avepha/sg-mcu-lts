@@ -7,9 +7,9 @@
 
 class JsonRequest {
 public:
-  JsonRequest(String topic, String method, int reqId = 0);
+  JsonRequest(String topic, String method, String reqId = "reqId-0");
 
-  JsonRequest(String topic, String method, JsonDocument data, int reqId = 0);
+  JsonRequest(String topic, String method, JsonDocument data, String reqId = "reqId-0");
 
   String toString();
 
@@ -19,16 +19,16 @@ private:
   String topic;
   String method;
   StaticJsonDocument<2048> data;
-  int reqId;
+  String reqId;
 };
 
-JsonRequest::JsonRequest(String topic, String method, int reqId) :
+JsonRequest::JsonRequest(String topic, String method, String reqId) :
     topic(topic),
     method(method),
     reqId(reqId)
     {};
 
-JsonRequest::JsonRequest(String topic, String method, JsonDocument data, int reqId) :
+JsonRequest::JsonRequest(String topic, String method, JsonDocument data, String reqId) :
     topic(topic),
     method(method),
     data(data),

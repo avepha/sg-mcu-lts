@@ -8,7 +8,7 @@ public:
   Resolvers(String , CombineContext *);
   String getName() {return name;}
   virtual String resolve() { return "NULL";}
-  virtual JsonDocument resolve(JsonObject reqJson) {
+  virtual JsonDocument resolve(JsonObject reqData) {
     DynamicJsonDocument json(64);
     return json;
   }
