@@ -1,6 +1,5 @@
 #include "util/converter.h"
 
-//TODO: revise, there still have infinity loop bug if stop bit is not found
 class SensorEndpoint {
 public:
   SensorEndpoint(HardwareSerial *entryPoint);

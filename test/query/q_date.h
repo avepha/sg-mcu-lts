@@ -13,7 +13,8 @@ void q_date_check_correct_type() {
   }
   TEST_ASSERT_TRUE(resJson["topic"] == "date");
   TEST_ASSERT_TRUE(resJson["method"] == "query");
-  TEST_ASSERT_TRUE(resJson["data"].as<String>().endsWith("000Z"));
+  TEST_ASSERT_FALSE(resJson["data"].isNull());
+  TEST_ASSERT_TRUE(resJson["data"]["date"].as<String>().endsWith("000Z"));
 }
 
 void q_date_RUN_TEST() {

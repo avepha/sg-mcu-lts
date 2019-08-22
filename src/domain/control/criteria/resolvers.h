@@ -12,15 +12,15 @@ class mutation_criteria_save : public Resolvers {
 public:
   explicit mutation_criteria_save(CombineContext *context) : Resolvers("criteria_save", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
-      InvalidInputError error("index is not specified.");
-      return error.toJsonString();
+      InvalidInputError err("index is not specified.");
+      throw err;
     }
 
     if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
-      InvalidInputError error("index out of range.");
-      return error.toJsonString();
+      InvalidInputError err("index out of range.");
+      throw err;
     }
 
     int index = reqJson["data"]["index"];
@@ -34,7 +34,7 @@ public:
 
     CriteriaSchema newSchema = context->criteriaContext->model->get();
 
-    StaticJsonDocument<256> data;
+    DynamicJsonDocument data(256);
     data["index"] = index;
     data["writeOps"] = writeOps;
     JsonObject criteria = data.createNestedObject("criteria");
@@ -42,8 +42,7 @@ public:
     criteria["criteria"] = newSchema.criterias[index].criteria;
     criteria["greater"] = newSchema.criterias[index].greater;
 
-    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return topic.toString();
+    return data;
   };
 };
 
@@ -52,29 +51,28 @@ class query_criteria : public Resolvers {
 public:
   explicit query_criteria(CombineContext *context) : Resolvers("criteria", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
-      InvalidInputError error("index is not specified.");
-      return error.toJsonString();
+      InvalidInputError err("index is not specified.");
+      throw err;
     }
 
     if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
-      InvalidInputError error("index out of range.");
-      return error.toJsonString();
+      InvalidInputError err("index out of range.");
+      throw err;
     }
 
     int index = reqJson["data"]["index"];
     CriteriaSchema schema = context->criteriaContext->model->get();
 
-    StaticJsonDocument<256> data;
+    DynamicJsonDocument data(256);
     data["index"] = index;
     JsonObject criteria = data.createNestedObject("criteria");
     criteria["sensor"] = schema.criterias[index].sensor;
     criteria["criteria"] = schema.criterias[index].criteria;
     criteria["greater"] = schema.criterias[index].greater;
 
-    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return topic.toString();
+    return data;
   };
 };
 

@@ -47,21 +47,53 @@ CombineResolvers::CombineResolvers(CombineContext *context):
 
 
 String CombineResolvers::execute(JsonObject json) {
+  DynamicJsonDocument response(2048);
+  uint32_t incomingTime = millis();
 
   if (json["method"] == "query") {
     for(int i = 0 ; i < QUERY_SIZE; i++) {
       if (query[i]->getName() == json["topic"]) {
-        return query[i]->resolve(json);
-      }
-    }
-  }
-  else if (json["method"] == "mutation") {
-    for(int i = 0 ; i < MUTATION_SIZE; i++) {
-      if (mutation[i]->getName() == json["topic"]) {
-        return mutation[i]->resolve(json);
+        try {
+          JsonDocument data = query[i]->resolve(json);
+          response["topic"] = json["topic"];
+          response["method"] = json["method"];
+          response["reqId"] = json["reqId"].isNull() ? 0 : json["reqId"];
+          response["execTime"] = millis() - incomingTime;
+          response["data"] = data;
+
+          String resString;
+          serializeJson(response, resString);
+          return resString;
+        }
+        catch(ValidationError err) {
+          return err.toJsonString();
+        }
       }
     }
   }
 
-  return (new InvalidMethodError())->toJsonString();
+  else if (json["method"] == "mutation") {
+    for(int i = 0 ; i < MUTATION_SIZE; i++) {
+      if (mutation[i]->getName() == json["topic"]) {
+        try {
+          JsonDocument data =  mutation[i]->resolve(json);
+          response["topic"] = json["topic"];
+          response["method"] = json["method"];
+          response["reqId"] = json["reqId"].isNull() ? 0 : json["reqId"];
+          response["execTime"] = millis() - incomingTime;
+          response["data"] = data;
+
+          String resString;
+          serializeJson(response, resString);
+          return resString;
+        }
+        catch (ValidationError err) {
+          return err.toJsonString();
+        }
+      }
+    }
+  }
+
+  InvalidMethodError err;
+  return err.toJsonString();
 }

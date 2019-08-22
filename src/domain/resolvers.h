@@ -5,12 +5,13 @@
 
 class Resolvers {
 public:
-  //TODO: what is appropriate date type should we return?
   Resolvers(String , CombineContext *);
   String getName() {return name;}
   virtual String resolve() { return "NULL";}
-  virtual String resolve(JsonObject reqJson) {return "NULL";}
-  virtual String resolve(JsonRequest *topic) {return "recieve json topic";}
+  virtual JsonDocument resolve(JsonObject reqJson) {
+    DynamicJsonDocument json(64);
+    return json;
+  }
 
 protected:
   String name;

@@ -9,7 +9,7 @@ void m_sensor_order_save_check_correct_type() {
   names.add("sensor_1");
   names.add("sensor_2");
 
-  JsonRequest m_date_save("sensor_order_save", "mutation", data.as<JsonObject>());
+  JsonRequest m_date_save("sensor_order_save", "mutation", data);
   String m_sensor_order_save_res = resolvers.execute(m_date_save.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<512> m_sensor_order_save;
@@ -27,8 +27,8 @@ void m_sensor_order_save_check_correct_type() {
 }
 
 void m_sensor_order_save_names_is_not_define() {
-  StaticJsonDocument<64> data;
-  JsonRequest m_sensor_order_save("sensor_order_save", "mutation", data.as<JsonObject>());
+  DynamicJsonDocument data(64);
+  JsonRequest m_sensor_order_save("sensor_order_save", "mutation", data);
   String m_sensor_order_save_res = resolvers.execute(m_sensor_order_save.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<256> m_sensor_order_save_json;

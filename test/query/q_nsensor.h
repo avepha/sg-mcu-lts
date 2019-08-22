@@ -19,9 +19,9 @@ void q_nsensor_check_correct_type() {
   memcpy(plain_payload, payload_sta_1 + 1, plain_payload_size);
   context.nSensorContext->core->updateNSensor(plain_payload, plain_payload_size);
 
-  StaticJsonDocument<64> data;
+  DynamicJsonDocument data(64);
   data["index"] = 1;
-  JsonRequest topic("nsensor", "query", data.as<JsonObject>());
+  JsonRequest topic("nsensor", "query", data);
   String result = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<512> resJson;

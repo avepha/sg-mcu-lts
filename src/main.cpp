@@ -88,6 +88,6 @@ void loop1(void *pvParameters) {
 }
 
 void loop() {
-//  Serial.println("free heap: " + String(xPortGetFreeHeapSize()));
+  Serial.println("free heap: " + String(xPortGetFreeHeapSize()));
   delay(1000);
 }

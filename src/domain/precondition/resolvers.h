@@ -11,15 +11,15 @@ class mutation_precondition_save : public Resolvers {
 public:
   explicit mutation_precondition_save(CombineContext *context) : Resolvers("precondition_save", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
-      return err.toJsonString();
+      throw err;
     }
 
     if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
       InvalidInputError err("index out of range.");
-      return err.toJsonString();
+      throw err;
     }
 
     int index = reqJson["data"]["index"];
@@ -38,7 +38,7 @@ public:
       delay(10);
 
       PreConditionTimerSchema newSchema = context->preConditionContext->timerModel->get();
-      StaticJsonDocument<1024> data;
+      DynamicJsonDocument data(1024);
       data["index"] = index;
       data["writeOps"] = writeOps;
       JsonArray timers = data.createNestedArray("timers");
@@ -48,8 +48,7 @@ public:
         d_i.add(newSchema.timers[index].data[i][1]);
       }
 
-      JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-      return response.toString();
+      return data;
     }
 
     if(!reqJson["data"]["criteria"].isNull()) {
@@ -61,7 +60,7 @@ public:
       int writeOps = context->preConditionContext->criteriaModel->save(criteriaSchema);
 
       PreConditionCriteriaSchema newCriteriaSchema = context->preConditionContext->criteriaModel->get();
-      StaticJsonDocument<1024> data;
+      DynamicJsonDocument data(1024);
       data["index"] = index;
       data["writeOps"] = writeOps;
       JsonObject criteria = data.createNestedObject("criteria");
@@ -69,12 +68,11 @@ public:
       criteria["criteria"] = newCriteriaSchema.criterias[index].criteria;
       criteria["greater"] = newCriteriaSchema.criterias[index].greater;
 
-      JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-      return response.toString();
+      return data;
     }
 
     InvalidInputError err;
-    return err.toJsonString();
+    throw err;
   };
 };
 
@@ -83,15 +81,15 @@ class query_precondition : public Resolvers {
 public:
   explicit query_precondition(CombineContext *context) : Resolvers("precondition", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     if (reqJson["data"]["type"].isNull() || reqJson["data"]["index"].isNull()) {
       InvalidInputError err("type Or index field is not specified.");
-      return err.toJsonString();
+      throw err;
     }
 
     if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
       InvalidInputError err("index out of range.");
-      return err.toJsonString();
+      throw err;
     }
 
     int index = reqJson["data"]["index"];
@@ -99,7 +97,7 @@ public:
 
     if (type == "timer") {
       PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
-      StaticJsonDocument<1024> data;
+      DynamicJsonDocument data(1024);
       data["index"] = index;
       JsonArray timers = data.createNestedArray("timers");
       for (int i = 0; i < timerSchema.timers[index].size; i++) {
@@ -108,25 +106,23 @@ public:
         d_i.add(timerSchema.timers[index].data[i][1]);
       }
 
-      JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-      return response.toString();
+      return data;
     }
 
     if (type == "criteria") {
       PreConditionCriteriaSchema criteriaSchema = context->preConditionContext->criteriaModel->get();
-      StaticJsonDocument<1024> data;
+      DynamicJsonDocument data(1024);
       data["index"] = index;
       JsonObject criteria = data.createNestedObject("criteria");
       criteria["sensor"] = criteriaSchema.criterias[index].sensor;
       criteria["criteria"] = criteriaSchema.criterias[index].criteria;
       criteria["greater"] = criteriaSchema.criterias[index].greater;
 
-      JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-      return response.toString();
+      return data;
     }
 
     InvalidInputError err("No such the provided type.");
-    return err.toJsonString();
+    throw err;
   };
 };
 

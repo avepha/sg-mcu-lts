@@ -3,7 +3,7 @@
 void q_criteria_with_timer_param_check_correct_type() {
   StaticJsonDocument<256> data;
   data["index"] = 1;
-  JsonRequest topic("criteria", "query", data.as<JsonObject>());
+  JsonRequest topic("criteria", "query", data);
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -18,7 +18,7 @@ void q_criteria_with_timer_param_check_correct_type() {
 
 void q_criteria_index_is_not_specified() {
   StaticJsonDocument<256> data;
-  JsonRequest topic("criteria", "query", data.as<JsonObject>());
+  JsonRequest topic("criteria", "query", data);
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);
@@ -31,7 +31,7 @@ void q_criteria_index_is_not_specified() {
 void q_criteria_index_out_of_range() {
   StaticJsonDocument<256> data;
   data["index"] = -1;
-  JsonRequest topic("criteria", "query", data.as<JsonObject>());
+  JsonRequest topic("criteria", "query", data);
   String topicResult = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
   StaticJsonDocument<1024> jsonResult;
   deserializeJson(jsonResult, topicResult);

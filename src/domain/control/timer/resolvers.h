@@ -12,15 +12,15 @@ class mutation_timer_save : public Resolvers {
 public:
   explicit mutation_timer_save(CombineContext *context) : Resolvers("timer_save", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull() || reqJson["data"]["timers"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
-      return err.toJsonString();
+      throw err;
     }
 
     if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
       InvalidInputError err("index out of range.");
-      return err.toJsonString();
+       throw err;
     }
 
     int index = reqJson["data"]["index"].as<int>();
@@ -37,7 +37,7 @@ public:
     delay(10);
 
     TimerSchema newSchema = context->timerContext->model->get();
-    StaticJsonDocument<1024> data;
+    DynamicJsonDocument data(1024);
     data["index"] = index;
     data["writeOps"] = writeOps;
     JsonArray timers = data.createNestedArray("timers");
@@ -47,8 +47,7 @@ public:
       d_i.add(newSchema.timers[index].data[i][1]);
     }
 
-    JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return response.toString();
+    return data;
   };
 };
 
@@ -57,20 +56,20 @@ class query_timer : public Resolvers {
 public:
   explicit query_timer(CombineContext *context) : Resolvers("timer", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
-      InvalidInputError error("index is not specified.");
-      return error.toJsonString();
+      InvalidInputError err("index is not specified.");
+      throw err;
     }
 
     if (reqJson["data"]["index"] < 0 || reqJson["data"]["index"] > 7) {
-      InvalidInputError error("index out of range.");
-      return error.toJsonString();
+      InvalidInputError err("index out of range.");
+      throw err;
     }
 
     int index = reqJson["data"]["index"];
     TimerSchema timerSchema = context->timerContext->model->get();
-    StaticJsonDocument<1024> data;
+    DynamicJsonDocument data(1024);
     data["index"] = index;
     JsonArray timers = data.createNestedArray("timers");
     for (int i = 0; i < timerSchema.timers[index].size; i++) {
@@ -79,8 +78,7 @@ public:
       d_i.add(timerSchema.timers[index].data[i][1]);
     }
 
-    JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return response.toString();
+    return data;
   };
 };
 

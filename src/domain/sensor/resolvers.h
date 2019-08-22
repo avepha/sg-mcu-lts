@@ -12,10 +12,10 @@ class mutation_sensor_order_save : public Resolvers {
 public:
   explicit mutation_sensor_order_save(CombineContext *context) : Resolvers("sensor_order_save", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     if (reqJson["data"]["names"].isNull()) {
       InvalidInputError err;
-      return err.toJsonString();
+      throw err;
     }
     JsonArray names = reqJson["data"]["names"].as<JsonArray>();
 
@@ -30,15 +30,14 @@ public:
 
     delay(10);
     SensorSchema newSchema = context->sensorContext->model->get();
-    StaticJsonDocument<300> data;
+    DynamicJsonDocument data(300);
     data["writeOps"] = writeOps;
     JsonArray newNames = data.createNestedArray("names");
     for (int i = 0 ; i < newSchema.numberOfSensor; i++) {
       newNames.add(String(newSchema.names[i]));
     }
 
-    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return topic.toString();
+    return data;
   };
 };
 
@@ -47,17 +46,16 @@ class query_sensor : public Resolvers {
 public:
   explicit query_sensor(CombineContext *context) : Resolvers("sensor", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     SensorSchema sensorNames = context->sensorContext->model->get();
     float *sensors = context->sensorContext->core->getSensors();
 
-    StaticJsonDocument<256> data;
+    DynamicJsonDocument data(256);
     for(int i = 0; i < sensorNames.numberOfSensor; i++) {
       data[sensorNames.names[i]] = sensors[i];
     }
 
-    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return topic.toString();
+    return data;
   };
 };
 
@@ -65,18 +63,17 @@ class query_sensor_order : public Resolvers {
 public:
   explicit query_sensor_order(CombineContext *context) : Resolvers("sensor_order", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     SensorSchema sensorNames = context->sensorContext->model->get();
     delay(10);
 
-    StaticJsonDocument<256> data;
+    DynamicJsonDocument data(256);
     JsonArray names = data.createNestedArray("names");
     for(int i = 0; i < sensorNames.numberOfSensor; i++) {
       names.add(sensorNames.names[i]);
     }
 
-    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return topic.toString();
+    return data;
   };
 };
 

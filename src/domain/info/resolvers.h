@@ -12,11 +12,10 @@ class query_info : public Resolvers {
 public:
   explicit query_info(CombineContext *context) : Resolvers("info", context) {};
 
-  String resolve(JsonObject reqJson) override {
-    StaticJsonDocument<128> data;
+  JsonDocument resolve(JsonObject reqJson) override {
+    DynamicJsonDocument data(128);
     data["version"] = VERSION;
-    JsonRequest topic(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return topic.toString();
+    return data;
   };
 };
 

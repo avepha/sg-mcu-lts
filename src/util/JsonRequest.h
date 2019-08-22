@@ -9,11 +9,7 @@ class JsonRequest {
 public:
   JsonRequest(String topic, String method, int reqId = 0);
 
-  JsonRequest(String topic, String method, String data, int reqId = 0);
-
-  JsonRequest(String topic, String method, JsonObject data, int reqId = 0);
-
-  JsonRequest(String topic, String method, JsonArray data, int reqId = 0);
+  JsonRequest(String topic, String method, JsonDocument data, int reqId = 0);
 
   String toString();
 
@@ -22,9 +18,7 @@ public:
 private:
   String topic;
   String method;
-  JsonObject dataJson;
-  JsonArray dataJsonArray;
-  String dataString;
+  StaticJsonDocument<2048> data;
   int reqId;
 };
 
@@ -34,24 +28,10 @@ JsonRequest::JsonRequest(String topic, String method, int reqId) :
     reqId(reqId)
     {};
 
-JsonRequest::JsonRequest(String topic, String method, String data, int reqId) :
+JsonRequest::JsonRequest(String topic, String method, JsonDocument data, int reqId) :
     topic(topic),
     method(method),
-    dataString(data),
-    reqId(reqId)
-    {};
-
-JsonRequest::JsonRequest(String topic, String method, JsonObject data, int reqId) :
-    topic(topic),
-    method(method),
-    dataJson(data),
-    reqId(reqId)
-    {};
-
-JsonRequest::JsonRequest(String topic, String method, JsonArray data, int reqId) :
-    topic(topic),
-    method(method),
-    dataJsonArray(data),
+    data(data),
     reqId(reqId)
     {};
 
@@ -60,8 +40,8 @@ StaticJsonDocument<2048> JsonRequest::toStaticJsonObject() {
   json["topic"] = topic;
   json["method"] = method;
 
-  if (!dataJson.isNull())
-    json["data"] = dataJson;
+  if (!data.isNull())
+    json["data"] = data;
 
   return json;
 }
@@ -72,12 +52,8 @@ String JsonRequest::toString() {
   json["method"] = method;
   json["reqId"] = reqId;
 
-  if (!dataJson.isNull())
-    json["data"] = dataJson;
-  else if(!dataJsonArray.isNull())
-    json["data"] = dataJsonArray;
-  else
-    json["data"] = dataString;
+  if (!data.isNull())
+    json["data"] = data;
 
   String jsonString;
   serializeJson(json, jsonString);

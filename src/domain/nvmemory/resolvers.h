@@ -13,14 +13,15 @@ class mutation_clear_nvmemory : public Resolvers {
 public:
   explicit mutation_clear_nvmemory(CombineContext *context) : Resolvers("clear_nvmemory", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     for(int i = 0 ; i < EEPROM_SIZE; i++) {
       EEPROM.put(i, 255);
     }
     EEPROM.commit();
 
-    JsonRequest response(reqJson["topic"], reqJson["method"], "SUCCESS");
-    return response.toString();
+    DynamicJsonDocument data(64);
+    data["status"] = "success";
+    return data;
   };
 };
 

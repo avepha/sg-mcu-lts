@@ -12,11 +12,11 @@ class query_nsensors : public Resolvers {
 public:
   explicit query_nsensors(CombineContext *context) : Resolvers("nsensors", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     SensorSchema sensorSchema = context->sensorContext->model->get();
     NSensor *nodes = context->nSensorContext->core->getNSensor();
 
-    StaticJsonDocument<2048> data;
+    DynamicJsonDocument data(2048);
     for (int i = 0; i < 8; i++) {
       if( millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0) {
         JsonObject dataObj = data.createNestedObject();
@@ -31,8 +31,7 @@ public:
       }
     }
 
-    JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonArray>());
-    return response.toString();
+    return data;
   };
 };
 
@@ -40,22 +39,22 @@ class query_nsensor : public Resolvers {
 public:
   explicit query_nsensor(CombineContext *context) : Resolvers("nsensor", context) {};
 
-  String resolve(JsonObject reqJson) override {
+  JsonDocument resolve(JsonObject reqJson) override {
     if (reqJson["data"].isNull() || reqJson["data"]["index"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
-      return err.toJsonString();
+      throw err;
     }
 
     if (reqJson["data"]["index"].as<int>() < 0 || reqJson["data"]["index"].as<int>() > 7) {
       InvalidInputError err("index out of range.");
-      return err.toJsonString();
+      throw err;
     }
 
     int index = reqJson["data"]["index"];
     SensorSchema sensorSchema = context->sensorContext->model->get();
     NSensor *nodes = context->nSensorContext->core->getNSensor();
 
-    StaticJsonDocument<512> data;
+    DynamicJsonDocument data(512);
     data["index"] = index;
     data["lastSeen"] = nodes[index].lastSeen;
     data["isAlive"] = millis() - nodes[index].lastSeen < 10000 && nodes[index].lastSeen != 0;
@@ -65,8 +64,7 @@ public:
       sensorObj[sensorSchema.names[i]] = nodes[index].sensors[i];
     }
 
-    JsonRequest response(reqJson["topic"], reqJson["method"], data.as<JsonObject>());
-    return response.toString();
+    return data;
   };
 };
 

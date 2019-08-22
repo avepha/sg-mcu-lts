@@ -1,8 +1,8 @@
 #include "../init.h"
 
 void q_timer_index_is_not_defined() {
-  StaticJsonDocument<64> data;
-  JsonRequest topic("timer", "query", data.as<JsonObject>());
+  DynamicJsonDocument data(64);
+  JsonRequest topic("timer", "query", data);
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
   String result = resolvers.execute(json.as<JsonObject>());
 
@@ -18,9 +18,9 @@ void q_timer_index_is_not_defined() {
 }
 
 void q_timer_index_out_of_range() {
-  StaticJsonDocument<64> data;
+  DynamicJsonDocument data(64);
   data["index"] = -1;
-  JsonRequest topic("timer", "query", data.as<JsonObject>());
+  JsonRequest topic("timer", "query", data);
   StaticJsonDocument<256> json = topic.toStaticJsonObject();
   String result = resolvers.execute(json.as<JsonObject>());
 
@@ -33,10 +33,10 @@ void q_timer_index_out_of_range() {
 }
 
 void q_timer_check_correct_type() {
-  StaticJsonDocument<64> data;
+  DynamicJsonDocument data(64);
   data["type"] = "timer";
   data["index"] = 0;
-  JsonRequest topic("timer", "query", data.as<JsonObject>());
+  JsonRequest topic("timer", "query", data);
   String result = resolvers.execute(topic.toStaticJsonObject().as<JsonObject>());
 
   StaticJsonDocument<512> resJson;
