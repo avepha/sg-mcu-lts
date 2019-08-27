@@ -20,7 +20,7 @@ public:
 
     if (reqData["withSensor"].isNull() || reqData["withSensor"]) {
       for (int i = 0; i < 8; i++) {
-        if( millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0) {
+        if( millis() - nodes[i].lastSeen < 10000 || nodes[i].lastSeen != 0) {
           JsonObject dataObj = data.createNestedObject();
           dataObj["index"] = i;
           dataObj["lastSeen"] = nodes[i].lastSeen;
@@ -35,7 +35,7 @@ public:
     }
     else if(reqData["withSensor"] == false) {
       for (int i = 0; i < 8; i++) {
-        if( millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0) {
+        if( millis() - nodes[i].lastSeen < 10000 || nodes[i].lastSeen != 0) {
           JsonObject dataObj = data.createNestedObject();
           dataObj["index"] = i;
           dataObj["lastSeen"] = nodes[i].lastSeen;
