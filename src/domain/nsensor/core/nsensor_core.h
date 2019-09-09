@@ -7,7 +7,7 @@
 
 struct NSensor {
   float sensors[11] = {0};
-  unsigned long lastSeen = 0;
+  unsigned long timeStamp = 0;
 };
 
 class NSensorCore {
@@ -27,7 +27,7 @@ public:
       nodes[station].sensors[i] = sensorBucket[i];
     }
 
-    nodes[station].lastSeen = millis();
+    nodes[station].timeStamp = millis();
   }
 
   NSensor* getNSensor() {

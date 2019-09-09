@@ -20,11 +20,11 @@ public:
 
     if (reqData["withSensor"].isNull() || reqData["withSensor"]) {
       for (int i = 0; i < 8; i++) {
-        if( millis() - nodes[i].lastSeen < 10000 || nodes[i].lastSeen != 0) {
+        if( millis() - nodes[i].timeStamp < 10000 || nodes[i].timeStamp != 0) {
           JsonObject dataObj = data.createNestedObject();
           dataObj["index"] = i;
-          dataObj["lastSeen"] = nodes[i].lastSeen;
-          dataObj["isAlive"] = millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0;
+          dataObj["lastSeen"] = millis() - nodes[i].timeStamp;
+          dataObj["isAlive"] = millis() - nodes[i].timeStamp < 10000 && nodes[i].timeStamp != 0;
 
           JsonObject sensorObj = dataObj.createNestedObject("sensors");
           for(int j = 0; j < sensorSchema.numberOfSensor; j++) {
@@ -35,11 +35,11 @@ public:
     }
     else if(reqData["withSensor"] == false) {
       for (int i = 0; i < 8; i++) {
-        if( millis() - nodes[i].lastSeen < 10000 || nodes[i].lastSeen != 0) {
+        if( millis() - nodes[i].timeStamp < 10000 || nodes[i].timeStamp != 0) {
           JsonObject dataObj = data.createNestedObject();
           dataObj["index"] = i;
-          dataObj["lastSeen"] = nodes[i].lastSeen;
-          dataObj["isAlive"] = millis() - nodes[i].lastSeen < 10000 && nodes[i].lastSeen != 0;
+          dataObj["lastSeen"] =  millis() - nodes[i].timeStamp;
+          dataObj["isAlive"] = millis() - nodes[i].timeStamp < 10000 && nodes[i].timeStamp != 0;
 
           JsonArray sensorObj = dataObj.createNestedArray("sensors");
           for(int j = 0; j < sensorSchema.numberOfSensor; j++) {
@@ -75,8 +75,8 @@ public:
 
     DynamicJsonDocument data(512);
     data["index"] = index;
-    data["lastSeen"] = nodes[index].lastSeen;
-    data["isAlive"] = millis() - nodes[index].lastSeen < 10000 && nodes[index].lastSeen != 0;
+    data["lastSeen"] =  millis() - nodes[index].timeStamp;
+    data["isAlive"] = millis() - nodes[index].timeStamp < 10000 && nodes[index].timeStamp != 0;
 
     JsonObject sensorObj = data.createNestedObject("sensors");
     for(int i = 0; i < sensorSchema.numberOfSensor; i++) {

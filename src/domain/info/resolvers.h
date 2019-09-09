@@ -15,6 +15,9 @@ public:
   JsonDocument resolve(JsonObject reqData) override {
     DynamicJsonDocument data(128);
     data["version"] = VERSION;
+#ifdef SG_TEST
+    data["device_env"] = "test";
+#endif
     return data;
   };
 };
