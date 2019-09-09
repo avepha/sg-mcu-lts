@@ -34,7 +34,7 @@ int SensorEndpoint::embrace(byte *bytes) {
           byte byteVal = entryPoint->read();
           if (byteVal == 0xEF) {
             byte checkSum = modsum(raw, readIndex - 1);
-            memccpy(bytes, raw, checkSum, readIndex - 1);
+            memccpy(bytes, raw, checkSum, readIndex - 1); // bytes = [sta, payload]
             return checkSum == raw[readIndex - 1] ? readIndex - 1: -2; // return -2 = wrong checksum
           } else {
             raw[readIndex++] = byteVal;

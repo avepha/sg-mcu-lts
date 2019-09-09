@@ -2,6 +2,7 @@
 
 #ifndef SG_MCU_UTIL_NSENSOR_H
 #define SG_MCU_UTIL_NSENSOR_H
+
 void publishNSensorToStation(int station) {
   int bucketSize = 6;
   uint16_t sensorBucket[bucketSize];
