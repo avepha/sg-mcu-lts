@@ -16,3 +16,8 @@ x
 ```
     {Gdatetime}
 ```
+
+- Clear memeory
+```
+    {clear-memory}
+```
