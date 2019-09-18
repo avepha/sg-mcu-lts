@@ -1,4 +1,4 @@
-#define SG_TEST
+//#define SG_TEST
 #include <Arduino.h>
 #include <Wire.h>
 #include <EEPROM.h>
@@ -95,7 +95,6 @@ void loop1(void *pvParameters) {
 }
 
 void loop() {
-  //Serial.println("free heap: " + String(xPortGetFreeHeapSize()));
 #ifdef SG_TEST
   for (int i = 1 ; i < 3; i++) { // mock 3 stations
     int bucketSize = 6;
