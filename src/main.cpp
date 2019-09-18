@@ -33,7 +33,9 @@ void loop1(void *pvParameters);
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
   Serial.begin(115200);
-  entryPort.begin(115200);
+
+//  entryPort.begin(115200);
+  entryPort.begin(115200, SERIAL_8N1, 18, 19);
   sensorPort.begin(9600);
 
   deviceEndpoint = new DeviceEndpoint(&entryPort);
