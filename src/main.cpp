@@ -108,9 +108,9 @@ void loop() {
     uint16_t sensorBucket[bucketSize];
     sensorBucket[0] = Float16Compressor::compress((float) random(280, 288) / 10);
     sensorBucket[1] = Float16Compressor::compress((float) random(500, 510) / 10);
-    sensorBucket[2] = Float16Compressor::compress((float) random(290, 298) / 10);
-    sensorBucket[3] = Float16Compressor::compress((float) random(510, 520) / 10);
-    sensorBucket[4] = Float16Compressor::compress((float) random(10, 15) / 10);
+    sensorBucket[2] = Float16Compressor::compress((float) random(31, 32) / 10);
+    sensorBucket[3] = Float16Compressor::compress((float) random(290, 298) / 10);
+    sensorBucket[4] = Float16Compressor::compress((float) random(510, 520) / 10);
     sensorBucket[5] = Float16Compressor::compress((float) random(10, 15) / 10);
     sensorBucket[6] = Float16Compressor::compress((float) random(10, 15) / 10);
 
@@ -124,12 +124,13 @@ void loop() {
 
     context->nSensorContext->core->updateNSensor(plain_payload, plain_payload_size);
   }
+
   for (int i = 1 ; i < 3; i++) { // mock 3 stations
     int bucketSize = 7;
     uint16_t sensorBucket[bucketSize];
     sensorBucket[0] = Float16Compressor::compress((float) random(280, 288) / 10);
     sensorBucket[1] = Float16Compressor::compress((float) random(500, 510) / 10);
-    sensorBucket[2] = Float16Compressor::compress((float) random(31000, 31500) / 10);
+    sensorBucket[2] = Float16Compressor::compress((float) random(31, 32) / 10);
     sensorBucket[3] = Float16Compressor::compress((float) random(290, 298) / 10);
     sensorBucket[4] = Float16Compressor::compress((float) random(510, 520) / 10);
     sensorBucket[5] = Float16Compressor::compress((float) random(10, 15) / 10);
