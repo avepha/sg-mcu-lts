@@ -20,10 +20,10 @@
 #include "deviceEndpoint.h"
 #include "sensorEndpoint.h"
 
-HardwareSerial &entryPort = Serial;
+HardwareSerial &entryPort = Serial1;
 HardwareSerial &sensorPort = Serial2;
 
-DeviceEndpoint *deviceEndpoint;
+DeviceEndpoint *deviceEndpoint, *serialEndpoint;
 SensorEndpoint *sensorEndpoint;
 CombineResolvers *resolvers;
 CombineContext *context;
@@ -33,11 +33,10 @@ void loop1(void *pvParameters);
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
   Serial.begin(115200);
-
-//  entryPort.begin(115200);
   entryPort.begin(115200, SERIAL_8N1, 18, 19);
   sensorPort.begin(9600);
 
+  serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
   deviceEndpoint = new DeviceEndpoint(&entryPort);
   sensorEndpoint = new SensorEndpoint(&sensorPort);
   context = new CombineContext();
@@ -49,8 +48,10 @@ void setup() {
 void loop1(void *pvParameters) {
   while (true) {
     String requestString;;
-    bool isDataComing = deviceEndpoint->embrace(&requestString);
-    if (isDataComing) {
+    bool isDeviceDataComing = deviceEndpoint->embrace(&requestString);
+    bool isEndpointDataComing = serialEndpoint->embrace(&requestString);
+
+    if (isEndpointDataComing || isDeviceDataComing) {
       DynamicJsonDocument requestJson(1024);
       DeserializationError error = deserializeJson(requestJson, requestString);
 
@@ -72,7 +73,13 @@ void loop1(void *pvParameters) {
 
       String responseString;
       serializeJson(responseJson, responseString);
-      deviceEndpoint->unleash(responseString);
+
+      if (isDeviceDataComing) {
+        deviceEndpoint->unleash(responseString);
+      }
+      if (isEndpointDataComing) {
+        serialEndpoint->unleash(responseString);
+      }
     }
 
     byte bSensors[64];
