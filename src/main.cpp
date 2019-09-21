@@ -70,8 +70,8 @@ void setup()
   Serial.begin(115200);
   Wire.begin();
 
-  mpuCom.begin(115200);
-  sensorCom.begin(9600);
+  mpuCom.begin(115200, SERIAL_8N1, 18, 19);
+  sensorCom.begin(9600, SERIAL_8N1, 16, 17);
 
   EEPROM_Manager::InitEEPROM();
 
@@ -79,7 +79,6 @@ void setup()
   taskManager.StartTask(Sensor::instance());
   taskManager.StartTask(ParAcc::instance());
   taskManager.StartTask(Communication::instance());
-//  taskManager.StartTask(PingMessage::instance());
 
   ChannelHanler::instance();
 
