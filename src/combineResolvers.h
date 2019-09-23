@@ -56,7 +56,7 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
     for (int i = 0; i < QUERY_SIZE; i++) {
       if (query[i]->getName() == json["topic"]) {
         try {
-          JsonDocument data = query[i]->resolve(json["data"]);
+          JsonDocument data = query[i]->exec(json["data"]);
           response["topic"] = json["topic"];
           response["method"] = json["method"];
           response["execTime"] = millis() - incomingTime;
@@ -73,7 +73,7 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
     for (int i = 0; i < MUTATION_SIZE; i++) {
       if (mutation[i]->getName() == json["topic"]) {
         try {
-          JsonDocument data = mutation[i]->resolve(json["data"]);
+          JsonDocument data = mutation[i]->exec(json["data"]);
           response["topic"] = json["topic"];
           response["method"] = json["method"];
           response["execTime"] = millis() - incomingTime;

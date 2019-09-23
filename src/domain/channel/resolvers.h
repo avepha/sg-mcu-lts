@@ -2,6 +2,7 @@
 #include "combineContext.h"
 #include "domain/resolvers.h"
 #include "util/util.h"
+#include "./permission.h"
 
 #ifndef SG_MCU_CHANNEL_RESOLVERS_H
 #define SG_MCU_CHANNEL_RESOLVERS_H
@@ -9,19 +10,10 @@
 // @query
 class query_channel : public Resolvers {
 public:
-  explicit query_channel(CombineContext *context) : Resolvers("channel", context) {};
+  explicit query_channel(CombineContext *context) :
+      Resolvers("channel", context, new permission_channel(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    if (reqData["index"].isNull()) {
-      InvalidInputError err("index field is not specified.");
-      throw err;
-    }
-
-    if (reqData["index"] < 0 || reqData["index"] > 7) {
-      InvalidInputError err("index out of range.");
-      throw err;
-    }
-
     int index = reqData["index"];
     ChannelSchema channelSchema = context->channelContext->channelModel->get();
     ChannelSchema::Channel channel = channelSchema.channels[index];
@@ -48,37 +40,10 @@ public:
 
 class mutation_channel_save : public Resolvers {
 public:
-  explicit mutation_channel_save(CombineContext *context) : Resolvers("channel_save", context) {};
+  explicit mutation_channel_save(CombineContext *context) :
+      Resolvers("channel_save", context, new permission_channel_save(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    if (reqData["index"].isNull()) {
-      InvalidInputError err("index field is not specified.");
-      throw err;
-    }
-
-    if (reqData["index"] < 0 || reqData["index"] > 7) {
-      InvalidInputError err("index out of range.");
-      throw err;
-    }
-
-    if (reqData["control"].isNull() || reqData["control"]["type"].isNull() || reqData["control"]["value"].isNull()) {
-      InvalidInputError err("control field must have type and value.");
-      throw err;
-    }
-
-    if (reqData["preconditions"].isNull() || !reqData["preconditions"].is<JsonArray>()) {
-      InvalidInputError err("preconditions field must be an array.");
-      throw err;
-    }
-
-    for (int i = 0 ; i < reqData["preconditions"].as<JsonArray>().size(); i++) {
-      JsonObject jo = reqData["preconditions"][0];
-      if (jo["type"].isNull() || jo["value"].isNull()) {
-        InvalidInputError err("precondition must have field type and value");
-        throw err; 
-      }
-    }
-
     DynamicJsonDocument data(1024);
     return data;
   }
