@@ -2,7 +2,7 @@
 
 void q_sensor_check_correct_type() {
   JsonRequest requestTopic("sensor", "query");
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "sensor");
   TEST_ASSERT_TRUE(responseJson["method"] == "query");

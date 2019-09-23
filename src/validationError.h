@@ -58,6 +58,14 @@ class InvalidInputError: public ValidationError {
 public: explicit InvalidInputError(String message = "Input is invalid") : ValidationError("invalid-input", message) {};
 };
 
+class IndexNotSpecifyError: public ValidationError {
+public: explicit IndexNotSpecifyError(String message = "Index is not specify") : ValidationError("index-not-specify", message) {};
+};
+
+class IndexOutOfBoundError: public ValidationError {
+public: explicit IndexOutOfBoundError(String message = "Index out of bound") : ValidationError("index-out-of-bound", message) {};
+};
+
 class NSensorInvalidCheckSumError: public ValidationError {
 public: explicit NSensorInvalidCheckSumError(String message = "NSensor checksum is invalid") : ValidationError("invalid-checksum-nsensor", message) {};
 };

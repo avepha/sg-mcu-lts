@@ -10,7 +10,7 @@ void m_sensor_order_save_check_correct_type() {
   names.add("sensor_2");
 
   JsonRequest requestTopic("sensor_order_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "sensor_order_save");
   TEST_ASSERT_TRUE(responseJson["method"] == "mutation");
@@ -23,7 +23,7 @@ void m_sensor_order_save_check_correct_type() {
 void m_sensor_order_save_names_is_not_define() {
   DynamicJsonDocument data(64);
   JsonRequest requestTopic("sensor_order_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");

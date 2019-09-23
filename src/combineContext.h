@@ -6,6 +6,8 @@
 #include "domain/control/criteria/context.h"
 #include "domain/control/timer/context.h"
 
+#include "domain/channel/context.h"
+
 #ifndef SG_MCU_COMBINE_CONTEXT_H
 #define SG_MCU_COMBINE_CONTEXT_H
 
@@ -17,6 +19,7 @@ public:
   CriteriaContext *criteriaContext;
   TimerContext *timerContext;
   NSensorContext *nSensorContext;
+  ChannelContext *channelContext;
   CombineContext();
 };
 
@@ -27,6 +30,7 @@ CombineContext::CombineContext() {
   criteriaContext = new CriteriaContext;
   timerContext = new TimerContext;
   nSensorContext = new NSensorContext;
+  channelContext = new ChannelContext;
 };
 
 

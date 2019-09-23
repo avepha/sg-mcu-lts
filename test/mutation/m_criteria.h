@@ -8,7 +8,7 @@ void m_criteria_save_with_timer_param_check_correct_type() {
   criteria["criteria"] = 70.1;
   criteria["greater"] = true;
   JsonRequest requestTopic("criteria_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "criteria_save");
   TEST_ASSERT_TRUE(responseJson["method"] == "mutation");
@@ -26,7 +26,7 @@ void m_criteria_save_index_is_not_specified() {
   criteria["criteria"] = 70.1;
   criteria["greater"] = true;
   JsonRequest requestTopic("criteria_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
@@ -41,7 +41,7 @@ void m_criteria_save_index_out_of_range() {
   criteria["criteria"] = 70.1;
   criteria["greater"] = true;
   JsonRequest requestTopic("criteria_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");

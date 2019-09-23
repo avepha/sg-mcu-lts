@@ -57,9 +57,9 @@ void util_update_sensor() {
   TEST_ASSERT_FLOAT_WITHIN(2, 1, dePayload[4]);
   TEST_ASSERT_FLOAT_WITHIN(2, 1, dePayload[5]);
 
-  context.nSensorContext->core->updateNSensor(plain_payload, plain_payload_size);
+  context->nSensorContext->core->updateNSensor(plain_payload, plain_payload_size);
   JsonRequest requestTopic("nsensors", "query");
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "nsensors");
   TEST_ASSERT_TRUE(responseJson["method"] == "query");
