@@ -4,6 +4,7 @@
 #include "mutation/m_precondition_save.h"
 #include "mutation/m_criteria.h"
 #include "mutation/m_timer_save.h"
+#include "mutation/m_channel_save.h"
 
 #include "query/q_date.h"
 #include "query/q_sensor.h"
@@ -13,6 +14,7 @@
 #include "query/q_timer.h"
 #include "query/q_nsensor.h"
 #include "query/q_nsensors.h"
+#include "query/q_channel.h"
 
 #include "test_util/date_time.h"
 #include "test_util/updateNSensor.h"
@@ -25,7 +27,7 @@ void setup() {
 
   context = new CombineContext;
   resolvers = new CombineResolvers(context);
-  delay(2000);
+  delay(1000);
 
   UNITY_BEGIN();
 
@@ -37,16 +39,19 @@ void setup() {
   q_timer_RUN_TEST();
   q_nsensor_RUN_TEST();
   q_nsensors_RUN_TEST();
+  new t_channel();
 
   m_date_save_RUN_TEST();
   m_sensor_order_save_RUN_TEST();
   m_precondition_save_RUN_TEST();
   m_criteria_save_RUN_TEST();
   m_timer_save_RUN_TEST();
+  new t_channel_save();
 
   util_date_time_RUN_TEST();
   util_updateNSensor_RUN_TEST();
   TClearRom();
+
   UNITY_END();
 }
 
