@@ -20,36 +20,33 @@ public:
 
     if (reqData["withSensor"].isNull() || reqData["withSensor"]) {
       for (int i = 0; i < 8; i++) {
-        if( millis() - nodes[i].timeStamp < 10000 || nodes[i].timeStamp != 0) {
+        if (millis() - nodes[i].timeStamp < 10000 && nodes[i].timeStamp != 0) {
           JsonObject dataObj = data.createNestedObject();
           dataObj["index"] = i;
           dataObj["lastSeen"] = millis() - nodes[i].timeStamp;
           dataObj["isAlive"] = millis() - nodes[i].timeStamp < 10000 && nodes[i].timeStamp != 0;
 
           JsonObject sensorObj = dataObj.createNestedObject("sensors");
-          for(int j = 0; j < sensorSchema.numberOfSensor; j++) {
+          for (int j = 0; j < sensorSchema.numberOfSensor; j++) {
             sensorObj[sensorSchema.names[j]] = nodes[i].sensors[j];
           }
         }
       }
-    }
-    else if(reqData["withSensor"] == false) {
+    } else if (reqData["withSensor"] == false) {
       for (int i = 0; i < 8; i++) {
-        if( millis() - nodes[i].timeStamp < 10000 || nodes[i].timeStamp != 0) {
+        if (millis() - nodes[i].timeStamp < 10000 && nodes[i].timeStamp != 0) {
           JsonObject dataObj = data.createNestedObject();
           dataObj["index"] = i;
-          dataObj["lastSeen"] =  millis() - nodes[i].timeStamp;
+          dataObj["lastSeen"] = millis() - nodes[i].timeStamp;
           dataObj["isAlive"] = millis() - nodes[i].timeStamp < 10000 && nodes[i].timeStamp != 0;
 
           JsonArray sensorObj = dataObj.createNestedArray("sensors");
-          for(int j = 0; j < sensorSchema.numberOfSensor; j++) {
+          for (int j = 0; j < sensorSchema.numberOfSensor; j++) {
             sensorObj.add(nodes[i].sensors[j]);
           }
         }
       }
     }
-
-
     return data;
   };
 };
@@ -75,11 +72,11 @@ public:
 
     DynamicJsonDocument data(512);
     data["index"] = index;
-    data["lastSeen"] =  millis() - nodes[index].timeStamp;
+    data["lastSeen"] = millis() - nodes[index].timeStamp;
     data["isAlive"] = millis() - nodes[index].timeStamp < 10000 && nodes[index].timeStamp != 0;
 
     JsonObject sensorObj = data.createNestedObject("sensors");
-    for(int i = 0; i < sensorSchema.numberOfSensor; i++) {
+    for (int i = 0; i < sensorSchema.numberOfSensor; i++) {
       sensorObj[sensorSchema.names[i]] = nodes[index].sensors[i];
     }
 

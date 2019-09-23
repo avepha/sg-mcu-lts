@@ -1,4 +1,4 @@
-//#define SG_TEST
+#define SG_TEST
 #include <Arduino.h>
 #include <Wire.h>
 #include <EEPROM.h>

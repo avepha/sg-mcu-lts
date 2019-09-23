@@ -21,6 +21,6 @@ void publishNSensorToStation(int station) {
   byte plain_payload[plain_payload_size];
   memcpy(plain_payload, payload_sta_n + 1, plain_payload_size);
 
-  context.nSensorContext->core->updateNSensor(plain_payload, plain_payload_size);
+  context->nSensorContext->core->updateNSensor(plain_payload, plain_payload_size);
 }
 #endif

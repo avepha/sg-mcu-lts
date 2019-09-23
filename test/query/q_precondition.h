@@ -4,7 +4,7 @@ void q_precondition_type_is_not_defined() {
   DynamicJsonDocument data(64);
   data["index"] = 0;
   JsonRequest requestTopic("precondition", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
@@ -15,7 +15,7 @@ void q_precondition_index_is_not_defined() {
   DynamicJsonDocument data(64);
   data["type"] = "timer";
   JsonRequest requestTopic("precondition", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
@@ -27,7 +27,7 @@ void q_precondition_index_out_of_range() {
   data["type"] = "timer";
   data["index"] = -1;
   JsonRequest requestTopic("precondition", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
@@ -39,7 +39,7 @@ void q_precondition_no_match_type() {
   data["type"] = "nomatch";
   data["index"] = 0;
   JsonRequest requestTopic("precondition", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
@@ -51,7 +51,7 @@ void q_precondition_with_timer_param_check_correct_type() {
   data["type"] = "timer";
   data["index"] = 0;
   JsonRequest requestTopic("precondition", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "precondition");
   TEST_ASSERT_TRUE(responseJson["method"] == "query");
@@ -64,7 +64,7 @@ void q_precondition_with_criteria_param_check_correct_type() {
   data["type"] = "criteria";
   data["index"] = 0;
   JsonRequest requestTopic("precondition", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "precondition");
   TEST_ASSERT_TRUE(responseJson["method"] == "query");

@@ -13,7 +13,7 @@ void m_timer_save_check_correct_type() {
   timer_1.add(10800);
 
   JsonRequest requestTopic("timer_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "timer_save");
   TEST_ASSERT_TRUE(responseJson["method"] == "mutation");
@@ -38,7 +38,7 @@ void m_timer_save_index_is_not_defined() {
 
   JsonRequest requestTopic("timer_save", "mutation", data);
 
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
@@ -54,7 +54,7 @@ void m_timer_save_index_out_of_range() {
 
   data["index"] = -1;
   JsonRequest requestTopic("timer_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");

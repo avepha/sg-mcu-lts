@@ -4,7 +4,7 @@ void m_date_save_check_correct_type() {
   DynamicJsonDocument data(64);
   data["date"] = "2019-08-10T05:01:02";
   JsonRequest requestTopic("date_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "date_save");
   TEST_ASSERT_TRUE(responseJson["method"] == "mutation");
@@ -15,7 +15,7 @@ void m_date_save_check_correct_type() {
 void m_date_save_throw_date_is_not_define() {
   DynamicJsonDocument data(64);
   JsonRequest requestTopic("date_save", "mutation", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");

@@ -17,7 +17,7 @@
 #include "../src/combineContext.h"
 #include "../src/combineResolvers.h"
 
-CombineContext context;
-CombineResolvers resolvers(&context);
+CombineContext *context;
+CombineResolvers *resolvers;
 
 #endif //SG_MCU_INIT_H

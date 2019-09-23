@@ -8,7 +8,7 @@ void q_nsensor_check_correct_type() {
   data["index"] = 1;
   JsonRequest requestTopic("nsensor", "query", data);
 
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "nsensor");
   TEST_ASSERT_TRUE(responseJson["method"] == "query");

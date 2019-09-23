@@ -86,5 +86,4 @@ public:
   }
 };
 
-
 #endif //SG_MCU_RESOLVERS_H

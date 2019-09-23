@@ -49,12 +49,10 @@ public:
   JsonDocument resolve(JsonObject reqData) override {
     SensorSchema sensorNames = context->sensorContext->model->get();
     float *sensors = context->sensorContext->core->getSensors();
-
     DynamicJsonDocument data(256);
     for(int i = 0; i < sensorNames.numberOfSensor; i++) {
       data[sensorNames.names[i]] = sensors[i];
     }
-
     return data;
   };
 };
@@ -65,7 +63,6 @@ public:
 
   JsonDocument resolve(JsonObject reqData) override {
     SensorSchema sensorNames = context->sensorContext->model->get();
-    delay(10);
 
     DynamicJsonDocument data(256);
     JsonArray names = data.createNestedArray("names");

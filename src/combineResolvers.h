@@ -69,7 +69,11 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
         }
       }
     }
-  } else if (json["method"] == "mutation") {
+
+    TopicNotFoundError err;
+    return err.toJson();
+  }
+  else if (json["method"] == "mutation") {
     for (int i = 0; i < MUTATION_SIZE; i++) {
       if (mutation[i]->getName() == json["topic"]) {
         try {
@@ -86,6 +90,9 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
         }
       }
     }
+
+    TopicNotFoundError err;
+    return err.toJson();
   }
 
   InvalidMethodError err;

@@ -10,12 +10,12 @@ public:
 
   void resolve(JsonObject reqData) override {
     if (reqData["index"].isNull()) {
-      InvalidInputError err("index field is not specified.");
+      IndexNotSpecifyError err;
       throw err;
     }
 
     if (reqData["index"] < 0 || reqData["index"] > 7) {
-      InvalidInputError err("index out of range.");
+      IndexOutOfBoundError err;
       throw err;
     }
   }
@@ -28,12 +28,12 @@ public:
 
   void resolve(JsonObject reqData) override {
     if (reqData["index"].isNull()) {
-      InvalidInputError err("index field is not specified.");
+      IndexNotSpecifyError err;
       throw err;
     }
 
     if (reqData["index"] < 0 || reqData["index"] > 7) {
-      InvalidInputError err("index out of range.");
+      IndexOutOfBoundError err;
       throw err;
     }
 

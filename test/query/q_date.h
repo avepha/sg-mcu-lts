@@ -3,7 +3,7 @@
 void q_date_check_correct_type() {
   JsonRequest requestTopic("date", "query");
 
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "date");
   TEST_ASSERT_TRUE(responseJson["method"] == "query");

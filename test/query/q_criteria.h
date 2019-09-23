@@ -4,7 +4,7 @@ void q_criteria_with_timer_param_check_correct_type() {
   DynamicJsonDocument data(256);
   data["index"] = 1;
   JsonRequest requestTopic("criteria", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "criteria");
   TEST_ASSERT_TRUE(responseJson["method"] == "query");
@@ -17,7 +17,7 @@ void q_criteria_with_timer_param_check_correct_type() {
 void q_criteria_index_is_not_specified() {
   DynamicJsonDocument data(256);
   JsonRequest requestTopic("criteria", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
@@ -28,7 +28,7 @@ void q_criteria_index_out_of_range() {
   DynamicJsonDocument data(256);
   data["index"] = -1;
   JsonRequest requestTopic("criteria", "query", data);
-  JsonDocument responseJson = resolvers.execute(requestTopic.toJson());
+  JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
   TEST_ASSERT_TRUE(responseJson["topic"] == "Error");
   TEST_ASSERT_TRUE(responseJson["code"] == "invalid-input");
