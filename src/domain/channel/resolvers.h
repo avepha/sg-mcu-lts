@@ -25,7 +25,7 @@ public:
     control["type"] = channel.control.type;
     control["value"] = channel.control.value;
 
-    JsonArray jarrPreconditions = data.createNestedArray("precondition");
+    JsonArray jarrPreconditions = data.createNestedArray("preconditions");
     for (int i = 0; i < sizeof(channel.preconditions) / sizeof(channel.preconditions[0]); i++) {
       ChannelSchema::Channel::Precondition precondition = channel.preconditions[i];
       if (strcmp(precondition.type, "none") != 0) {
@@ -73,7 +73,7 @@ public:
     control["type"] = channel.control.type;
     control["value"] = channel.control.value;
 
-    JsonArray jarrPreconditions = data.createNestedArray("precondition");
+    JsonArray jarrPreconditions = data.createNestedArray("preconditions");
     for (int i = 0; i < sizeof(channel.preconditions) / sizeof(channel.preconditions[0]); i++) {
       ChannelSchema::Channel::Precondition precondition = channel.preconditions[i];
       if (strcmp(precondition.type, "none") != 0) {
