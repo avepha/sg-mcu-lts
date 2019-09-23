@@ -37,3 +37,4 @@
 * nsensors ```{"topic": "nsensors", "method": "query"}```
 * nsensors (with sensor = false) ```{"topic": "nsensors", "method": "query", "data": {"withSensor": false}}```
 * nsensor ```{"topic": "nsensor", "method": "query", "data": {"index": 1}}```
+* channel ```{"topic": "channel", "method": "query", "data": {"index": 1}}```
