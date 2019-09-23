@@ -47,6 +47,11 @@ public:
       throw err;
     }
 
+    if (reqData["preconditions"].size() > 3) {
+      InvalidInputError err("preconditions field must have maximum length of 3");
+      throw err;
+    }
+
     for (int i = 0 ; i < reqData["preconditions"].as<JsonArray>().size(); i++) {
       JsonObject jo = reqData["preconditions"][0];
       if (jo["type"].isNull() || jo["value"].isNull()) {
