@@ -11,7 +11,9 @@
 class query_channel : public Resolvers {
 public:
   explicit query_channel(CombineContext *context) :
-      Resolvers("channel", context, new permission_channel(context)) {};
+      Resolvers(
+          "channel", context,
+          new permission_channel(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
@@ -42,7 +44,9 @@ public:
 class mutation_channel_save : public Resolvers {
 public:
   explicit mutation_channel_save(CombineContext *context) :
-      Resolvers("channel_save", context, new permission_channel_save(context)) {};
+      Resolvers(
+          "channel_save", context,
+          new permission_channel_save(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
     ChannelSchema channelSchema = context->channelContext->channelModel->get();
