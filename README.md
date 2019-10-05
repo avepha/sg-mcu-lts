@@ -38,6 +38,10 @@
 ```json
 {"topic": "timer_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}
 ```
+* channel_save
+```json
+{ "topic": "channel_save", "method": "mutation", "data": { "index": 1, "control": { "type": "manual", "value": 0 }, "preconditions": [{ "type": "timer", "value": 1 }] } }
+```
 
 ###Query
 * Info 

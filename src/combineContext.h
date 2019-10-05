@@ -31,7 +31,6 @@ CombineContext::CombineContext() {
   timerContext = new TimerContext;
   nSensorContext = new NSensorContext;
   channelContext = new ChannelContext;
-};
-
+}
 
 #endif //SG_MCU_COMBINECONTEXT_H

@@ -6,9 +6,7 @@
 
 class ChannelCore {
 public:
-  ChannelCore() {
-
-  }
+  ChannelCore() {}
 
 private:
   struct ChannelControl {
