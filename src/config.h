@@ -1,6 +1,3 @@
-#include <Arduino.h>
-#include <map>
-
 #ifndef SG_MCU_CONFIG_H
 #define SG_MCU_CONFIG_H
 
