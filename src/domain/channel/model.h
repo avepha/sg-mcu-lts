@@ -1,3 +1,5 @@
+#include "domain/control/control.h"
+#include "domain/precondition/precondition.h"
 #include "domain/model.h"
 
 #ifndef SG_MCU_CHANNEL_MODEL_H
@@ -8,16 +10,18 @@ const int CHANNEL_ROM_ADDR = 1900;
 struct ChannelSchema {
   struct Channel {
     bool isActive = false;
+
     struct control {
-      char type[10] = "manual";
+      CONTROL_TYPE_ENUM type = CTRL_NONE;
       uint8_t value = 0;
     } control;
+
     struct Precondition {
-      char type[10] = "none";
+      PRECONDITION_TYPE_ENUM type = PREC_NONE;
       uint8_t value = 0;
     } preconditions[3];
   } channels[8];
-}; // size 184
+}; // size 288
 
 class ChannelModel : public RomModel<ChannelSchema> {
 public:

@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <EEPROM.h>
+#include "config.h"
 #include <TaskScheduler.h>
 #include <ArduinoJson.h>
 
@@ -33,8 +34,8 @@ void loop1(void *pvParameters);
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
   Serial.begin(115200);
-  entryPort.begin(115200, SERIAL_8N1, 18, 19);
-  sensorPort.begin(9600);
+  entryPort.begin(115200, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
+  sensorPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
 
   serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
   deviceEndpoint = new DeviceEndpoint(&entryPort);

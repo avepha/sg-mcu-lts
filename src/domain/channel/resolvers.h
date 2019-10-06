@@ -3,6 +3,9 @@
 #include "domain/resolvers.h"
 #include "util/util.h"
 #include "./permission.h"
+#include "../control/util/resolveControlEnum.h"
+#include "../precondition/util/resolvePreconditionEnum.h"
+
 
 #ifndef SG_MCU_CHANNEL_RESOLVERS_H
 #define SG_MCU_CHANNEL_RESOLVERS_H
@@ -24,15 +27,15 @@ public:
     data["index"] = index;
     data["isActive"] = channel.isActive;
     JsonObject control = data.createNestedObject("control");
-    control["type"] = channel.control.type;
+    control["type"] = ControlEnumToString(channel.control.type);
     control["value"] = channel.control.value;
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");
     for (int i = 0; i < sizeof(channel.preconditions) / sizeof(channel.preconditions[0]); i++) {
       ChannelSchema::Channel::Precondition precondition = channel.preconditions[i];
-      if (strcmp(precondition.type, "none") != 0) {
+      if (precondition.type != PREC_NONE) {
         JsonObject joPrecondition = jarrPreconditions.createNestedObject();
-        joPrecondition["type"] = precondition.type;
+        joPrecondition["type"] = PreconditionEnumToString(precondition.type);
         joPrecondition["value"] = precondition.value;
       }
     }
@@ -52,18 +55,21 @@ public:
     ChannelSchema channelSchema = context->channelContext->channelModel->get();
     int index = reqData["index"];
 
-    strcpy(channelSchema.channels[index].control.type, reqData["control"]["type"]);
+    channelSchema.channels[index].control.type = ControlStringToEnum(reqData["control"]["type"]);
     channelSchema.channels[index].control.value = reqData["control"]["value"];
 
+    // set precondition to providing args
     for (int i = 0 ; i < reqData["preconditions"].size(); i++) {
-      strcpy(channelSchema.channels[index].preconditions[i].type, reqData["preconditions"][i]["type"]);
+      channelSchema.channels[index].preconditions[i].type = PreconditionStringToEnum(reqData["preconditions"][i]["type"]);
       channelSchema.channels[index].preconditions[i].value = reqData["preconditions"][i]["value"];
     }
 
+    // set precondition to none if providing args size < 3
     for (int i = reqData["preconditions"].size() ; i < 3; i++) {
-      strcpy(channelSchema.channels[index].preconditions[i].type, "none");
+      channelSchema.channels[index].preconditions[i].type = PREC_NONE;
       channelSchema.channels[index].preconditions[i].value = 0;
     }
+
     context->channelContext->channelModel->save(channelSchema);
     delay(10);
 
@@ -74,15 +80,15 @@ public:
     data["index"] = index;
     data["isActive"] = channel.isActive;
     JsonObject control = data.createNestedObject("control");
-    control["type"] = channel.control.type;
+    control["type"] = ControlEnumToString(channel.control.type);
     control["value"] = channel.control.value;
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");
     for (int i = 0; i < sizeof(channel.preconditions) / sizeof(channel.preconditions[0]); i++) {
       ChannelSchema::Channel::Precondition precondition = channel.preconditions[i];
-      if (strcmp(precondition.type, "none") != 0) {
+      if (precondition.type != PREC_NONE) {
         JsonObject joPrecondition = jarrPreconditions.createNestedObject();
-        joPrecondition["type"] = precondition.type;
+        joPrecondition["type"] = PreconditionEnumToString(precondition.type);
         joPrecondition["value"] = precondition.value;
       }
     }

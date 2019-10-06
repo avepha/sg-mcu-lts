@@ -12,7 +12,7 @@
 ###Mutation
 * date_save
 ```json
-{"topic": "date_save", "method": "mutation", "data": {"date": "2019-08-12T17:00:17.613Z"}}
+{"topic": "date_save", "method": "mutation", "data": {"date": "2019-08-12T17:00:17.6\13Z"}}
 ```
 * sensor_order_save 
 ```json
