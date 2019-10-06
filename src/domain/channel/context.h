@@ -1,4 +1,4 @@
-#include "model/model.h"
+#include "./model.h"
 #include "core/channel_core.h"
 
 #ifndef SG_MCU_CHANNEL_CONTEXT_H
