@@ -13,7 +13,7 @@ struct ChannelSchema {
 
     struct control {
       CONTROL_TYPE_ENUM type = CTRL_NONE;
-      uint8_t value = 0;
+      uint8_t value = 0; // manual
     } control;
 
     struct Precondition {

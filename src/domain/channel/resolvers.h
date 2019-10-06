@@ -44,6 +44,25 @@ public:
   }
 };
 
+class query_gpio : public Resolvers {
+public:
+  explicit query_gpio(CombineContext *context) :
+      Resolvers("gpio", context) {};
+
+  JsonDocument resolve(JsonObject reqData) override {
+    std::array<int, 8> channelState = context->channelContext->channelCore->getChannelState();
+
+    DynamicJsonDocument data(1024);
+    for (int i = 0; i < channelState.size(); i++) {
+      JsonObject channel = data.createNestedObject();
+      channel["channel"] = i;
+      channel["state"] = channelState[i] == HIGH ? "HIGH" : "LOW";
+    }
+
+    return data;
+  }
+};
+
 class mutation_channel_save : public Resolvers {
 public:
   explicit mutation_channel_save(CombineContext *context) :
@@ -59,13 +78,14 @@ public:
     channelSchema.channels[index].control.value = reqData["control"]["value"];
 
     // set precondition to providing args
-    for (int i = 0 ; i < reqData["preconditions"].size(); i++) {
-      channelSchema.channels[index].preconditions[i].type = PreconditionStringToEnum(reqData["preconditions"][i]["type"]);
+    for (int i = 0; i < reqData["preconditions"].size(); i++) {
+      channelSchema.channels[index].preconditions[i].type = PreconditionStringToEnum(
+          reqData["preconditions"][i]["type"]);
       channelSchema.channels[index].preconditions[i].value = reqData["preconditions"][i]["value"];
     }
 
     // set precondition to none if providing args size < 3
-    for (int i = reqData["preconditions"].size() ; i < 3; i++) {
+    for (int i = reqData["preconditions"].size(); i < 3; i++) {
       channelSchema.channels[index].preconditions[i].type = PREC_NONE;
       channelSchema.channels[index].preconditions[i].value = 0;
     }
@@ -92,6 +112,35 @@ public:
         joPrecondition["value"] = precondition.value;
       }
     }
+    return data;
+  }
+};
+
+class channel_activate : public Resolvers {
+public:
+  explicit channel_activate(CombineContext *context) :
+      Resolvers(
+          "channel_activate",
+          context,
+          new permission_channel_activate(context)) {};
+
+  JsonDocument resolve(JsonObject reqData) override {
+    int index = reqData["index"];
+    boolean isActive = reqData["isActive"];
+    ChannelSchema channelSchema = context->channelContext->channelModel->get();
+    channelSchema.channels[index].isActive = isActive;
+
+    context->channelContext->channelModel->save(channelSchema);
+    delay(10);
+
+    ChannelSchema newChannelSchema = context->channelContext->channelModel->get();
+    DynamicJsonDocument data(1024);
+    data["index"] = index;
+    data["isActive"] = newChannelSchema.channels[index].isActive;
+
+    // index = channel 0 - 7
+    context->channelContext->channelCore->checkAndActivateControlType(newChannelSchema.channels[index], index);
+
     return data;
   }
 };

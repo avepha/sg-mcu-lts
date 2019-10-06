@@ -42,6 +42,10 @@
 ```json
 { "topic": "channel_save", "method": "mutation", "data": { "index": 1, "control": { "type": "manual", "value": 0 }, "preconditions": [{ "type": "timer", "value": 1 }] } }
 ```
+* channel_activate
+```json
+{ "topic": "channel_activate", "method": "mutation", "data": { "index": 0,  "isActive": false}}
+```
 
 ###Query
 * Info 
@@ -90,5 +94,9 @@
 ```
 * channel 
 ```json
-{"topic": "channel", "method": "query", "data": {"index": 1}}
+{"topic": "channel", "method": "query", "data": {"index": 0}}
+```
+* gpio 
+```json
+{"topic": "gpio", "method": "query"}
 ```

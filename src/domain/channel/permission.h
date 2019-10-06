@@ -21,7 +21,6 @@ public:
   }
 };
 
-
 class permission_channel_save : public Permission {
 public:
   explicit permission_channel_save(CombineContext *context) : Permission(context) {};
@@ -58,6 +57,33 @@ public:
         InvalidInputError err("precondition must have field type and value");
         throw err;
       }
+    }
+  }
+};
+
+class permission_channel_activate : public Permission {
+public:
+  explicit permission_channel_activate(CombineContext *context) : Permission(context) {};
+
+  void resolve(JsonObject reqData) override {
+    if (reqData["index"].isNull()) {
+      IndexNotSpecifyError err;
+      throw err;
+    }
+
+    if (reqData["index"] < 0 || reqData["index"] > 7) {
+      IndexOutOfBoundError err;
+      throw err;
+    }
+
+    if (reqData["isActive"].isNull()) {
+      InvalidInputError err("data field must have isActive and value.");
+      throw err;
+    }
+
+    if (!reqData["isActive"].is<boolean>()) {
+      InvalidInputError err("isActive field must be boolean.");
+      throw err;
     }
   }
 };
