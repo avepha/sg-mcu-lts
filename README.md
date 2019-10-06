@@ -1,23 +1,102 @@
-# Integrate with clion
+## Usage
+* Unit test
+    ```pio test -f mutation -e node32s --verbose```
+    
+*  Upload
+    ```pio run -t upload```
+    
+* monitor
+    ```pio device monitor```
+
+## Command List
+###Mutation
+* date_save
+```json
+{"topic": "date_save", "method": "mutation", "data": {"date": "2019-08-12T17:00:17.6\13Z"}}
 ```
-    pio init --ide clion
+* sensor_order_save 
+```json
+{"topic": "sensor_order_save", "method": "mutation", "data": {"names": ["sssssss", "sensor_2"]}}
 ```
-x
-#Command
-- Check Status 
+* clear_nvmemory
+```json
+{"topic": "clear_nvmemory", "method": "mutation"}
 ```
-    {checkstatus}
+* precondition_save for timer
+```json
+{"topic": "precondition_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}
 ```
-- Get sensors
+* precondition_save for criteria
+```json
+{"topic": "precondition_save", "method": "mutation", "data": {"index": 0, "criteria": { "sensor": 2, "criteria": 77.33, "greater": false }}}
 ```
-    {Gsensors}
+* criteria_save 
+```json
+{ "topic": "criteria_save", "method": "mutation", "data": { "index": 7, "criteria": { "sensor": 2, "criteria": 77.33, "greater": false } } }
 ```
-- Get Date & Time
+* timer_save
+```json
+{"topic": "timer_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}
 ```
-    {Gdatetime}
+* channel_save
+```json
+{ "topic": "channel_save", "method": "mutation", "data": { "index": 1, "control": { "type": "manual", "value": 0 }, "preconditions": [{ "type": "timer", "value": 1 }] } }
+```
+* channel_activate
+```json
+{ "topic": "channel_activate", "method": "mutation", "data": { "index": 0,  "isActive": false}}
 ```
 
-- Clear memeory
+###Query
+* Info 
+```json
+{"topic": "info", "method": "query", "reqId": "1"}
 ```
-    {clear-memory}
+* Date 
+```json
+{"topic": "date", "method": "query", "reqId": "16"}
+```
+* sensor 
+```json
+{"topic": "sensor", "method": "query"}
+```
+* sensor_order 
+```json
+{"topic": "sensor_order", "method": "query"}
+```
+* precondition for timer 
+```json
+{"topic": "precondition", "method": "query", "data": {"type": "timer", "index": 0}}
+```
+* precondition for criteria 
+```json
+{"topic": "precondition", "method": "query", "data": {"type": "criteria", "index": 0}}
+```
+* criteria 
+```json
+{"topic": "criteria", "method": "query", "data": {"index": 1}}
+```
+* timer 
+```json
+{"topic": "timer", "method": "query", "data": {"index": 0}}
+```
+* nsensors 
+```json
+{"topic": "nsensors", "method": "query"}
+```
+* nsensors (with sensor = false) 
+```json
+{"topic": "nsensors", "method": "query", "data": {"withSensor": false}}
+```
+* nsensor 
+```json
+{"topic": "nsensor", "method": "query", "data": {"index": 1}}
+```
+* channel 
+```json
+{"topic": "channel", "method": "query", "data": {"index": 0}}
+```
+* gpio 
+```json
+{"topic": "gpio", "method": "query"}
 ```
