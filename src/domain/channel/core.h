@@ -45,7 +45,8 @@ public:
     }
     else if (channelData.control.type == CTRL_TIMER) {
 
-    } else {
+    }
+    else {
       dWrite(channel, LOW);
     }
   }

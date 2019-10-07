@@ -90,6 +90,8 @@ public:
       channelSchema.channels[index].preconditions[i].value = 0;
     }
 
+    channelSchema.channels[index].isActive = false;
+    context->channelContext->channelCore->checkAndActivateControlType(channelSchema.channels[index], index);
     context->channelContext->channelModel->save(channelSchema);
     delay(10);
 
