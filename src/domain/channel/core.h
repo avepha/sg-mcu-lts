@@ -1,6 +1,8 @@
 #include <array>
 
 #include "domain/control/control.h"
+#include "domain/control/timer/core.h"
+
 #include "domain/precondition/precondition.h"
 #include "./model.h"
 
@@ -28,6 +30,13 @@ public:
   }
 
   void checkAndActivateControlType(ChannelSchema::Channel channelData, int channel) {
+    // check and remove control
+    if (channelControl[channel].control != nullptr) {
+      channelControl[channel].control->disable();
+      delete channelControl[channel].control;
+      channelControl[channel].control = nullptr;
+    }
+
     if (!channelData.isActive) {
       dWrite(channel, LOW);
       return;
@@ -44,11 +53,18 @@ public:
       }
     }
     else if (channelData.control.type == CTRL_TIMER) {
-
+      channelControl[channel].control = new TimerCore(channel, &dWrite);
     }
     else {
       dWrite(channel, LOW);
     }
+  }
+
+  static std::array<int, 8> channelState;
+
+  static void dWrite(int channel = 0, int value = LOW) {
+    channelState[channel] = value;
+    digitalWrite(CHANNEL_GPIO_MAP[channel], value);
   }
 
 private:
@@ -56,13 +72,8 @@ private:
     Control *control = nullptr;
     Precondition preconditions[3];
   } channelControl[8];
-
-  std::array<int, 8> channelState{{LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW}};
-
-  void dWrite(int channel = 0, int value = LOW) {
-    channelState[channel] = value;
-    digitalWrite(CHANNEL_GPIO_MAP[channel], value);
-  }
 };
+
+std::array<int, 8> ChannelCore::channelState = {{LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW}};
 
 #endif //SG_MCU_CHANNEL_CORE_H
