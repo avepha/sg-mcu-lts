@@ -1,4 +1,4 @@
-#include "model/criteria_model.h"
+#include "./model.h"
 
 #ifndef SG_MCU_CRITERIA_CONTEXT_H
 #define SG_MCU_CRITERIA_CONTEXT_H

@@ -9,9 +9,14 @@ void q_criteria_with_timer_param_check_correct_type() {
   TEST_ASSERT_TRUE(responseJson["topic"] == "criteria");
   TEST_ASSERT_TRUE(responseJson["method"] == "query");
   TEST_ASSERT_TRUE(responseJson["data"]["index"] == 1);
-  TEST_ASSERT_FALSE(responseJson["data"]["criteria"]["sensor"].isNull());
-  TEST_ASSERT_FALSE(responseJson["data"]["criteria"]["criteria"].isNull());
-  TEST_ASSERT_FALSE(responseJson["data"]["criteria"]["greater"].isNull());
+  TEST_ASSERT_FALSE(responseJson["data"]["sensor"].isNull());
+  TEST_ASSERT_FALSE(responseJson["data"]["criteria"].isNull());
+  TEST_ASSERT_FALSE(responseJson["data"]["greater"].isNull());
+  TEST_ASSERT_FALSE(responseJson["data"]["timing"].isNull());
+  TEST_ASSERT_TRUE(responseJson["data"]["timing"].is<JsonObject>());
+  TEST_ASSERT_TRUE(responseJson["data"]["timing"]["enable"].is<bool>());
+  TEST_ASSERT_TRUE(responseJson["data"]["timing"]["working"].is<int>());
+  TEST_ASSERT_TRUE(responseJson["data"]["timing"]["waiting"].is<int>());
 }
 
 void q_criteria_index_is_not_specified() {

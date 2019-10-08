@@ -6,10 +6,10 @@
 
 class Permission {
 public:
+  CombineContext *context;
   Permission(CombineContext *context) : context(context) {};
   virtual void resolve(JsonObject) {};
 private:
-  CombineContext *context;
 };
 
 

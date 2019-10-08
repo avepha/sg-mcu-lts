@@ -24,7 +24,6 @@ DateTime RtcCore::getDate() {
 }
 
 DateTime RtcCore::setDate(DateTime dt) {
-
   hwRtc.adjust(dt);
   swRtc.adjust(dt);
   return dt;

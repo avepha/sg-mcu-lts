@@ -36,15 +36,15 @@
 ```
 * timer_save
 ```json
-{"topic": "timer_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}
+{"topic": "timer_save", "method": "mutation", "data": {"index": 1, "timers": [ [0, 1440] ]}}
 ```
 * channel_save
 ```json
-{ "topic": "channel_save", "method": "mutation", "data": { "index": 1, "control": { "type": "manual", "value": 0 }, "preconditions": [{ "type": "timer", "value": 1 }] } }
+{ "topic": "channel_save", "method": "mutation", "data": { "index": 1, "control": { "type": "criteria", "value": 0 }, "preconditions": [] } }
 ```
 * channel_activate
 ```json
-{ "topic": "channel_activate", "method": "mutation", "data": { "index": 0,  "isActive": false}}
+{ "topic": "channel_activate", "method": "mutation", "data": { "index": 1,  "isActive": true}}
 ```
 
 ###Query
@@ -94,7 +94,7 @@
 ```
 * channel 
 ```json
-{"topic": "channel", "method": "query", "data": {"index": 0}}
+{"topic": "channel", "method": "query", "data": {"index": 1}}
 ```
 * gpio 
 ```json

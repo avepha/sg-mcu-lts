@@ -3,7 +3,7 @@
 #ifndef SG_MCU_PRECONDITION_CRITERIA_MODEL_H
 #define SG_MCU_PRECONDITION_CRITERIA_MODEL_H
 
-const int PRECONDITION_CRITERIA_ROM_ADDR = 1100;
+const int PRECONDITION_CRITERIA_ROM_ADDR = 900;
 
 struct PreConditionCriteriaSchema {
   struct criteria {

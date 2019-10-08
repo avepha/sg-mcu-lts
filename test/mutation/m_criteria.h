@@ -3,10 +3,9 @@
 void m_criteria_save_with_timer_param_check_correct_type() {
   DynamicJsonDocument data(256);
   data["index"] = 1;
-  JsonObject criteria = data.createNestedObject("criteria");
-  criteria["sensor"] = 1;
-  criteria["criteria"] = 70.1;
-  criteria["greater"] = true;
+  data["sensor"] = 1;
+  data["criteria"] = 70.1;
+  data["greater"] = true;
   JsonRequest requestTopic("criteria_save", "mutation", data);
   JsonDocument responseJson = resolvers->execute(requestTopic.toJson());
 
@@ -14,9 +13,9 @@ void m_criteria_save_with_timer_param_check_correct_type() {
   TEST_ASSERT_TRUE(responseJson["method"] == "mutation");
   TEST_ASSERT_TRUE(responseJson["data"]["index"] == 1);
   TEST_ASSERT_TRUE(responseJson["data"]["writeOps"] > 0);
-  TEST_ASSERT_TRUE(responseJson["data"]["criteria"]["sensor"] == 1);
-  TEST_ASSERT_TRUE(responseJson["data"]["criteria"]["criteria"] == 70.1);
-  TEST_ASSERT_TRUE(responseJson["data"]["criteria"]["greater"]);
+  TEST_ASSERT_TRUE(responseJson["data"]["sensor"] == 1);
+  TEST_ASSERT_TRUE(responseJson["data"]["criteria"] == 70.1);
+  TEST_ASSERT_TRUE(responseJson["data"]["greater"]);
 }
 
 void m_criteria_save_index_is_not_specified() {

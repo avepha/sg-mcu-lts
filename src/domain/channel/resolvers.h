@@ -6,7 +6,6 @@
 #include "../control/util/resolveControlEnum.h"
 #include "../precondition/util/resolvePreconditionEnum.h"
 
-
 #ifndef SG_MCU_CHANNEL_RESOLVERS_H
 #define SG_MCU_CHANNEL_RESOLVERS_H
 
@@ -63,6 +62,45 @@ public:
   }
 };
 
+class query_channel_state : public Resolvers {
+public:
+  explicit query_channel_state(CombineContext *context) :
+  Resolvers("channel_state", context, new permission_channel_state(context)) {};
+
+  JsonDocument resolve(JsonObject reqData) override {
+
+  }
+};
+
+class mutation_channel_activate : public Resolvers {
+public:
+  explicit mutation_channel_activate(CombineContext *context) :
+      Resolvers(
+          "channel_activate",
+          context,
+          new permission_channel_activate(context)) {};
+
+  JsonDocument resolve(JsonObject reqData) override {
+    int index = reqData["index"];
+    boolean isActive = reqData["isActive"];
+    ChannelSchema channelSchema = context->channelContext->channelModel->get();
+    channelSchema.channels[index].isActive = isActive;
+
+    context->channelContext->channelModel->save(channelSchema);
+    delay(10);
+
+    ChannelSchema newChannelSchema = context->channelContext->channelModel->get();
+    DynamicJsonDocument data(1024);
+    data["index"] = index;
+    data["isActive"] = newChannelSchema.channels[index].isActive;
+
+    // index = channel 0 - 7
+    context->channelContext->channelCore->checkAndActivateControlType(newChannelSchema.channels[index], index);
+
+    return data;
+  }
+};
+
 class mutation_channel_save : public Resolvers {
 public:
   explicit mutation_channel_save(CombineContext *context) :
@@ -114,35 +152,6 @@ public:
         joPrecondition["value"] = precondition.value;
       }
     }
-    return data;
-  }
-};
-
-class channel_activate : public Resolvers {
-public:
-  explicit channel_activate(CombineContext *context) :
-      Resolvers(
-          "channel_activate",
-          context,
-          new permission_channel_activate(context)) {};
-
-  JsonDocument resolve(JsonObject reqData) override {
-    int index = reqData["index"];
-    boolean isActive = reqData["isActive"];
-    ChannelSchema channelSchema = context->channelContext->channelModel->get();
-    channelSchema.channels[index].isActive = isActive;
-
-    context->channelContext->channelModel->save(channelSchema);
-    delay(10);
-
-    ChannelSchema newChannelSchema = context->channelContext->channelModel->get();
-    DynamicJsonDocument data(1024);
-    data["index"] = index;
-    data["isActive"] = newChannelSchema.channels[index].isActive;
-
-    // index = channel 0 - 7
-    context->channelContext->channelCore->checkAndActivateControlType(newChannelSchema.channels[index], index);
-
     return data;
   }
 };

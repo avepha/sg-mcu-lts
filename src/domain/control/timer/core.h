@@ -1,4 +1,5 @@
 #include "TaskScheduler.h"
+#include "domain/rtc/core.h"
 #include "../control.h"
 #include "./model.h"
 
@@ -7,19 +8,37 @@
 
 class TimerCore : public Control {
 public:
-  explicit TimerCore(int channel, void (*dWrite)(int channel, int value)): Control(channel) {
+  explicit TimerCore(int channel, void (*dWrite)(int channel, int value)): Control(channel, dWrite) {
     TimerModel model;
     TimerSchema timerSchema = model.get();
     timer = timerSchema.timers[channel];
+    rtcCore = new RtcCore;
+  }
+
+  ~TimerCore() override {
+    delete rtcCore;
   }
 
   bool Callback() override {
-    Serial.println("Timer is running at " + String(channel));
+    DateTime dt = rtcCore->getDate();
+    long currentInMinute = dt.hour() * 60 + dt.minute();
+
+    for (int i = 0; i < timer.size; i++)
+    {
+      if (currentInMinute >= timer.data[i][0] && currentInMinute <= timer.data[i][1])
+      {
+        dWrite(channel, HIGH);
+        break;
+      }
+      dWrite(channel, LOW);
+    }
     return true;
   }
 
+
 private:
   TimerSchema::timer timer;
+  RtcCore *rtcCore;
 };
 
 

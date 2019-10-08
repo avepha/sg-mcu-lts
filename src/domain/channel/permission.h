@@ -21,6 +21,23 @@ public:
   }
 };
 
+class permission_channel_state : public Permission {
+public:
+  explicit permission_channel_state(CombineContext *context) : Permission(context) {};
+
+  void resolve(JsonObject reqData) override {
+    if (reqData["index"].isNull()) {
+      IndexNotSpecifyError err;
+      throw err;
+    }
+
+    if (reqData["index"] < 0 || reqData["index"] > 7) {
+      IndexOutOfBoundError err;
+      throw err;
+    }
+  }
+};
+
 class permission_channel_save : public Permission {
 public:
   explicit permission_channel_save(CombineContext *context) : Permission(context) {};

@@ -2,6 +2,7 @@
 
 #include "domain/control/control.h"
 #include "domain/control/timer/core.h"
+#include "domain/control/criteria/core.h"
 
 #include "domain/precondition/precondition.h"
 #include "./model.h"
@@ -55,6 +56,9 @@ public:
     else if (channelData.control.type == CTRL_TIMER) {
       channelControl[channel].control = new TimerCore(channel, &dWrite);
     }
+    else if (channelData.control.type == CTRL_CRITERIA) {
+      channelControl[channel].control = new CriteriaCore(channel, &dWrite);
+    }
     else {
       dWrite(channel, LOW);
     }
@@ -63,6 +67,9 @@ public:
   static std::array<int, 8> channelState;
 
   static void dWrite(int channel = 0, int value = LOW) {
+    if (channelState[channel] == value)
+      return;
+
     channelState[channel] = value;
     digitalWrite(CHANNEL_GPIO_MAP[channel], value);
   }

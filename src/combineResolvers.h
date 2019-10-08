@@ -18,15 +18,14 @@ public:
   JsonDocument execute(JsonDocument);
 
 private:
-  static const int QUERY_SIZE = 11;
+  static const int QUERY_SIZE = 12;
   static const int MUTATION_SIZE = 8;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
   Resolvers *query[QUERY_SIZE];
 };
 
-CombineResolvers::CombineResolvers(CombineContext *context) :
-    context(context) {
+CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   query[0] = new query_date(context);
   query[1] = new query_sensor(context);
   query[2] = new query_sensor_order(context);
@@ -38,6 +37,7 @@ CombineResolvers::CombineResolvers(CombineContext *context) :
   query[8] = new query_info(context);
   query[9] = new query_channel(context);
   query[10] = new query_gpio(context);
+  query[11] = new query_channel_state(context);
 
   mutation[0] = new mutation_date_save(context);
   mutation[1] = new mutation_sensor_order_save(context);
@@ -46,7 +46,7 @@ CombineResolvers::CombineResolvers(CombineContext *context) :
   mutation[4] = new mutation_criteria_save(context);
   mutation[5] = new mutation_timer_save(context);
   mutation[6] = new mutation_channel_save(context);
-  mutation[7] = new channel_activate(context);
+  mutation[7] = new mutation_channel_activate(context);
 };
 
 

@@ -1,4 +1,4 @@
-#include "core/nsensor_core.h"
+#include "./core.h"
 
 #ifndef SG_MCU_NSENSOR_CONTEXT_H
 #define SG_MCU_NSENSOR_CONTEXT_H
@@ -11,8 +11,7 @@ public:
 };
 
 NSensorContext::NSensorContext() {
-  core = new NSensorCore;
+  core = NSensorCore::instance();
 }
-
 
 #endif //SG_MCU_CONTEXT_H

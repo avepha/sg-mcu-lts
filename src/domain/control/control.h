@@ -15,11 +15,15 @@ enum CONTROL_TYPE_ENUM {
 class Control: public Task {
 public:
   int channel = -1;
-  Control(int channel, int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, true),
-      channel(channel) {}
+  Control(int channel, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, true),
+      channel(channel),
+      dWrite(dWrite){}
+
   virtual ~Control() = default;;
 
-  bool Callback() override;
+  bool Callback();
+
+  void (*dWrite)(int, int);
 };
 
 bool Control::Callback() {
