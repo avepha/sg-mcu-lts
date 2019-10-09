@@ -38,7 +38,6 @@ SimulateNodeSensorsTask *simulateNodeSensorsTask;
 
 void loop1(void *pvParameters);
 
-
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
   Serial.begin(115200);

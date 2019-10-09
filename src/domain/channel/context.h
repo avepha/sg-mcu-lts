@@ -6,14 +6,14 @@
 
 class ChannelContext {
 public:
-  ChannelModel *channelModel;
-  ChannelCore *channelCore;
+  ChannelModel *model;
+  ChannelCore *core;
   ChannelContext();
 };
 
 ChannelContext::ChannelContext() {
-  channelModel = new ChannelModel();
-  channelCore = new ChannelCore();
+  model = new ChannelModel();
+  core = new ChannelCore();
 }
 
 #endif //SG_MCU_CONTEXT_H

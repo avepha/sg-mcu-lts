@@ -21,15 +21,19 @@ public:
     bool isReachThreshold = false;
     unsigned long currentWaitingTimeInSecond = 0;
     unsigned long currentWorkingTimeInSecond = 0;
-  } state;
+  };
 
-  explicit CriteriaCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, dWrite) {
+  explicit CriteriaCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CTRL_CRITERIA, dWrite) {
     CriteriaModel model;
     CriteriaSchema criteriaSchema = model.get();
     criteria = criteriaSchema.criterias[channel];
 
     nSensorCore = NSensorCore::instance();
     timeStamp = millis();
+  }
+
+  CriteriaStateStruct getControlState() {
+    return state;
   }
 
   ~CriteriaCore() override = default;
@@ -47,7 +51,7 @@ public:
       switch (state.criteriaState) {
         case CRITERIA_STATE_WAITING: {
           state.currentWaitingTimeInSecond = (millis() - timeStamp) / 1000;
-          if (state.currentWaitingTimeInSecond < criteria.timing.waitingTimeInSecond * 1000) {
+          if (state.currentWaitingTimeInSecond < criteria.timing.waitingTimeInSecond) {
             return true;
           }
 
@@ -64,7 +68,7 @@ public:
         }
         case CRITERIA_STATE_WORKING: {
           state.currentWorkingTimeInSecond = (millis() - timeStamp) / 1000;
-          if (state.currentWorkingTimeInSecond < criteria.timing.workingTimeInSecond * 1000) {
+          if (state.currentWorkingTimeInSecond < criteria.timing.workingTimeInSecond) {
             return true;
           }
 
@@ -83,6 +87,8 @@ public:
   }
 
 private:
+  CriteriaStateStruct state;
+
   unsigned long timeStamp = 0;
   NSensorCore *nSensorCore;
   CriteriaSchema::Criteria criteria;

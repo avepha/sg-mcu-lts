@@ -79,7 +79,7 @@
 * timer 
 ```json
 {"topic": "timer", "method": "query", "data": {"index": 0}}
-```
+```w
 * nsensors 
 ```json
 {"topic": "nsensors", "method": "query"}
@@ -100,3 +100,8 @@
 ```json
 {"topic": "gpio", "method": "query"}
 ```
+* channel_state 
+```json
+{"topic": "channel_state", "method": "query", "data":  {"index":  1}}
+```
+

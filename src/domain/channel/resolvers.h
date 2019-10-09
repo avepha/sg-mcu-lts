@@ -19,7 +19,7 @@ public:
 
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
-    ChannelSchema channelSchema = context->channelContext->channelModel->get();
+    ChannelSchema channelSchema = context->channelContext->model->get();
     ChannelSchema::Channel channel = channelSchema.channels[index];
 
     DynamicJsonDocument data(1024);
@@ -49,7 +49,7 @@ public:
       Resolvers("gpio", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    std::array<int, 8> channelState = context->channelContext->channelCore->getChannelState();
+    std::array<int, 8> channelState = context->channelContext->core->getChannelGpioState();
 
     DynamicJsonDocument data(1024);
     for (int i = 0; i < channelState.size(); i++) {
@@ -68,7 +68,27 @@ public:
   Resolvers("channel_state", context, new permission_channel_state(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
+    int index = reqData["index"];
+    ChannelCore::ChannelControl channelControl = context->channelContext->core->getChannelControlAt(index);
+    CONTROL_TYPE_ENUM type = channelControl.control->getType();
 
+    DynamicJsonDocument data(1024);
+    data["index"] = index;
+
+    switch (type) {
+      case CTRL_CRITERIA: {
+        auto *core = (CriteriaCore *)(channelControl.control);
+        CriteriaCore::CriteriaStateStruct state = core->getControlState();
+        data["criteriaState"] = (state.criteriaState == CriteriaCore::CRITERIA_STATE_WAITING) ? "waiting" : "working";
+        data["sensorValue"] = state.sensorValue;
+        data["isReachThreshold"] = state.isReachThreshold;
+        data["currentWorkingTimeInSecond"] = state.currentWorkingTimeInSecond;
+        data["currentWaitingTimeInSecond"] = state.currentWaitingTimeInSecond;
+      }
+      default: {}
+    }
+
+    return data;
   }
 };
 
@@ -83,19 +103,19 @@ public:
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
     boolean isActive = reqData["isActive"];
-    ChannelSchema channelSchema = context->channelContext->channelModel->get();
+    ChannelSchema channelSchema = context->channelContext->model->get();
     channelSchema.channels[index].isActive = isActive;
 
-    context->channelContext->channelModel->save(channelSchema);
+    context->channelContext->model->save(channelSchema);
     delay(10);
 
-    ChannelSchema newChannelSchema = context->channelContext->channelModel->get();
+    ChannelSchema newChannelSchema = context->channelContext->model->get();
     DynamicJsonDocument data(1024);
     data["index"] = index;
     data["isActive"] = newChannelSchema.channels[index].isActive;
 
     // index = channel 0 - 7
-    context->channelContext->channelCore->checkAndActivateControlType(newChannelSchema.channels[index], index);
+    context->channelContext->core->checkAndActivateControlType(newChannelSchema.channels[index], index);
 
     return data;
   }
@@ -109,7 +129,7 @@ public:
           new permission_channel_save(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    ChannelSchema channelSchema = context->channelContext->channelModel->get();
+    ChannelSchema channelSchema = context->channelContext->model->get();
     int index = reqData["index"];
 
     channelSchema.channels[index].control.type = ControlStringToEnum(reqData["control"]["type"]);
@@ -129,11 +149,11 @@ public:
     }
 
     channelSchema.channels[index].isActive = false;
-    context->channelContext->channelCore->checkAndActivateControlType(channelSchema.channels[index], index);
-    context->channelContext->channelModel->save(channelSchema);
+    context->channelContext->core->checkAndActivateControlType(channelSchema.channels[index], index);
+    context->channelContext->model->save(channelSchema);
     delay(10);
 
-    ChannelSchema newChannelSchema = context->channelContext->channelModel->get();
+    ChannelSchema newChannelSchema = context->channelContext->model->get();
     ChannelSchema::Channel channel = newChannelSchema.channels[index];
 
     DynamicJsonDocument data(1024);

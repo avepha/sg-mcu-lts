@@ -12,6 +12,11 @@
 
 class ChannelCore {
 public:
+  struct ChannelControl {
+    Control *control = nullptr;
+    Precondition preconditions[3];
+  };
+
   ChannelCore() {
     // initialize pin
     for (int i = 0; i < sizeof(CHANNEL_GPIO_MAP) / sizeof(CHANNEL_GPIO_MAP[0]); i++) {
@@ -26,8 +31,12 @@ public:
     }
   }
 
-  std::array<int, 8> getChannelState() {
-    return channelState;
+  static std::array<int, 8> getChannelGpioState() {
+    return channelGpioState;
+  }
+
+  ChannelControl getChannelControlAt(int channel) {
+    return channelControl[channel];
   }
 
   void checkAndActivateControlType(ChannelSchema::Channel channelData, int channel) {
@@ -64,23 +73,20 @@ public:
     }
   }
 
-  static std::array<int, 8> channelState;
-
+private:
+  static std::array<int, 8> channelGpioState;
   static void dWrite(int channel = 0, int value = LOW) {
-    if (channelState[channel] == value)
+    if (channelGpioState[channel] == value)
       return;
 
-    channelState[channel] = value;
+    channelGpioState[channel] = value;
     digitalWrite(CHANNEL_GPIO_MAP[channel], value);
   }
 
-private:
-  struct ChannelControl {
-    Control *control = nullptr;
-    Precondition preconditions[3];
-  } channelControl[8];
+  std::array<ChannelControl, 8> channelControl;
+
 };
 
-std::array<int, 8> ChannelCore::channelState = {{LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW}};
+std::array<int, 8> ChannelCore::channelGpioState = {{LOW, LOW, LOW, LOW, LOW, LOW, LOW, LOW}};
 
 #endif //SG_MCU_CHANNEL_CORE_H

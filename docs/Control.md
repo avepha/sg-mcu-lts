@@ -7,7 +7,7 @@
   "data": {
     "index": 1,
     "sensor": 1,
-    "criteria": 30.5,
+    "criteria": 80.0,
     "greater": false,
     "timing": {
       "working": 10,
