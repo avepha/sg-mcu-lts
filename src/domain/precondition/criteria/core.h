@@ -1,5 +1,5 @@
-#include "./domain/control/state.h"
-#include "./domain/nsensor/core.h"
+#include "domain/control/state.h"
+#include "domain/nsensor/core.h"
 #include "../precondition.h"
 #include "./model.h"
 
