@@ -12,7 +12,7 @@
 ###Mutation
 * date_save
 ```json
-{"topic": "date_save", "method": "mutation", "data": {"date": "2019-08-12T17:00:17.6\13Z"}}
+{"topic": "date_save", "method": "mutation", "data": {"date": "2019-08-12T17:00:17.613Z"}}
 ```
 * sensor_order_save 
 ```json
@@ -36,11 +36,11 @@
 ```
 * timer_save
 ```json
-{"topic": "timer_save", "method": "mutation", "data": {"index": 1, "timers": [ [0, 1440] ]}}
+{"topic": "timer_save", "method": "mutation", "data": {"index": 1, "timers": [ [1, 1440] ]}}
 ```
 * channel_save
 ```json
-{ "topic": "channel_save", "method": "mutation", "data": { "index": 1, "control": { "type": "criteria", "value": 0 }, "preconditions": [] } }
+{ "topic": "channel_save", "method": "mutation", "data": { "index": 1, "control": { "type": "timer", "value": 0 }, "preconditions": [] } }
 ```
 * channel_activate
 ```json
@@ -79,7 +79,7 @@
 * timer 
 ```json
 {"topic": "timer", "method": "query", "data": {"index": 0}}
-```w
+```
 * nsensors 
 ```json
 {"topic": "nsensors", "method": "query"}

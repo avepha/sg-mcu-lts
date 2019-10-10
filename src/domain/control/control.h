@@ -1,4 +1,5 @@
 #include <TaskScheduler.h>
+#include "state.h"
 
 #ifndef SG_MCU_CONTROL_H
 #define SG_MCU_CONTROL_H
@@ -15,6 +16,7 @@ enum CONTROL_TYPE_ENUM {
 class Control: public Task {
 public:
   int channel = -1;
+
   Control(int channel, CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, true),
       channel(channel),
       dWrite(dWrite),
@@ -22,7 +24,7 @@ public:
 
   virtual ~Control() = default;;
 
-  bool Callback();
+  bool Callback() override = 0;
 
   void (*dWrite)(int, int);
 
@@ -30,12 +32,9 @@ public:
     return type;
   }
 
+
 private:
   CONTROL_TYPE_ENUM type;
 };
-
-bool Control::Callback() {
-  return false;
-}
 
 #endif //SG_MCU_CONTROL_H

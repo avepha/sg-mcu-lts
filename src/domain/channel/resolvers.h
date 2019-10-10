@@ -78,12 +78,13 @@ public:
     switch (type) {
       case CTRL_CRITERIA: {
         auto *core = (CriteriaCore *)(channelControl.control);
-        CriteriaCore::CriteriaStateStruct state = core->getControlState();
-        data["criteriaState"] = (state.criteriaState == CriteriaCore::CRITERIA_STATE_WAITING) ? "waiting" : "working";
-        data["sensorValue"] = state.sensorValue;
-        data["isReachThreshold"] = state.isReachThreshold;
-        data["currentWorkingTimeInSecond"] = state.currentWorkingTimeInSecond;
-        data["currentWaitingTimeInSecond"] = state.currentWaitingTimeInSecond;
+        CriteriaState state = core->getControlState();
+        data["control"] = state.report();
+      }
+      case CTRL_TIMER: {
+        auto *core = (TimerCore *)(channelControl.control);
+        TimerState state = core->getControlState();
+        data["timer"] = state.report();
       }
       default: {}
     }

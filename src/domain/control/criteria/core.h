@@ -1,28 +1,40 @@
 #include "TaskScheduler.h"
 #include "domain/nsensor/core.h"
+#include "domain/control/state.h"
 #include "../control.h"
 #include "./model.h"
 
 #ifndef SG_MCU_CRITERIA_CORE_H
 #define SG_MCU_CRITERIA_CORE_H
 
-
-
-class CriteriaCore : public Control {
+class CriteriaState : public ControlState {
 public:
   enum CRITERIA_STATE_ENUM {
     CRITERIA_STATE_WAITING = 0,
     CRITERIA_STATE_WORKING = 1
   };
 
-  struct CriteriaStateStruct {
-    CRITERIA_STATE_ENUM criteriaState = CRITERIA_STATE_WAITING;
-    float sensorValue = 0;
-    bool isReachThreshold = false;
-    unsigned long currentWaitingTimeInSecond = 0;
-    unsigned long currentWorkingTimeInSecond = 0;
-  };
+  CRITERIA_STATE_ENUM criteriaState = CRITERIA_STATE_WAITING;
+  float sensorValue = 0;
+  bool isReachThreshold = false;
+  unsigned long currentWaitingTimeInSecond = 0;
+  unsigned long currentWorkingTimeInSecond = 0;
 
+  JsonDocument report() {
+    DynamicJsonDocument data(256);
+    data["type"] = "criteria";
+    data["criteriaState"] = (criteriaState == CRITERIA_STATE_WAITING) ? "waiting" : "working";
+    data["sensorValue"] = sensorValue;
+    data["isReachThreshold"] = isReachThreshold;
+    data["currentWorkingTimeInSecond"] = currentWorkingTimeInSecond;
+    data["currentWaitingTimeInSecond"] = currentWaitingTimeInSecond;
+
+    return data;
+  }
+};
+
+class CriteriaCore : public Control {
+public:
   explicit CriteriaCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CTRL_CRITERIA, dWrite) {
     CriteriaModel model;
     CriteriaSchema criteriaSchema = model.get();
@@ -32,11 +44,11 @@ public:
     timeStamp = millis();
   }
 
-  CriteriaStateStruct getControlState() {
+  ~CriteriaCore() override = default;
+
+  CriteriaState getControlState() {
     return state;
   }
-
-  ~CriteriaCore() override = default;
 
   bool Callback() {
 //  CriteriaModel::ShowModel(criteria, channel);
@@ -44,12 +56,13 @@ public:
     state.sensorValue = averageSensor.sensors[criteria.sensor];
 
     // check direction
-    state.isReachThreshold = (criteria.greater) ? (state.sensorValue >= criteria.criteria) : (state.sensorValue <= criteria.criteria);
+    state.isReachThreshold = (criteria.greater) ? (state.sensorValue >= criteria.criteria) : (state.sensorValue <=
+                                                                                              criteria.criteria);
 
     // if timing is enables
     if (criteria.timing.enable) {
       switch (state.criteriaState) {
-        case CRITERIA_STATE_WAITING: {
+        case CriteriaState::CRITERIA_STATE_WAITING: {
           state.currentWaitingTimeInSecond = (millis() - timeStamp) / 1000;
           if (state.currentWaitingTimeInSecond < criteria.timing.waitingTimeInSecond) {
             return true;
@@ -58,15 +71,15 @@ public:
           if (state.isReachThreshold) {
             // go to working state
             dWrite(channel, HIGH);
-            state.criteriaState = CRITERIA_STATE_WORKING;
+            state.criteriaState = CriteriaState::CRITERIA_STATE_WORKING;
           }
           else {
             // stay at waiting state
-            state.criteriaState = CRITERIA_STATE_WAITING;
+            state.criteriaState = CriteriaState::CRITERIA_STATE_WAITING;
           }
           timeStamp = millis();
         }
-        case CRITERIA_STATE_WORKING: {
+        case CriteriaState::CRITERIA_STATE_WORKING: {
           state.currentWorkingTimeInSecond = (millis() - timeStamp) / 1000;
           if (state.currentWorkingTimeInSecond < criteria.timing.workingTimeInSecond) {
             return true;
@@ -75,7 +88,7 @@ public:
           // go to waiting state
           dWrite(channel, LOW);
           timeStamp = millis();
-          state.criteriaState = CRITERIA_STATE_WAITING;
+          state.criteriaState = CriteriaState::CRITERIA_STATE_WAITING;
         }
       }
     }
@@ -87,12 +100,10 @@ public:
   }
 
 private:
-  CriteriaStateStruct state;
-
+  CriteriaState state;
   unsigned long timeStamp = 0;
   NSensorCore *nSensorCore;
   CriteriaSchema::Criteria criteria;
 };
-
 
 #endif //SG_MCU_CORE_H
