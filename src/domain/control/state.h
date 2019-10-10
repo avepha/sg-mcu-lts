@@ -3,7 +3,7 @@
 #ifndef SG_MCU_ABSTRACT_STATE_H
 #define SG_MCU_ABSTRACT_STATE_H
 
-class ControlState {
+class State {
 public:
   virtual JsonDocument report();
 };

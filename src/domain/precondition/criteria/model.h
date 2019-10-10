@@ -5,17 +5,17 @@
 
 const int PRECONDITION_CRITERIA_ROM_ADDR = 900;
 
-struct PreConditionCriteriaSchema {
-  struct criteria {
+struct PrecCriteriaSchema {
+  struct Criteria {
     byte sensor = 0;
     float criteria = 0.0F;
     bool greater = false;
   } criterias[8];
 }; // total size: 96
 
-class PreConditionCriteriaModel : public RomModel<PreConditionCriteriaSchema> {
+class PrecCriteriaModel : public RomModel<PrecCriteriaSchema> {
 public:
-  PreConditionCriteriaModel() : RomModel(PRECONDITION_CRITERIA_ROM_ADDR, "PreConditionCriteriaModel") {};
+  PrecCriteriaModel() : RomModel(PRECONDITION_CRITERIA_ROM_ADDR, "PreConditionCriteriaModel") {};
 };
 
 #endif //SG_MCU_CRITERIA_MODEL_H

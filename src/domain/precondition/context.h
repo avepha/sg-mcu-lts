@@ -4,16 +4,16 @@
 #ifndef SG_MCU_PRECONDITION_CONTEXT_H
 #define SG_MCU_PRECONDITION_CONTEXT_H
 
-class PreConditionContext {
+class PrecCriteriaContext {
 public:
   PreConditionTimerModel *timerModel;
-  PreConditionCriteriaModel *criteriaModel;
-  PreConditionContext();
+  PrecCriteriaModel *criteriaModel;
+  PrecCriteriaContext();
 };
 
-PreConditionContext::PreConditionContext() {
+PrecCriteriaContext::PrecCriteriaContext() {
   timerModel = new PreConditionTimerModel;
-  criteriaModel = new PreConditionCriteriaModel;
+  criteriaModel = new PrecCriteriaModel;
 }
 
 #endif //SG_MCU_CONTEXT_H

@@ -7,7 +7,7 @@
 #ifndef SG_MCU_CRITERIA_CORE_H
 #define SG_MCU_CRITERIA_CORE_H
 
-class CriteriaState : public ControlState {
+class CriteriaState : public State {
 public:
   enum CRITERIA_STATE_ENUM {
     CRITERIA_STATE_WAITING = 0,
@@ -56,8 +56,8 @@ public:
     state.sensorValue = averageSensor.sensors[criteria.sensor];
 
     // check direction
-    state.isReachThreshold = (criteria.greater) ? (state.sensorValue >= criteria.criteria) : (state.sensorValue <=
-                                                                                              criteria.criteria);
+    state.isReachThreshold = (criteria.greater) ? (state.sensorValue >= criteria.criteria)
+                                                : (state.sensorValue <= criteria.criteria);
 
     // if timing is enables
     if (criteria.timing.enable) {

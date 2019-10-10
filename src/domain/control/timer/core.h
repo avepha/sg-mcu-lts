@@ -7,7 +7,7 @@
 #ifndef SG_MCU_CTRL_TIMER_CORE_H
 #define SG_MCU_CTRL_TIMER_CORE_H
 
-class TimerState : public ControlState {
+class TimerState : public State {
 public:
   unsigned long currentTimeInSecond = 0;
   bool isReachThreshold = false;

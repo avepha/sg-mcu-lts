@@ -52,14 +52,14 @@ public:
     }
 
     if(!reqData["criteria"].isNull()) {
-      PreConditionCriteriaSchema criteriaSchema = context->precondition->criteriaModel->get();
+      PrecCriteriaSchema criteriaSchema = context->precondition->criteriaModel->get();
       criteriaSchema.criterias[index].sensor = reqData["criteria"]["sensor"];
       criteriaSchema.criterias[index].criteria = reqData["criteria"]["criteria"];
       criteriaSchema.criterias[index].greater = reqData["criteria"]["greater"];
 
       int writeOps = context->precondition->criteriaModel->save(criteriaSchema);
 
-      PreConditionCriteriaSchema newCriteriaSchema = context->precondition->criteriaModel->get();
+      PrecCriteriaSchema newCriteriaSchema = context->precondition->criteriaModel->get();
       DynamicJsonDocument data(1024);
       data["index"] = index;
       data["writeOps"] = writeOps;
@@ -110,7 +110,7 @@ public:
     }
 
     if (type == "criteria") {
-      PreConditionCriteriaSchema criteriaSchema = context->precondition->criteriaModel->get();
+      PrecCriteriaSchema criteriaSchema = context->precondition->criteriaModel->get();
       DynamicJsonDocument data(1024);
       data["index"] = index;
       JsonObject criteria = data.createNestedObject("criteria");

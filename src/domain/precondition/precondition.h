@@ -8,8 +8,10 @@ enum PRECONDITION_TYPE_ENUM {
 };
 
 class Precondition {
-
+public:
+  virtual bool resolve() {
+    return false;
+  };
 };
-
 
 #endif //SG_MCU_PRECONDITION_H

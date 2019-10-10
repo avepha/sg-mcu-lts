@@ -15,7 +15,7 @@ class CombineContext {
 public:
   RtcContext *rtc;
   SensorContext *sensor;
-  PreConditionContext *precondition;
+  PrecCriteriaContext *precondition;
   CriteriaContext *criteria;
   TimerContext *timer;
   NSensorContext *nsensors;
@@ -26,7 +26,7 @@ public:
 CombineContext::CombineContext() {
   rtc = new RtcContext;
   sensor = new SensorContext;
-  precondition = new PreConditionContext;
+  precondition = new PrecCriteriaContext;
   criteria = new CriteriaContext;
   timer = new TimerContext;
   nsensors = new NSensorContext;
