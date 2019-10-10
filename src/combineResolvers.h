@@ -10,6 +10,7 @@
 #include "domain/control/timer/resolvers.h"
 #include "domain/info/resolvers.h"
 #include "domain/channel/resolvers.h"
+#include "domain/precondition/criteria/resolvers.h"
 
 class CombineResolvers {
 public:
@@ -18,8 +19,8 @@ public:
   JsonDocument execute(JsonDocument);
 
 private:
-  static const int QUERY_SIZE = 12;
-  static const int MUTATION_SIZE = 8;
+  static const int QUERY_SIZE = 13;
+  static const int MUTATION_SIZE = 9;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
   Resolvers *query[QUERY_SIZE];
@@ -38,6 +39,7 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   query[9] = new query_channel(context);
   query[10] = new query_gpio(context);
   query[11] = new query_channel_state(context);
+  query[12] = new query_precondition_criteria(context);
 
   mutation[0] = new mutation_date_save(context);
   mutation[1] = new mutation_sensor_order_save(context);
@@ -47,6 +49,7 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   mutation[5] = new mutation_timer_save(context);
   mutation[6] = new mutation_channel_save(context);
   mutation[7] = new mutation_channel_activate(context);
+  mutation[8] = new mutation_precondition_criteria_save(context);
 };
 
 
