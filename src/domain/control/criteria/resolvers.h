@@ -18,14 +18,16 @@ public:
     int index = reqData["index"];
     CriteriaSchema schema = context->criteria->model->get();
 
-    schema.criterias[index].sensor = reqData["sensor"];
-    schema.criterias[index].criteria = reqData["criteria"];
-    schema.criterias[index].greater = reqData["greater"];
+    JsonObject criteria = reqData["criteria"];
 
-    if (!reqData["timing"].isNull()) {
+    schema.criterias[index].sensor = criteria["sensor"];
+    schema.criterias[index].criteria = criteria["criteria"];
+    schema.criterias[index].greater = criteria["greater"];
+
+    if (!criteria["timing"].isNull()) {
       schema.criterias[index].timing.enable = true;
-      schema.criterias[index].timing.workingTimeInSecond = reqData["timing"]["working"];
-      schema.criterias[index].timing.waitingTimeInSecond = reqData["timing"]["waiting"];
+      schema.criterias[index].timing.workingTimeInSecond = criteria["timing"]["working"];
+      schema.criterias[index].timing.waitingTimeInSecond = criteria["timing"]["waiting"];
     }
     else {
       schema.criterias[index].timing.enable = false;
@@ -62,11 +64,12 @@ public:
 
     DynamicJsonDocument data(256);
     data["index"] = index;
-    data["sensor"] = schema.criterias[index].sensor;
-    data["criteria"] = schema.criterias[index].criteria;
-    data["greater"] = schema.criterias[index].greater;
+    JsonObject criteria = data.createNestedObject("criteria");
+    criteria["sensor"] = schema.criterias[index].sensor;
+    criteria["criteria"] = schema.criterias[index].criteria;
+    criteria["greater"] = schema.criterias[index].greater;
 
-    JsonObject timing = data.createNestedObject("timing");
+    JsonObject timing = criteria.createNestedObject("timing");
     timing["enable"] = schema.criterias[index].timing.enable;
     timing["working"] = schema.criterias[index].timing.workingTimeInSecond;
     timing["waiting"] = schema.criterias[index].timing.waitingTimeInSecond;

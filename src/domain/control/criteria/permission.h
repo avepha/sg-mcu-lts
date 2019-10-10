@@ -19,43 +19,54 @@ public:
       throw err;
     }
 
-    if (reqData["sensor"].isNull()) {
+    if (reqData["criteria"].isNull()) {
+      InvalidInputError err("criteria is not specified.");
+      throw err;
+    }
+
+    if (!reqData["criteria"].is<JsonObject>()) {
+      InvalidInputError err("criteria must be an object.");
+      throw err;
+    }
+
+    JsonObject criteria = reqData["criteria"];
+    if (criteria["sensor"].isNull()) {
       InvalidInputError err("sensor is not specified");
       throw err;
     }
 
-    if (!reqData["sensor"].is<int>()) {
+    if (!criteria["sensor"].is<int>()) {
       InvalidInputError err("sensor must be type of integer");
       throw err;
     }
 
     SensorSchema sensorSchema = context->sensor->model->get();
-    if (reqData["sensor"] < 0 || reqData["sensor"] > sensorSchema.numberOfSensor) {
+    if (criteria["sensor"] < 0 || criteria["sensor"] > sensorSchema.numberOfSensor) {
       InvalidInputError err("sensor index out of bound");
       throw err;
     }
 
-    if (reqData["criteria"].isNull()) {
+    if (criteria["criteria"].isNull()) {
       InvalidInputError err("criteria is not specified");
       throw err;
     }
 
-    if (!reqData["criteria"].is<float>()) {
+    if (!criteria["criteria"].is<float>()) {
       InvalidInputError err("sensor must be type of double");
       throw err;
     }
 
-    if (!reqData["greater"].is<bool>()) {
+    if (!criteria["greater"].is<bool>()) {
       InvalidInputError err("Greater field must be boolean");
       throw err;
     }
 
-    if (!reqData["timing"].isNull()) {
-      if (reqData["timing"]["working"].isNull()) {
+    if (!criteria["timing"].isNull()) {
+      if (criteria["timing"]["working"].isNull()) {
         InvalidInputError err("timing.working is not specified");
         throw err;
       }
-      if (reqData["timing"]["waiting"].isNull()) {
+      if (criteria["timing"]["waiting"].isNull()) {
         InvalidInputError err("timing.waiting is not specified");
         throw err;
       }
