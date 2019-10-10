@@ -28,9 +28,10 @@ public:
     DynamicJsonDocument data(256);
     data["index"] = index;
     data["writeOps"] = writeOps;
-    data["sensor"] = newCriteriaSchema.criterias[index].sensor;
-    data["criteria"] = newCriteriaSchema.criterias[index].criteria;
-    data["greater"] = newCriteriaSchema.criterias[index].greater;
+    JsonObject criteria = data.createNestedObject("criteria");
+    criteria["sensor"] = newCriteriaSchema.criterias[index].sensor;
+    criteria["criteria"] = newCriteriaSchema.criterias[index].criteria;
+    criteria["greater"] = newCriteriaSchema.criterias[index].greater;
 
     return data;
   };
@@ -39,7 +40,7 @@ public:
 class query_precondition_criteria : public Resolvers {
 public:
   explicit query_precondition_criteria(CombineContext *context) :
-      Resolvers("precondition_criteria_save", context, new permission_precondition_criteria(context)) {};
+      Resolvers("precondition_criteria", context, new permission_precondition_criteria(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
@@ -47,9 +48,10 @@ public:
 
     DynamicJsonDocument data(256);
     data["index"] = index;
-    data["sensor"] = criteriaSchema.criterias[index].sensor;
-    data["criteria"] = criteriaSchema.criterias[index].criteria;
-    data["greater"] = criteriaSchema.criterias[index].greater;
+    JsonObject criteria = data.createNestedObject("criteria");
+    criteria["sensor"] = criteriaSchema.criterias[index].sensor;
+    criteria["criteria"] = criteriaSchema.criterias[index].criteria;
+    criteria["greater"] = criteriaSchema.criterias[index].greater;
 
     return data;
   };
