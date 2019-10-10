@@ -13,24 +13,24 @@
 
 class CombineContext {
 public:
-  RtcContext *rtcContext;
-  SensorContext *sensorContext;
-  PreConditionContext *preConditionContext;
-  CriteriaContext *criteriaContext;
-  TimerContext *timerContext;
-  NSensorContext *nSensorContext;
-  ChannelContext *channelContext;
+  RtcContext *rtc;
+  SensorContext *sensor;
+  PreConditionContext *precondition;
+  CriteriaContext *criteria;
+  TimerContext *timer;
+  NSensorContext *nsensors;
+  ChannelContext *channel;
   CombineContext();
 };
 
 CombineContext::CombineContext() {
-  rtcContext = new RtcContext;
-  sensorContext = new SensorContext;
-  preConditionContext = new PreConditionContext;
-  criteriaContext = new CriteriaContext;
-  timerContext = new TimerContext;
-  nSensorContext = new NSensorContext;
-  channelContext = new ChannelContext;
+  rtc = new RtcContext;
+  sensor = new SensorContext;
+  precondition = new PreConditionContext;
+  criteria = new CriteriaContext;
+  timer = new TimerContext;
+  nsensors = new NSensorContext;
+  channel = new ChannelContext;
 }
 
 #endif //SG_MCU_COMBINECONTEXT_H

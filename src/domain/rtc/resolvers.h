@@ -23,8 +23,8 @@ public:
     }
 
     DateTime newDate(IsoStringToDateTime(reqData["date"]));
-    context->rtcContext->core->setDate(newDate);
-    DateTime dateTime = context->rtcContext->core->getDate();
+    context->rtc->core->setDate(newDate);
+    DateTime dateTime = context->rtc->core->getDate();
 
     DynamicJsonDocument data(64);
     data["date"] = DateTimeToIsoString(dateTime);
@@ -39,7 +39,7 @@ public:
   explicit query_date(CombineContext *context) : Resolvers("date", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    DateTime dateTime = context->rtcContext->core->getDate();
+    DateTime dateTime = context->rtc->core->getDate();
 
     DynamicJsonDocument data(64);
     data["date"] = DateTimeToIsoString(dateTime);

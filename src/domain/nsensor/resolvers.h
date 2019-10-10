@@ -13,8 +13,8 @@ public:
   explicit query_nsensors(CombineContext *context) : Resolvers("nsensors", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    std::array<NSensor, 8> nodes = context->nSensorContext->core->getNSensor();
-    SensorSchema sensorSchema = context->sensorContext->model->get();
+    std::array<NSensor, 8> nodes = context->nsensors->core->getNSensor();
+    SensorSchema sensorSchema = context->sensor->model->get();
 
     DynamicJsonDocument data(2048);
 
@@ -67,8 +67,8 @@ public:
     }
 
     int index = reqData["index"];
-    SensorSchema sensorSchema = context->sensorContext->model->get();
-    std::array<NSensor, 8> nodes = context->nSensorContext->core->getNSensor();
+    SensorSchema sensorSchema = context->sensor->model->get();
+    std::array<NSensor, 8> nodes = context->nsensors->core->getNSensor();
 
     DynamicJsonDocument data(512);
     data["index"] = index;

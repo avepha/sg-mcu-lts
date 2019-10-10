@@ -99,7 +99,7 @@ void loop1(void *pvParameters) {
     int bSize = sensorEndpoint->embrace(bSensors);
 
     if (bSize > 0) {
-      context->nSensorContext->core->updateNSensor(bSensors, bSize);
+      context->nsensors->core->updateNSensor(bSensors, bSize);
     }
     else if(bSize == -2) { //checksum error
       NSensorInvalidCheckSumError err;

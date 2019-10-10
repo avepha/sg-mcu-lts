@@ -19,17 +19,17 @@ public:
     }
     JsonArray names = reqData["names"].as<JsonArray>();
 
-    SensorSchema sensorSchema = context->sensorContext->model->get();
+    SensorSchema sensorSchema = context->sensor->model->get();
     sensorSchema.numberOfSensor = names.size();
     for (int i = 0 ; i < names.size(); i++) {
       String name = names[i].as<String>();
       name.toCharArray(sensorSchema.names[i], name.length() + 1);
     }
 
-    int writeOps = context->sensorContext->model->save(sensorSchema);
+    int writeOps = context->sensor->model->save(sensorSchema);
 
     delay(10);
-    SensorSchema newSchema = context->sensorContext->model->get();
+    SensorSchema newSchema = context->sensor->model->get();
     DynamicJsonDocument data(300);
     data["writeOps"] = writeOps;
     JsonArray newNames = data.createNestedArray("names");
@@ -47,8 +47,8 @@ public:
   explicit query_sensor(CombineContext *context) : Resolvers("sensor", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    SensorSchema sensorNames = context->sensorContext->model->get();
-    float *sensors = context->sensorContext->core->getSensors();
+    SensorSchema sensorNames = context->sensor->model->get();
+    float *sensors = context->sensor->core->getSensors();
     DynamicJsonDocument data(256);
     for(int i = 0; i < sensorNames.numberOfSensor; i++) {
       data[sensorNames.names[i]] = sensors[i];
@@ -62,7 +62,7 @@ public:
   explicit query_sensor_order(CombineContext *context) : Resolvers("sensor_order", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    SensorSchema sensorNames = context->sensorContext->model->get();
+    SensorSchema sensorNames = context->sensor->model->get();
 
     DynamicJsonDocument data(256);
     JsonArray names = data.createNestedArray("names");

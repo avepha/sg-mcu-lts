@@ -29,7 +29,7 @@ public:
       throw err;
     }
 
-    SensorSchema sensorSchema = context->sensorContext->model->get();
+    SensorSchema sensorSchema = context->sensor->model->get();
     if (reqData["sensor"] < 0 || reqData["sensor"] > sensorSchema.numberOfSensor) {
       InvalidInputError err("sensor index out of bound");
       throw err;

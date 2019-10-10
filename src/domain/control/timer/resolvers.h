@@ -24,7 +24,7 @@ public:
     }
 
     int index = reqData["index"];
-    TimerSchema timerSchema = context->timerContext->model->get();
+    TimerSchema timerSchema = context->timer->model->get();
     int size = reqData["timers"].size();
 
     timerSchema.timers[index].size = size;
@@ -33,10 +33,10 @@ public:
       timerSchema.timers[index].data[i][1] = reqData["timers"][i][1];
     }
 
-    int writeOps = context->timerContext->model->save(timerSchema);
+    int writeOps = context->timer->model->save(timerSchema);
     delay(10);
 
-    TimerSchema newSchema = context->timerContext->model->get();
+    TimerSchema newSchema = context->timer->model->get();
     DynamicJsonDocument data(1024);
     data["index"] = index;
     data["writeOps"] = writeOps;
@@ -68,7 +68,7 @@ public:
     }
 
     int index = reqData["index"];
-    TimerSchema timerSchema = context->timerContext->model->get();
+    TimerSchema timerSchema = context->timer->model->get();
     DynamicJsonDocument data(1024);
     data["index"] = index;
     JsonArray timers = data.createNestedArray("timers");

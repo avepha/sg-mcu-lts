@@ -25,7 +25,7 @@ public:
     int index = reqData["index"];
 
     if (!reqData["timers"].isNull()) {
-      PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
+      PreConditionTimerSchema timerSchema = context->precondition->timerModel->get();
       int size = reqData["timers"].size();
 
       timerSchema.timers[index].size = size;
@@ -34,10 +34,10 @@ public:
         timerSchema.timers[index].data[i][1] = reqData["timers"][i][1];
       }
 
-      int writeOps = context->preConditionContext->timerModel->save(timerSchema);
+      int writeOps = context->precondition->timerModel->save(timerSchema);
       delay(10);
 
-      PreConditionTimerSchema newSchema = context->preConditionContext->timerModel->get();
+      PreConditionTimerSchema newSchema = context->precondition->timerModel->get();
       DynamicJsonDocument data(1024);
       data["index"] = index;
       data["writeOps"] = writeOps;
@@ -52,14 +52,14 @@ public:
     }
 
     if(!reqData["criteria"].isNull()) {
-      PreConditionCriteriaSchema criteriaSchema = context->preConditionContext->criteriaModel->get();
+      PreConditionCriteriaSchema criteriaSchema = context->precondition->criteriaModel->get();
       criteriaSchema.criterias[index].sensor = reqData["criteria"]["sensor"];
       criteriaSchema.criterias[index].criteria = reqData["criteria"]["criteria"];
       criteriaSchema.criterias[index].greater = reqData["criteria"]["greater"];
 
-      int writeOps = context->preConditionContext->criteriaModel->save(criteriaSchema);
+      int writeOps = context->precondition->criteriaModel->save(criteriaSchema);
 
-      PreConditionCriteriaSchema newCriteriaSchema = context->preConditionContext->criteriaModel->get();
+      PreConditionCriteriaSchema newCriteriaSchema = context->precondition->criteriaModel->get();
       DynamicJsonDocument data(1024);
       data["index"] = index;
       data["writeOps"] = writeOps;
@@ -96,7 +96,7 @@ public:
     String type = reqData["type"];
 
     if (type == "timer") {
-      PreConditionTimerSchema timerSchema = context->preConditionContext->timerModel->get();
+      PreConditionTimerSchema timerSchema = context->precondition->timerModel->get();
       DynamicJsonDocument data(1024);
       data["index"] = index;
       JsonArray timers = data.createNestedArray("timers");
@@ -110,7 +110,7 @@ public:
     }
 
     if (type == "criteria") {
-      PreConditionCriteriaSchema criteriaSchema = context->preConditionContext->criteriaModel->get();
+      PreConditionCriteriaSchema criteriaSchema = context->precondition->criteriaModel->get();
       DynamicJsonDocument data(1024);
       data["index"] = index;
       JsonObject criteria = data.createNestedObject("criteria");

@@ -28,7 +28,7 @@ public:
       byte plain_payload[plain_payload_size];
       memcpy(plain_payload, payload_sta_1 + 1, plain_payload_size);
 
-      context->nSensorContext->core->updateNSensor(plain_payload, plain_payload_size);
+      context->nsensors->core->updateNSensor(plain_payload, plain_payload_size);
     }
 
     for (int i = 1; i < 3; i++) { // mock 3 stations
@@ -50,7 +50,7 @@ public:
       byte plain_payload[plain_payload_size];
       memcpy(plain_payload, payload_sta_1 + 1, plain_payload_size);
 
-      context->nSensorContext->core->updateNSensor(plain_payload, plain_payload_size);
+      context->nsensors->core->updateNSensor(plain_payload, plain_payload_size);
     }
 #endif
     return true;
