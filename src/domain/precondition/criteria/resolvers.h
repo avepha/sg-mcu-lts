@@ -17,14 +17,14 @@ public:
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
 
-    PrecCriteriaSchema criteriaSchema = context->precondition->criteriaModel->get();
+    PrecCriteriaSchema criteriaSchema = context->precCriteria->model->get();
     criteriaSchema.criterias[index].sensor = reqData["criteria"]["sensor"];
     criteriaSchema.criterias[index].criteria = reqData["criteria"]["criteria"];
     criteriaSchema.criterias[index].greater = reqData["criteria"]["greater"];
 
-    int writeOps = context->precondition->criteriaModel->save(criteriaSchema);
+    int writeOps = context->precCriteria->model->save(criteriaSchema);
 
-    PrecCriteriaSchema newCriteriaSchema = context->precondition->criteriaModel->get();
+    PrecCriteriaSchema newCriteriaSchema = context->precCriteria->model->get();
     DynamicJsonDocument data(256);
     data["index"] = index;
     data["writeOps"] = writeOps;
@@ -43,7 +43,7 @@ public:
 
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
-    PrecCriteriaSchema criteriaSchema = context->precondition->criteriaModel->get();
+    PrecCriteriaSchema criteriaSchema = context->precCriteria->model->get();
 
     DynamicJsonDocument data(256);
     data["index"] = index;

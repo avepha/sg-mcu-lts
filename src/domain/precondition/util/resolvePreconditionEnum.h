@@ -31,4 +31,4 @@ PRECONDITION_TYPE_ENUM PreconditionStringToEnum(String precString) {
   }
 }
 
-#endif //SG_MCU_RESOLVEPRECONDITIONENUM_H
+#endif // SG_MCU_RESOLVEPRECONDITIONENUM_H

@@ -5,12 +5,12 @@
 #include "domain/sensor/resolvers.h"
 #include "domain/nsensor/resolvers.h"
 #include "domain/nvmemory/resolvers.h"
-#include "domain/precondition/resolvers.h"
 #include "domain/control/criteria/resolvers.h"
 #include "domain/control/timer/resolvers.h"
 #include "domain/info/resolvers.h"
 #include "domain/channel/resolvers.h"
 #include "domain/precondition/criteria/resolvers.h"
+#include "domain/precondition/timer/resolvers.h"
 
 class CombineResolvers {
 public:
@@ -30,26 +30,26 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   query[0] = new query_date(context);
   query[1] = new query_sensor(context);
   query[2] = new query_sensor_order(context);
-  query[3] = new query_precondition(context);
-  query[4] = new query_criteria(context);
-  query[5] = new query_timer(context);
-  query[6] = new query_nsensors(context);
-  query[7] = new query_nsensor(context);
-  query[8] = new query_info(context);
-  query[9] = new query_channel(context);
-  query[10] = new query_gpio(context);
-  query[11] = new query_channel_state(context);
-  query[12] = new query_precondition_criteria(context);
+  query[3] = new query_criteria(context);
+  query[4] = new query_timer(context);
+  query[5] = new query_nsensors(context);
+  query[6] = new query_nsensor(context);
+  query[7] = new query_info(context);
+  query[8] = new query_channel(context);
+  query[9] = new query_gpio(context);
+  query[10] = new query_channel_state(context);
+  query[11] = new query_precondition_criteria(context);
+  query[12] = new query_precondition_timer(context);
 
   mutation[0] = new mutation_date_save(context);
   mutation[1] = new mutation_sensor_order_save(context);
   mutation[2] = new mutation_clear_nvmemory(context);
-  mutation[3] = new mutation_precondition_save(context);
-  mutation[4] = new mutation_criteria_save(context);
-  mutation[5] = new mutation_timer_save(context);
-  mutation[6] = new mutation_channel_save(context);
-  mutation[7] = new mutation_channel_activate(context);
-  mutation[8] = new mutation_precondition_criteria_save(context);
+  mutation[3] = new mutation_criteria_save(context);
+  mutation[4] = new mutation_timer_save(context);
+  mutation[5] = new mutation_channel_save(context);
+  mutation[6] = new mutation_channel_activate(context);
+  mutation[7] = new mutation_precondition_criteria_save(context);
+  mutation[8] = new mutation_precondition_timer_save(context);
 };
 
 

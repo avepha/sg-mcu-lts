@@ -12,3 +12,15 @@
   }
 }
 ```
+
+* Precondition timer save
+```json
+{
+  "topic": "precondition_timer_save",
+  "method": "mutation",
+  "data": {
+    "index": 1,
+    "timers": [[0, 1440]]
+  }
+}
+```

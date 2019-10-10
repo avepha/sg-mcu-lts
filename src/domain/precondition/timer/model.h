@@ -9,16 +9,16 @@
 
 const int PRECONDITION_TIMER_ROM_ADDR = 300;
 
-struct PreConditionTimerSchema {
+struct PrecTimerSchema {
   struct timer {
     uint8_t size = 2;
     uint16_t data[10][2] = {{6 * HOUR_IN_MINUTE, 12 * HOUR_IN_MINUTE}, {13 * HOUR_IN_MINUTE, 18 * HOUR_IN_MINUTE}};
   } timers[8];
 }; // total size: 300, 300-636
 
-class PreConditionTimerModel : public RomModel<PreConditionTimerSchema> {
+class PrecTimerModel : public RomModel<PrecTimerSchema> {
 public:
-  PreConditionTimerModel() : RomModel(PRECONDITION_TIMER_ROM_ADDR, "PreconditionTimerModel") {};
+  PrecTimerModel() : RomModel(PRECONDITION_TIMER_ROM_ADDR, "PreconditionTimerModel") {};
 };
 
 #endif //SG_MCU_SENSOR_MODEL_H
