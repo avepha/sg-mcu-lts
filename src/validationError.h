@@ -74,4 +74,12 @@ class NSensorTimeoutError: public ValidationError {
 public: explicit NSensorTimeoutError(String message = "NSensor is timeout") : ValidationError("nsensor-timeout", message) {};
 };
 
+class PrecondtionExceedError: public ValidationError {
+public: explicit PrecondtionExceedError(String message = "Precondition per control is exceeded") : ValidationError("precondition-exceeded", message) {};
+};
+
+class InactiveControlError: public ValidationError {
+public: explicit InactiveControlError(String message = "Control is inactive") : ValidationError("inactive-control", message) {};
+};
+
 #endif //SG_MCU_VALIDATIONERROR_H

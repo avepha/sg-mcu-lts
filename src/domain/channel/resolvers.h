@@ -65,7 +65,7 @@ public:
 class query_channel_state : public Resolvers {
 public:
   explicit query_channel_state(CombineContext *context) :
-  Resolvers("channel_state", context, new permission_channel_state(context)) {};
+      Resolvers("channel_state", context, new permission_channel_state(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
@@ -74,20 +74,33 @@ public:
 
     DynamicJsonDocument data(1024);
     data["index"] = index;
+    JsonArray chainOfControlAndPreconditions = data.createNestedArray("states");
 
     switch (type) {
       case CTRL_CRITERIA: {
-        auto *core = (CriteriaCore *)(channelControl.control);
-        CriteriaState state = core->getControlState();
-        data["control"] = state.report();
+        auto *ctrlCore = (CriteriaCore *) (channelControl.control);
+        for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
+          if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
+            auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_TIMER) {
+            auto *precCoreAtN = (PrecTimerCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+        }
+        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
+        break;
       }
       case CTRL_TIMER: {
-        auto *core = (TimerCore *)(channelControl.control);
-        TimerState state = core->getControlState();
-        data["timer"] = state.report();
+        auto *ctrlCore = (TimerCore *) (channelControl.control);
+        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
+        break;
       }
-      default: {}
+      default: {
+      }
     }
+
 
     return data;
   }

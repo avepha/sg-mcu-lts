@@ -15,15 +15,14 @@ public:
 
   JsonDocument report() override {
     DynamicJsonDocument data(256);
-    data["type"] = "timer";
+    data["type"] = "precTimer";
     data["currentTimeInSecond"] = currentTimeInSecond;
     data["isReachThreshold"] = isReachThreshold;
     if (isReachThreshold) {
       JsonObject _currentTime = data.createNestedObject("currentIntervalTimerInSeconds");
       _currentTime["start"] = currentIntervalTimerInSeconds[0];
       _currentTime["stop"] = currentIntervalTimerInSeconds[1];
-    }
-    else {
+    } else {
       JsonObject _currentTime = data.createNestedObject("nextIntervalTimerInSeconds");
       _currentTime["start"] = nextIntervalTimerInSeconds[0];
       _currentTime["stop"] = nextIntervalTimerInSeconds[1];
@@ -35,13 +34,13 @@ public:
 
 class PrecTimerCore : public Precondition {
 public:
-  PrecTimerCore(int channel) {
+  explicit PrecTimerCore(int channel) : Precondition(PREC_TIMER) {
     PrecTimerModel model;
     PrecTimerSchema timerSchema = model.get();
     timer = timerSchema.timers[channel];
   }
 
-  bool resolve() {
+  bool resolve() override {
     DateTime dt = rtcCore->getDate();
     state.currentTimeInSecond = dt.hour() * 3600 + dt.minute() * 60 + dt.second();
 
@@ -52,7 +51,8 @@ public:
         state.nextIntervalTimerInSeconds[1] = timer.data[i][1] * 60; // stop time
       }
 
-      state.isReachThreshold = state.currentTimeInSecond >= timer.data[i][0] * 60 && state.currentTimeInSecond <= timer.data[i][1] * 60;
+      state.isReachThreshold =
+          state.currentTimeInSecond >= timer.data[i][0] * 60 && state.currentTimeInSecond <= timer.data[i][1] * 60;
       if (state.isReachThreshold) {
         state.currentIntervalTimerInSeconds[0] = timer.data[i][0] * 60; // start time
         state.currentIntervalTimerInSeconds[1] = timer.data[i][1] * 60; // stop time
@@ -62,10 +62,15 @@ public:
     return false;
   }
 
+  PrecTimerState getPreconditionState() {
+    return state;
+  }
+
+
 private:
   PrecTimerState state;
   PrecTimerSchema::timer timer;
-  RtcCore *rtcCore;
+  RtcCore *rtcCore{};
 };
 
 #endif //SG_MCU_CORE_H

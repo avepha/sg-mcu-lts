@@ -14,6 +14,7 @@ public:
     CRITERIA_STATE_WORKING = 1
   };
 
+  bool isTimingEnable = false;
   CRITERIA_STATE_ENUM criteriaState = CRITERIA_STATE_WAITING;
   float sensorValue = 0;
   bool isReachThreshold = false;
@@ -23,12 +24,13 @@ public:
   JsonDocument report() {
     DynamicJsonDocument data(256);
     data["type"] = "criteria";
-    data["criteriaState"] = (criteriaState == CRITERIA_STATE_WAITING) ? "waiting" : "working";
     data["sensorValue"] = sensorValue;
     data["isReachThreshold"] = isReachThreshold;
-    data["currentWorkingTimeInSecond"] = currentWorkingTimeInSecond;
-    data["currentWaitingTimeInSecond"] = currentWaitingTimeInSecond;
-
+    if (isTimingEnable) {
+      data["criteriaState"] = (criteriaState == CRITERIA_STATE_WAITING) ? "waiting" : "working";
+      data["currentWorkingTimeInSecond"] = currentWorkingTimeInSecond;
+      data["currentWaitingTimeInSecond"] = currentWaitingTimeInSecond;
+    }
     return data;
   }
 };
@@ -50,17 +52,18 @@ public:
     return state;
   }
 
-  bool Callback() {
+  bool controlTask() override {
 //  CriteriaModel::ShowModel(criteria, channel);
     NSensor averageSensor = nSensorCore->getAverageSensor();
     state.sensorValue = averageSensor.sensors[criteria.sensor];
 
+    state.isTimingEnable = criteria.timing.enable;
+
     // check direction
     state.isReachThreshold = (criteria.greater) ? (state.sensorValue >= criteria.criteria)
                                                 : (state.sensorValue <= criteria.criteria);
-
     // if timing is enables
-    if (criteria.timing.enable) {
+    if (state.isTimingEnable) {
       switch (state.criteriaState) {
         case CriteriaState::CRITERIA_STATE_WAITING: {
           state.currentWaitingTimeInSecond = (millis() - timeStamp) / 1000;

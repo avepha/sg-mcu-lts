@@ -51,7 +51,7 @@ public:
     return state;
   }
 
-  bool Callback() override {
+  bool controlTask() override {
     DateTime dt = rtcCore->getDate();
     state.currentTimeInSecond = dt.hour() * 3600 + dt.minute() * 60 + dt.second();
 

@@ -22,7 +22,7 @@ public:
 
 class PrecCriteriaCore : public Precondition {
 public:
-  PrecCriteriaCore(int channel) {
+  explicit PrecCriteriaCore(int channel) : Precondition(PREC_CRITERIA) {
     nSensorCore = NSensorCore::instance();
     PrecCriteriaModel model;
     PrecCriteriaSchema precCriteriaSchema = model.get();
@@ -36,6 +36,10 @@ public:
                                                 : (state.sensorValue <= criteria.criteria);
 
     return state.isReachThreshold;
+  }
+
+  PrecCriteriaState getPreconditionState() {
+    return state;
   }
 
 private:

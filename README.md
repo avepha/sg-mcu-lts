@@ -24,7 +24,7 @@
 ```
 * precondition_save for timer
 ```json
-{"topic": "precondition_save", "method": "mutation", "data": {"index": 0, "timers": [[0, 3600], [7200, 8400]]}}
+{"topic": "precondition_timer_save", "method": "mutation", "data": {"index": 1, "timers": [[0, 1440]]}}
 ```
 * precondition_save for criteria
 ```json

@@ -70,7 +70,9 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
           return response;
         }
         catch (ValidationError err) {
-          return err.toJson();
+          JsonDocument errResponse = err.toJson();
+          errResponse["execTime"] = millis() - incomingTime;
+          return errResponse;
         }
       }
     }
@@ -91,7 +93,9 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
           return response;
         }
         catch (ValidationError err) {
-          return err.toJson();
+          JsonDocument errResponse = err.toJson();
+          errResponse["execTime"] = millis() - incomingTime;
+          return errResponse;
         }
       }
     }

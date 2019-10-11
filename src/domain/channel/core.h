@@ -5,6 +5,8 @@
 #include "domain/control/criteria/core.h"
 
 #include "domain/precondition/precondition.h"
+#include "domain/precondition/criteria/core.h"
+#include "domain/precondition/timer/core.h"
 #include "./model.h"
 
 #ifndef SG_MCU_CHANNEL_CORE_H
@@ -14,7 +16,6 @@ class ChannelCore {
 public:
   struct ChannelControl {
     Control *control = nullptr;
-    Precondition preconditions[3];
   };
 
   ChannelCore() {
@@ -64,9 +65,19 @@ public:
     }
     else if (channelData.control.type == CTRL_TIMER) {
       channelControl[channel].control = new TimerCore(channel, &dWrite);
+      channelControl[channel].control->enable();
     }
     else if (channelData.control.type == CTRL_CRITERIA) {
       channelControl[channel].control = new CriteriaCore(channel, &dWrite);
+      for (int i = 0; i < sizeof(channelData.preconditions) / sizeof(channelData.preconditions[0]); i++) {
+        if (channelData.preconditions[i].type == PREC_CRITERIA) {
+          channelControl[channel].control->addPrecondition(new PrecCriteriaCore(channel));
+        }
+        else if (channelData.preconditions[i].type == PREC_TIMER) {
+          channelControl[channel].control->addPrecondition(new PrecTimerCore(channel));
+        }
+      }
+      channelControl[channel].control->enable();
     }
     else {
       dWrite(channel, LOW);
@@ -75,6 +86,7 @@ public:
 
 private:
   static std::array<int, 8> channelGpioState;
+
   static void dWrite(int channel = 0, int value = LOW) {
     if (channelGpioState[channel] == value)
       return;

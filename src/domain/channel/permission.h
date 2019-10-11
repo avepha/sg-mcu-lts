@@ -35,6 +35,13 @@ public:
       IndexOutOfBoundError err;
       throw err;
     }
+
+    int index = reqData["index"];
+    ChannelSchema schema = context->channel->model->get();
+    if (!schema.channels[index].isActive) {
+      InactiveControlError err;
+      throw err;
+    }
   }
 };
 

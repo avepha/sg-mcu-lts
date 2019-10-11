@@ -1,5 +1,7 @@
 #include <TaskScheduler.h>
+#include "validationError.h"
 #include "state.h"
+#include "domain/precondition/precondition.h"
 
 #ifndef SG_MCU_CONTROL_H
 #define SG_MCU_CONTROL_H
@@ -17,14 +19,30 @@ class Control: public Task {
 public:
   int channel = -1;
 
-  Control(int channel, CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, true),
+  Control(int channel, CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, false),
       channel(channel),
       dWrite(dWrite),
       type(type) {}
 
-  virtual ~Control() = default;;
+  virtual ~Control() {
+    for (int i = 0; i < precSize; i++) {
+      delete preconditions[i];
+    }
+  };
 
-  bool Callback() override = 0;
+  virtual bool controlTask() {
+    return true;
+  };
+
+  bool Callback() override {
+    for (int i = 0; i < precSize; i++) {
+      if (!preconditions[i]->resolve()) {
+        return false;
+      }
+    }
+
+    return controlTask();
+  };
 
   void (*dWrite)(int, int);
 
@@ -32,9 +50,29 @@ public:
     return type;
   }
 
+  void addPrecondition(Precondition *_precondition) {
+    if (precSize > 2) {
+      PrecondtionExceedError err;
+      throw err;
+    }
+
+    preconditions[precSize] = _precondition;
+    precSize++;
+  }
+
+  int getPreconditionSize() {
+    return precSize;
+  }
+
+  Precondition* getPreconditionAt(int index) {
+    return preconditions[index];
+  }
+
 
 private:
   CONTROL_TYPE_ENUM type;
+  uint8_t precSize = 0;
+  Precondition *preconditions[3];
 };
 
 #endif //SG_MCU_CONTROL_H
