@@ -18,3 +18,20 @@
   }
 }
 ```
+
+*Range
+```json
+{
+	"topic": "range_save",
+	"method": "mutation",
+	"data": {
+		"index": 1,
+		"range": {
+			"timing": {
+				"working": 10,
+				"waiting": 10
+			}
+		}
+	}
+}
+```

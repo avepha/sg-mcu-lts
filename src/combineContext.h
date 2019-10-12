@@ -4,6 +4,7 @@
 
 #include "domain/control/criteria/context.h"
 #include "domain/control/timer/context.h"
+#include "domain/control/range/context.h"
 
 #include "domain/precondition/criteria/context.h"
 #include "domain/precondition/timer/context.h"
@@ -22,6 +23,7 @@ public:
 
   CriteriaContext *criteria;
   TimerContext *timer;
+  RangeContext *range;
 
   PrecTimerContext *precTimer;
   PrecCriteriaContext *precCriteria;
@@ -32,6 +34,7 @@ CombineContext::CombineContext() {
   rtc = new RtcContext;
   sensor = new SensorContext;
   criteria = new CriteriaContext;
+  range = new RangeContext;
   timer = new TimerContext;
   nsensors = new NSensorContext;
   channel = new ChannelContext;
