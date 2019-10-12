@@ -1,7 +1,7 @@
 #include "./model.h"
 
-#ifndef SG_MCU_PRECONDITION_CONTEXT_H
-#define SG_MCU_PRECONDITION_CONTEXT_H
+#ifndef SG_MCU_PRECONDITION_CRITERIA_CONTEXT_H
+#define SG_MCU_PRECONDITION_CRITERIA_CONTEXT_H
 
 class PrecCriteriaContext {
 public:

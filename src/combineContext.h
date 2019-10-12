@@ -8,6 +8,7 @@
 
 #include "domain/precondition/criteria/context.h"
 #include "domain/precondition/timer/context.h"
+#include "domain/precondition/range/context.h"
 
 #include "domain/channel/context.h"
 
@@ -27,6 +28,7 @@ public:
 
   PrecTimerContext *precTimer;
   PrecCriteriaContext *precCriteria;
+  PrecRangeContext *precRange;
   CombineContext();
 };
 
@@ -40,6 +42,7 @@ CombineContext::CombineContext() {
   channel = new ChannelContext;
   precTimer = new PrecTimerContext;
   precCriteria = new PrecCriteriaContext;
+  precRange = new PrecRangeContext;
 }
 
 #endif //SG_MCU_COMBINECONTEXT_H

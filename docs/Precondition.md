@@ -15,6 +15,23 @@
 }
 ```
 
+* Precondition range save
+```json
+{
+  "topic": "precondition_range_save",
+  "method": "mutation",
+  "data": {
+    "index": 1,
+    "range": {
+      "sensor": 1,
+      "upper": 30.0,
+      "lower": 25.0,
+      "greater": false
+    }
+  }
+}
+```
+
 * Precondition timer save
 ```json
 {

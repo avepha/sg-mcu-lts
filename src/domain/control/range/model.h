@@ -17,7 +17,7 @@ struct RangeSchema {
       uint16_t waitingTimeInSecond = 10;
     } timing;
   } ranges[8];
-}; // total size: 128
+}; // total size: 160
 
 class RangeModel : public RomModel<RangeSchema> {
 public:
