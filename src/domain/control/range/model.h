@@ -3,7 +3,7 @@
 #ifndef SG_MCU_CONTROL_RANGE_MODEL_H
 #define SG_MCU_CONTROL_RANGE_MODEL_H
 
-const int RANGE_ROM_ADDR = 1700;
+const int RANGE_ROM_ADDR = 2100;
 
 struct RangeSchema {
   struct Range {
@@ -24,4 +24,4 @@ public:
   RangeModel() : RomModel(RANGE_ROM_ADDR, "RangeModel") {};
 };
 
-#endif //SG_MCU_CRITERIA_MODEL_H
+#endif //SG_MCU_RANGE_MODEL_H

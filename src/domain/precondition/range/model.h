@@ -10,7 +10,6 @@ struct PrecRangeSchema {
     byte sensor = 0;
     float upper = 0.0F;
     float lower = 0.0F;
-    bool greater = false;
   } ranges[8];
 }; // total size: 128
 

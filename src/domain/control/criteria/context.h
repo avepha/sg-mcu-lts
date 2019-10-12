@@ -13,5 +13,4 @@ CriteriaContext::CriteriaContext() {
   model = new CriteriaModel;
 }
 
-
 #endif //SG_MCU_CONTEXT_H

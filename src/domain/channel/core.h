@@ -1,13 +1,16 @@
 #include <array>
 
+#include "./model.h"
+
 #include "domain/control/control.h"
 #include "domain/control/timer/core.h"
 #include "domain/control/criteria/core.h"
+#include "domain/control/range/core.h"
 
 #include "domain/precondition/precondition.h"
 #include "domain/precondition/criteria/core.h"
 #include "domain/precondition/timer/core.h"
-#include "./model.h"
+#include "domain/precondition/range/core.h"
 
 #ifndef SG_MCU_CHANNEL_CORE_H
 #define SG_MCU_CHANNEL_CORE_H
@@ -69,12 +72,32 @@ public:
     }
     else if (channelData.control.type == CTRL_CRITERIA) {
       channelControl[channel].control = new CriteriaCore(channel, &dWrite);
+
       for (int i = 0; i < sizeof(channelData.preconditions) / sizeof(channelData.preconditions[0]); i++) {
         if (channelData.preconditions[i].type == PREC_CRITERIA) {
           channelControl[channel].control->addPrecondition(new PrecCriteriaCore(channel));
         }
         else if (channelData.preconditions[i].type == PREC_TIMER) {
           channelControl[channel].control->addPrecondition(new PrecTimerCore(channel));
+        }
+        else if (channelData.preconditions[i].type == PREC_RANGE) {
+          channelControl[channel].control->addPrecondition(new PrecRangeCore(channel));
+        }
+      }
+      channelControl[channel].control->enable();
+    }
+    else if (channelData.control.type == CTRL_RANGE) {
+      channelControl[channel].control = new RangeCore(channel, &dWrite);
+
+      for (int i = 0; i < sizeof(channelData.preconditions) / sizeof(channelData.preconditions[0]); i++) {
+        if (channelData.preconditions[i].type == PREC_CRITERIA) {
+          channelControl[channel].control->addPrecondition(new PrecCriteriaCore(channel));
+        }
+        else if (channelData.preconditions[i].type == PREC_TIMER) {
+          channelControl[channel].control->addPrecondition(new PrecTimerCore(channel));
+        }
+        else if (channelData.preconditions[i].type == PREC_RANGE) {
+          channelControl[channel].control->addPrecondition(new PrecRangeCore(channel));
         }
       }
       channelControl[channel].control->enable();

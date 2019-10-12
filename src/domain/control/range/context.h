@@ -13,5 +13,4 @@ RangeContext::RangeContext() {
   model = new RangeModel;
 }
 
-
 #endif //SG_MCU_CONTEXT_H

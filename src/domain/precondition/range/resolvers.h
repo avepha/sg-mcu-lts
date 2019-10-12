@@ -23,7 +23,6 @@ public:
     schema.ranges[index].sensor = range["sensor"];
     schema.ranges[index].upper = range["upper"];
     schema.ranges[index].lower = range["lower"];
-    schema.ranges[index].greater = range["greater"];
 
     int writeOps = context->precRange->model->save(schema);
 
@@ -36,7 +35,6 @@ public:
     _range["sensor"] = newSchema.ranges[index].sensor;
     _range["upper"] = newSchema.ranges[index].upper;
     _range["lower"] = newSchema.ranges[index].lower;
-    _range["greater"] = newSchema.ranges[index].greater;
 
     return data;
   };
@@ -57,7 +55,6 @@ public:
     range["sensor"] = schema.ranges[index].sensor;
     range["upper"] = schema.ranges[index].upper;
     range["lower"] = schema.ranges[index].lower;
-    range["greater"] = schema.ranges[index].greater;
 
     return data;
   };

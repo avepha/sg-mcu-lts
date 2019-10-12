@@ -65,11 +65,6 @@ public:
       InvalidInputError err("lower must be type of double");
       throw err;
     }
-
-    if (!range["greater"].is<bool>()) {
-      InvalidInputError err("Greater field must be boolean");
-      throw err;
-    }
   }
 };
 
