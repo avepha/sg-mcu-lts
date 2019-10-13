@@ -1,4 +1,4 @@
-#define SG_TEST
+//#define SG_TEST
 #define _TASK_OO_CALLBACKS
 
 #include <Arduino.h>
