@@ -16,6 +16,7 @@ private:
 };
 
 RtcCore::RtcCore() {
+  hwRtc.begin();
   swRtc.adjust(DateTime(2019, 01, 01));
 }
 

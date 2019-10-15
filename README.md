@@ -54,7 +54,7 @@
 ```
 * Date 
 ```json
-{"topic": "date", "method": "query", "reqId": "16"}
+{"topic": "date", "method": "query", "reqId": "1"}
 ```
 * sensor 
 ```json
