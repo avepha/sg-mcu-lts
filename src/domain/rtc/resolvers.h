@@ -24,11 +24,38 @@ public:
 
     DateTime newDate(IsoStringToDateTime(reqData["date"]));
     context->rtc->core->setDate(newDate);
-    DateTime dateTime = context->rtc->core->getDate();
+    DateTime dateTime = context->rtc->core->getUtcDate();
 
     DynamicJsonDocument data(64);
     data["date"] = DateTimeToIsoString(dateTime);
 
+    return data;
+  };
+};
+
+class mutation_timezone_save: public Resolvers {
+public:
+  explicit mutation_timezone_save(CombineContext *context) : Resolvers("timezone_save", context) {};
+
+  JsonDocument resolve(JsonObject reqData) override {
+    if (reqData["timezone"].isNull()) {
+      InvalidInputError err("timezone must not be null");
+      throw err;
+    }
+
+    if (!reqData["timezone"].is<int>()) {
+      InvalidInputError err("timezone must not be a number");
+      throw err;
+    }
+
+    RtcSchema schema = context->rtc->model->get();
+    schema.timezone = reqData["timezone"];
+    context->rtc->model->save(schema);
+    delay(10);
+
+    RtcSchema newSchema = context->rtc->model->get();
+    DynamicJsonDocument data(64);
+    data["timezone"] = newSchema.timezone;
     return data;
   };
 };
@@ -39,7 +66,13 @@ public:
   explicit query_date(CombineContext *context) : Resolvers("date", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    DateTime dateTime = context->rtc->core->getDate();
+    DateTime dateTime;
+    if (!reqData["local"].isNull()) {
+      dateTime = context->rtc->core->getDate();
+    }
+    else {
+      dateTime = context->rtc->core->getUtcDate();
+    }
 
     DynamicJsonDocument data(64);
     data["date"] = DateTimeToIsoString(dateTime);
@@ -47,5 +80,20 @@ public:
     return data;
   };
 };
+
+class query_timezone : public Resolvers {
+public:
+  explicit query_timezone(CombineContext *context) : Resolvers("timezone", context) {};
+
+  JsonDocument resolve(JsonObject reqData) override {
+    RtcSchema schema = context->rtc->model->get();
+
+    DynamicJsonDocument data(64);
+    data["timezone"] = schema.timezone;
+
+    return data;
+  };
+};
+
 
 #endif //SG_MCU_RESOLVERS_H

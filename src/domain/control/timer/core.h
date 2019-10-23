@@ -40,7 +40,7 @@ public:
     TimerModel model;
     TimerSchema timerSchema = model.get();
     timer = timerSchema.timers[channel];
-    rtcCore = new RtcCore;
+    rtcCore = RtcCore::instance();
   }
 
   ~TimerCore() override {

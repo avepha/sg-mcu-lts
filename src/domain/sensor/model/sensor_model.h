@@ -1,3 +1,4 @@
+// TODO: refactor code -> change location and file name(model.h)
 #include "domain/model.h"
 
 #ifndef SG_MCU_SENSOR_MODEL_H

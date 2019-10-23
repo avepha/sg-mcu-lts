@@ -46,6 +46,10 @@
 ```json
 { "topic": "channel_activate", "method": "mutation", "data": { "index": 1,  "isActive": true}}
 ```
+* timezone_save
+```json
+{ "topic": "timezone_save", "method": "mutation", "data": { "timezone": 7}}
+```
 
 ###Query
 * Info 
@@ -55,6 +59,10 @@
 * Date 
 ```json
 {"topic": "date", "method": "query", "reqId": "1"}
+```
+* Date with local
+```json
+{"topic": "date", "method": "query", "data": {"local":  true},"reqId": "1"}
 ```
 * sensor 
 ```json
@@ -103,5 +111,9 @@
 * channel_state 
 ```json
 {"topic": "channel_state", "method": "query", "data":  {"index":  1}}
+```
+* timezone 
+```json
+{"topic": "timezone", "method": "query"}
 ```
 

@@ -1,6 +1,7 @@
 #include "combineContext.h"
 #include "validationError.h"
 
+#include "domain/rtc/resolvers.h"
 #include "domain/nvmemory/resolvers.h"
 #include "domain/info/resolvers.h"
 #include "domain/channel/resolvers.h"
@@ -23,8 +24,8 @@ public:
   JsonDocument execute(JsonDocument);
 
 private:
-  static const int QUERY_SIZE = 15;
-  static const int MUTATION_SIZE = 11;
+  static const int QUERY_SIZE = 16;
+  static const int MUTATION_SIZE = 12;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
   Resolvers *query[QUERY_SIZE];
@@ -46,6 +47,7 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   query[12] = new query_precondition_timer(context);
   query[13] = new query_range(context);
   query[14] = new query_precondition_range(context);
+  query[15] = new query_timezone(context);
 
   mutation[0] = new mutation_date_save(context);
   mutation[1] = new mutation_sensor_order_save(context);
@@ -58,8 +60,8 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   mutation[8] = new mutation_precondition_timer_save(context);
   mutation[9] = new mutation_range_save(context);
   mutation[10] = new mutation_precondition_range_save(context);
+  mutation[11] = new mutation_timezone_save(context);
 };
-
 
 JsonDocument CombineResolvers::execute(JsonDocument json) {
   DynamicJsonDocument response(2048);
