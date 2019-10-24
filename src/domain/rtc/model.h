@@ -6,7 +6,8 @@
 const int RTC_ROM_ADDR = 0;
 
 struct RtcSchema {
-  int8_t timezone = 7; // +07 ICT
+  int8_t tzOffsetHour = 7; // +07 :00ICT
+  int8_t tzOffsetMin = 0;
 }; // total size: 1
 
 class RtcModel : public RomModel<RtcSchema> {

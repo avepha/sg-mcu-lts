@@ -48,7 +48,7 @@
 ```
 * timezone_save
 ```json
-{ "topic": "timezone_save", "method": "mutation", "data": { "timezone": 7}}
+{ "topic": "timezone_save", "method": "mutation", "data": { "offset": "-02:00"}}
 ```
 
 ###Query

@@ -35,9 +35,9 @@ RtcCore::RtcCore() {
 }
 
 DateTime RtcCore::getDate() {
-  int8_t timezone = rtcModel->get().timezone;
+  RtcSchema rtcSchema =  rtcModel->get();
   DateTime utcDt = hwRtc.isrunning() ? hwRtc.now() : swRtc.now();
-  TimeSpan tzTimeSpan(timezone * 3600);
+  TimeSpan tzTimeSpan(rtcSchema.tzOffsetHour * 3600 + rtcSchema.tzOffsetMin * 30);
   return utcDt + tzTimeSpan;
 }
 

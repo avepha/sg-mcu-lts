@@ -4,6 +4,7 @@
 #include "combineContext.h"
 #include "domain/resolvers.h"
 #include "util/util.h"
+#include "./permission.h"
 
 #include "./util/RtcUtil.h"
 
@@ -33,29 +34,33 @@ public:
   };
 };
 
-class mutation_timezone_save: public Resolvers {
+class mutation_timezone_save : public Resolvers {
 public:
-  explicit mutation_timezone_save(CombineContext *context) : Resolvers("timezone_save", context) {};
+  explicit mutation_timezone_save(CombineContext *context) : Resolvers("timezone_save", context,
+                                                                       new permission_timezone_save(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    if (reqData["timezone"].isNull()) {
-      InvalidInputError err("timezone must not be null");
-      throw err;
-    }
-
-    if (!reqData["timezone"].is<int>()) {
-      InvalidInputError err("timezone must not be a number");
-      throw err;
-    }
-
+    String offset = reqData["offset"];
+    String sign = offset.substring(0, 1);
+    String hourOffset = offset.substring(1, 3);
+    String minOffset = offset.substring(4);
     RtcSchema schema = context->rtc->model->get();
-    schema.timezone = reqData["timezone"];
+
+    schema.tzOffsetMin = minOffset.toInt();
+    schema.tzOffsetHour = (sign == "+") ? hourOffset.toInt() : hourOffset.toInt() * -1;
+
     context->rtc->model->save(schema);
-    delay(10);
 
     RtcSchema newSchema = context->rtc->model->get();
     DynamicJsonDocument data(64);
-    data["timezone"] = newSchema.timezone;
+
+    String tzString = (newSchema.tzOffsetHour >= 0) ? "+" : "-";
+    int hour = (newSchema.tzOffsetHour < 0) ? newSchema.tzOffsetHour * -1 : newSchema.tzOffsetHour;
+    tzString += (hour > 10) ? String(hour) : "0" + String(hour);
+    tzString += ":";
+    tzString += (newSchema.tzOffsetMin > 10) ? String(newSchema.tzOffsetMin) : "0" + String(newSchema.tzOffsetMin);
+
+    data["offset"] = tzString;
     return data;
   };
 };
@@ -86,11 +91,17 @@ public:
   explicit query_timezone(CombineContext *context) : Resolvers("timezone", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
+
     RtcSchema schema = context->rtc->model->get();
-
     DynamicJsonDocument data(64);
-    data["timezone"] = schema.timezone;
 
+    String tzString = (schema.tzOffsetHour >= 0) ? "+" : "-";
+    int hour = (schema.tzOffsetHour < 0) ? schema.tzOffsetHour * -1 : schema.tzOffsetHour;
+    tzString += (hour > 10) ? String(hour) : "0" + String(hour);
+    tzString += ":";
+    tzString += (schema.tzOffsetMin > 10) ? String(schema.tzOffsetMin) : "0" + String(schema.tzOffsetMin);
+
+    data["offset"] = tzString;
     return data;
   };
 };
