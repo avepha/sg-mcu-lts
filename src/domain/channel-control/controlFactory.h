@@ -1,8 +1,8 @@
-#include "./channel-control/control.h"
+#include "control.h"
 
-#include "./channel-control/timer/core.h"
-#include "./channel-control/range/core.h"
-#include "./channel-control/criteria/core.h"
+#include "./timer/core.h"
+#include "./range/core.h"
+#include "./criteria/core.h"
 
 #ifndef SG_MCU_CONTROL_FACTORY_H
 #define SG_MCU_CONTROL_FACTORY_H

@@ -3,7 +3,7 @@
 #include "./model.h"
 
 #include "domain/precondition/preconditionFactory.h"
-#include "domain/control/controlFactory.h"
+#include "domain/channel-control/controlFactory.h"
 
 #ifndef SG_MCU_CHANNEL_CORE_H
 #define SG_MCU_CHANNEL_CORE_H

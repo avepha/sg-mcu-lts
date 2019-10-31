@@ -9,9 +9,9 @@
 #include "domain/sensor/resolvers.h"
 #include "domain/nsensor/resolvers.h"
 
-#include "domain/control/channel-control/criteria/resolvers.h"
-#include "domain/control/channel-control/timer/resolvers.h"
-#include "domain/control/channel-control/range/resolvers.h"
+#include "domain/channel-control//criteria/resolvers.h"
+#include "domain/channel-control//timer/resolvers.h"
+#include "domain/channel-control//range/resolvers.h"
 
 #include "domain/precondition/criteria/resolvers.h"
 #include "domain/precondition/timer/resolvers.h"

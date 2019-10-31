@@ -1,6 +1,6 @@
 #include <TaskScheduler.h>
 #include "validationError.h"
-#include "domain/control/state.h"
+#include "domain/channel-control/state.h"
 #include "domain/precondition/precondition.h"
 
 #ifndef SG_MCU_CONTROL_H
@@ -67,7 +67,6 @@ public:
   Precondition* getPreconditionAt(int index) {
     return preconditions[index];
   }
-
 
 private:
   CONTROL_TYPE_ENUM type;
