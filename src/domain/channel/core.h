@@ -2,15 +2,8 @@
 
 #include "./model.h"
 
-#include "domain/control/channel-control/control.h"
-#include "domain/control/channel-control/timer/core.h"
-#include "domain/control/channel-control/criteria/core.h"
-#include "domain/control/channel-control/range/core.h"
-
-#include "domain/precondition/precondition.h"
-#include "domain/precondition/criteria/core.h"
-#include "domain/precondition/timer/core.h"
-#include "domain/precondition/range/core.h"
+#include "domain/precondition/preconditionFactory.h"
+#include "domain/control/controlFactory.h"
 
 #ifndef SG_MCU_CHANNEL_CORE_H
 #define SG_MCU_CHANNEL_CORE_H
@@ -65,41 +58,21 @@ public:
           dWrite(channel, LOW);
           break;
       }
+
+      return;
     }
-    else if (channelData.control.type == CTRL_TIMER) {
-      channelControl[channel].control = new TimerCore(channel, &dWrite);
-      channelControl[channel].control->enable();
-    }
-    else if (channelData.control.type == CTRL_CRITERIA) {
-      channelControl[channel].control = new CriteriaCore(channel, &dWrite);
+
+    Control *control = ControlFactory::getControl(channelData.control.type, channel, &dWrite);
+    if (control != nullptr) {
+      channelControl[channel].control = control;
 
       for (int i = 0; i < sizeof(channelData.preconditions) / sizeof(channelData.preconditions[0]); i++) {
-        if (channelData.preconditions[i].type == PREC_CRITERIA) {
-          channelControl[channel].control->addPrecondition(new PrecCriteriaCore(channel));
-        }
-        else if (channelData.preconditions[i].type == PREC_TIMER) {
-          channelControl[channel].control->addPrecondition(new PrecTimerCore(channel));
-        }
-        else if (channelData.preconditions[i].type == PREC_RANGE) {
-          channelControl[channel].control->addPrecondition(new PrecRangeCore(channel));
+        Precondition *precondition = PreconditionFactory::getPrecondition(channelData.preconditions[i].type, channel);
+        if (precondition != nullptr) {
+          channelControl[channel].control->addPrecondition(precondition);
         }
       }
-      channelControl[channel].control->enable();
-    }
-    else if (channelData.control.type == CTRL_RANGE) {
-      channelControl[channel].control = new RangeCore(channel, &dWrite);
 
-      for (int i = 0; i < sizeof(channelData.preconditions) / sizeof(channelData.preconditions[0]); i++) {
-        if (channelData.preconditions[i].type == PREC_CRITERIA) {
-          channelControl[channel].control->addPrecondition(new PrecCriteriaCore(channel));
-        }
-        else if (channelData.preconditions[i].type == PREC_TIMER) {
-          channelControl[channel].control->addPrecondition(new PrecTimerCore(channel));
-        }
-        else if (channelData.preconditions[i].type == PREC_RANGE) {
-          channelControl[channel].control->addPrecondition(new PrecRangeCore(channel));
-        }
-      }
       channelControl[channel].control->enable();
     }
     else {
