@@ -1,5 +1,5 @@
 #include "../precondition.h"
-#include "domain/control/state.h"
+#include "domain/channel-control/state.h"
 #include "domain/rtc/core.h"
 #include "./model.h"
 

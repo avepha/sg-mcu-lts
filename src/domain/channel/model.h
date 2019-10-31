@@ -1,4 +1,4 @@
-#include "domain/control/channel-control/control.h"
+#include "domain/channel-control/control.h"
 #include "domain/precondition/precondition.h"
 #include "domain/model.h"
 

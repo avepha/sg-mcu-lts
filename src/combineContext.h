@@ -2,9 +2,9 @@
 #include "domain/sensor/context.h"
 #include "domain/nsensor/context.h"
 
-#include "domain/control/channel-control/criteria/context.h"
-#include "domain/control/channel-control/timer/context.h"
-#include "domain/control/channel-control/range/context.h"
+#include "domain/channel-control//criteria/context.h"
+#include "domain/channel-control//timer/context.h"
+#include "domain/channel-control//range/context.h"
 
 #include "domain/precondition/criteria/context.h"
 #include "domain/precondition/timer/context.h"

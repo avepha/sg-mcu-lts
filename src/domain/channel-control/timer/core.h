@@ -1,7 +1,7 @@
 #include "TaskScheduler.h"
 #include "domain/rtc/core.h"
-#include "domain/control/state.h"
-#include "domain/control/channel-control/control.h"
+#include "domain/channel-control/state.h"
+#include "domain/channel-control/control.h"
 #include "./model.h"
 
 #ifndef SG_MCU_CTRL_TIMER_CORE_H
