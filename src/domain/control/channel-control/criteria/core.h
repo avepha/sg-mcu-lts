@@ -1,7 +1,7 @@
 #include "TaskScheduler.h"
 #include "domain/nsensor/core.h"
 #include "domain/control/state.h"
-#include "../control.h"
+#include "domain/control/channel-control/control.h"
 #include "./model.h"
 
 #ifndef SG_MCU_CRITERIA_CORE_H

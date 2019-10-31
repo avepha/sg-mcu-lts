@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "../control.h"
+#include "domain/control/channel-control/control.h"
 #ifndef SG_MCU_RESOLVE_CONTROL_TO_ENUM_H
 #define SG_MCU_RESOLVE_CONTROL_TO_ENUM_H
 

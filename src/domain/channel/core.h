@@ -2,10 +2,10 @@
 
 #include "./model.h"
 
-#include "domain/control/control.h"
-#include "domain/control/timer/core.h"
-#include "domain/control/criteria/core.h"
-#include "domain/control/range/core.h"
+#include "domain/control/channel-control/control.h"
+#include "domain/control/channel-control/timer/core.h"
+#include "domain/control/channel-control/criteria/core.h"
+#include "domain/control/channel-control/range/core.h"
 
 #include "domain/precondition/precondition.h"
 #include "domain/precondition/criteria/core.h"

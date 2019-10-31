@@ -1,6 +1,6 @@
 #include <TaskScheduler.h>
 #include "validationError.h"
-#include "state.h"
+#include "domain/control/state.h"
 #include "domain/precondition/precondition.h"
 
 #ifndef SG_MCU_CONTROL_H

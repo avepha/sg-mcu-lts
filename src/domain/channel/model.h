@@ -1,4 +1,4 @@
-#include "domain/control/control.h"
+#include "domain/control/channel-control/control.h"
 #include "domain/precondition/precondition.h"
 #include "domain/model.h"
 
@@ -11,7 +11,7 @@ struct ChannelSchema {
   struct Channel {
     bool isActive = false;
 
-    struct control {
+    struct Control {
       CONTROL_TYPE_ENUM type = CTRL_NONE;
       uint8_t value = 0; // manual
     } control;

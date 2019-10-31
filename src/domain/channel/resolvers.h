@@ -3,8 +3,8 @@
 #include "domain/resolvers.h"
 #include "util/util.h"
 #include "./permission.h"
-#include "../control/util/resolveControlEnum.h"
-#include "../precondition/util/resolvePreconditionEnum.h"
+#include "domain/control/channel-control/util/resolveControlEnum.h"
+#include "domain/precondition/util/resolvePreconditionEnum.h"
 
 #ifndef SG_MCU_CHANNEL_RESOLVERS_H
 #define SG_MCU_CHANNEL_RESOLVERS_H
