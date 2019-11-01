@@ -26,8 +26,8 @@ public:
   JsonDocument execute(JsonDocument);
 
 private:
-  static const int QUERY_SIZE = 16;
-  static const int MUTATION_SIZE = 12;
+  static const int QUERY_SIZE = 17;
+  static const int MUTATION_SIZE = 13;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
   Resolvers *query[QUERY_SIZE];
