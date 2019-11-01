@@ -15,7 +15,6 @@ public:
   explicit mutation_continuous_criteria_save(CombineContext *context) : Resolvers("continuous_criteria_save", context, new permission_continuous_criteria_save(context)) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    int index = reqData["index"];
     ContinuousCriteriaSchema schema = context->continuousCriteria->model->get();
 
     JsonObject criteria = reqData["criteria"];
@@ -38,7 +37,6 @@ public:
     ContinuousCriteriaSchema newSchema = context->continuousCriteria->model->get();
 
     DynamicJsonDocument data(256);
-    data["index"] = index;
     data["writeOps"] = writeOps;
     data["sensor"] = newSchema.criteria.sensor;
     data["criteria"] = newSchema.criteria.criteria;
@@ -56,14 +54,12 @@ public:
 // @query: date
 class query_continuous_criteria : public Resolvers {
 public:
-  explicit query_continuous_criteria(CombineContext *context) : Resolvers("continuous_criteria", context, new permission_continuous_criteria(context)) {};
+  explicit query_continuous_criteria(CombineContext *context) : Resolvers("continuous_criteria", context) {};
 
   JsonDocument resolve(JsonObject reqData) override {
-    int index = reqData["index"];
     ContinuousCriteriaSchema schema = context->continuousCriteria->model->get();
 
     DynamicJsonDocument data(256);
-    data["index"] = index;
     JsonObject criteria = data.createNestedObject("criteria");
     criteria["sensor"] = schema.criteria.sensor;
     criteria["criteria"] = schema.criteria.criteria;

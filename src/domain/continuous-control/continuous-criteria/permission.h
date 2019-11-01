@@ -65,21 +65,4 @@ public:
   }
 };
 
-class permission_continuous_criteria : public Permission {
-public:
-  explicit permission_continuous_criteria(CombineContext *context) : Permission(context) {};
-
-  void resolve(JsonObject reqData) override {
-    if (reqData.isNull() || reqData["index"].isNull()) {
-      InvalidInputError err("index is not specified.");
-      throw err;
-    }
-
-    if (reqData["index"] < 0 || reqData["index"] > 7) {
-      InvalidInputError err("index out of range.");
-      throw err;
-    }
-  }
-};
-
 #endif //SG_MCU_CONTINUOUS_CRITERIA_PERMISSION_H

@@ -1,0 +1,10 @@
+# criteria control
+### Query
+```json
+{"topic": "continuous_criteria", "method": "query"}
+```
+
+### Mutation
+```json
+{"topic": "continuous_criteria_save", "method": "mutation", "data":  {"criteria": {"sensor": 1, "criteria": 25, "greater": false, "timing": {"working": 30, "waiting": 30}}}}
+```
