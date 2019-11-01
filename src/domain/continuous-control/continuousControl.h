@@ -1,23 +1,23 @@
 #include <TaskScheduler.h>
 #include "validationError.h"
-#include "./controlTypeEnum.h"
-#include "domain/channel-control/state.h"
+#include "./state.h"
+#include "continuousControlTypeEnum.h"
 #include "domain/precondition/precondition.h"
 
-#ifndef SG_MCU_CONTROL_H
-#define SG_MCU_CONTROL_H
+#ifndef SG_MCU_CONTINUOUS_CONTROL_H
+#define SG_MCU_CONTINUOUS_CONTROL_H
 Scheduler ctrlScheduler;
 
-class Control: public Task {
+class ContinuousControl: public Task {
 public:
   int channel = -1;
 
-  Control(int channel, CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, false),
-      channel(channel),
-      dWrite(dWrite),
-      type(type) {}
+  ContinuousControl(int channel, CONTINUOUS_CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, false),
+                                                                                                                channel(channel),
+                                                                                                                dWrite(dWrite),
+                                                                                                                type(type) {}
 
-  virtual ~Control() {
+  virtual ~ContinuousControl() {
     for (int i = 0; i < precSize; i++) {
       delete preconditions[i];
     }
@@ -39,7 +39,7 @@ public:
 
   void (*dWrite)(int, int);
 
-  CONTROL_TYPE_ENUM getType() {
+  CONTINUOUS_CONTROL_TYPE_ENUM getType() {
     return type;
   }
 
@@ -62,9 +62,9 @@ public:
   }
 
 private:
-  CONTROL_TYPE_ENUM type;
+  CONTINUOUS_CONTROL_TYPE_ENUM type;
   uint8_t precSize = 0;
   Precondition *preconditions[3];
 };
 
-#endif //SG_MCU_CONTROL_H
+#endif //SG_MCU_CONTINUOUS_CONTROL_H

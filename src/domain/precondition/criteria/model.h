@@ -3,8 +3,6 @@
 #ifndef SG_MCU_PRECONDITION_CRITERIA_MODEL_H
 #define SG_MCU_PRECONDITION_CRITERIA_MODEL_H
 
-const int PRECONDITION_CRITERIA_ROM_ADDR = 900;
-
 struct PrecCriteriaSchema {
   struct Criteria {
     byte sensor = 0;
@@ -15,7 +13,7 @@ struct PrecCriteriaSchema {
 
 class PrecCriteriaModel : public RomModel<PrecCriteriaSchema> {
 public:
-  PrecCriteriaModel() : RomModel(PRECONDITION_CRITERIA_ROM_ADDR, "PreConditionCriteriaModel") {};
+  PrecCriteriaModel() : RomModel("PreConditionCriteriaModel") {};
 };
 
 #endif //SG_MCU_CRITERIA_MODEL_H

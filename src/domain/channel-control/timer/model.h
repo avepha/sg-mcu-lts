@@ -7,8 +7,6 @@
 #define HOUR_IN_MINUTE 60
 #endif
 
-const int CONTROL_TIMER_ROM_ADDR = 1000;
-
 struct TimerSchema {
   struct timer {
     uint8_t size = 2;
@@ -18,7 +16,7 @@ struct TimerSchema {
 
 class TimerModel : public RomModel<TimerSchema> {
 public:
-  TimerModel() : RomModel(CONTROL_TIMER_ROM_ADDR, "TimerModel") {};
+  TimerModel() : RomModel("TimerModel") {};
 };
 
 #endif //SG_MCU_CRITERIA_MODEL_H

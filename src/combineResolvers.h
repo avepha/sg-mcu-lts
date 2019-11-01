@@ -9,9 +9,11 @@
 #include "domain/sensor/resolvers.h"
 #include "domain/nsensor/resolvers.h"
 
-#include "domain/channel-control//criteria/resolvers.h"
-#include "domain/channel-control//timer/resolvers.h"
-#include "domain/channel-control//range/resolvers.h"
+#include "domain/channel-control/criteria/resolvers.h"
+#include "domain/channel-control/timer/resolvers.h"
+#include "domain/channel-control/range/resolvers.h"
+
+#include "domain/continuous-control/continuous-criteria/resolvers.h"
 
 #include "domain/precondition/criteria/resolvers.h"
 #include "domain/precondition/timer/resolvers.h"
@@ -24,8 +26,8 @@ public:
   JsonDocument execute(JsonDocument);
 
 private:
-  static const int QUERY_SIZE = 16;
-  static const int MUTATION_SIZE = 12;
+  static const int QUERY_SIZE = 17;
+  static const int MUTATION_SIZE = 13;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE];
   Resolvers *query[QUERY_SIZE];
@@ -48,6 +50,7 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   query[13] = new query_range(context);
   query[14] = new query_precondition_range(context);
   query[15] = new query_timezone(context);
+  query[16] = new query_continuous_criteria(context);
 
   mutation[0] = new mutation_date_save(context);
   mutation[1] = new mutation_sensor_order_save(context);
@@ -61,6 +64,7 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   mutation[9] = new mutation_range_save(context);
   mutation[10] = new mutation_precondition_range_save(context);
   mutation[11] = new mutation_timezone_save(context);
+  mutation[12] = new mutation_continuous_criteria_save(context);
 };
 
 JsonDocument CombineResolvers::execute(JsonDocument json) {

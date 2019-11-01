@@ -4,8 +4,6 @@
 #ifndef SG_MCU_SENSOR_MODEL_H
 #define SG_MCU_SENSOR_MODEL_H
 
-const int SENSOR_ROM_ADDR = 0;
-
 struct SensorSchema {
   int numberOfSensor = 9;
   char names[12][20] = {
@@ -26,7 +24,7 @@ struct SensorSchema {
 
 class SensorModel : public RomModel<SensorSchema> {
 public:
-  SensorModel() : RomModel(SENSOR_ROM_ADDR, "SensorModel") {};
+  SensorModel() : RomModel("SensorModel") {};
 };
 
 #endif //SG_MCU_SENSOR_MODEL_H

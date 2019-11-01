@@ -5,8 +5,6 @@
 #ifndef SG_MCU_CHANNEL_MODEL_H
 #define SG_MCU_CHANNEL_MODEL_H
 
-const int CHANNEL_ROM_ADDR = 1400;
-
 struct ChannelSchema {
   struct Channel {
     bool isActive = false;
@@ -25,7 +23,7 @@ struct ChannelSchema {
 
 class ChannelModel : public RomModel<ChannelSchema> {
 public:
-  ChannelModel() : RomModel(CHANNEL_ROM_ADDR, "ChannelModel") {};
+  ChannelModel() : RomModel("ChannelModel") {};
 };
 
 

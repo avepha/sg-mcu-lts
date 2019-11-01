@@ -2,9 +2,11 @@
 #include "domain/sensor/context.h"
 #include "domain/nsensor/context.h"
 
-#include "domain/channel-control//criteria/context.h"
-#include "domain/channel-control//timer/context.h"
-#include "domain/channel-control//range/context.h"
+#include "domain/channel-control/criteria/context.h"
+#include "domain/channel-control/timer/context.h"
+#include "domain/channel-control/range/context.h"
+
+#include "domain/continuous-control/continuous-criteria/context.h"
 
 #include "domain/precondition/criteria/context.h"
 #include "domain/precondition/timer/context.h"
@@ -26,6 +28,8 @@ public:
   TimerContext *timer;
   RangeContext *range;
 
+  ContinuousCriteriaContext *continuousCriteria;
+
   PrecTimerContext *precTimer;
   PrecCriteriaContext *precCriteria;
   PrecRangeContext *precRange;
@@ -43,6 +47,7 @@ CombineContext::CombineContext() {
   precTimer = new PrecTimerContext;
   precCriteria = new PrecCriteriaContext;
   precRange = new PrecRangeContext;
+  continuousCriteria = new ContinuousCriteriaContext;
 }
 
 #endif //SG_MCU_COMBINECONTEXT_H

@@ -3,8 +3,6 @@
 #ifndef SG_MCU_CONTROL_RANGE_MODEL_H
 #define SG_MCU_CONTROL_RANGE_MODEL_H
 
-const int RANGE_ROM_ADDR = 2100;
-
 struct RangeSchema {
   struct Range {
     byte sensor = 0;
@@ -21,7 +19,7 @@ struct RangeSchema {
 
 class RangeModel : public RomModel<RangeSchema> {
 public:
-  RangeModel() : RomModel(RANGE_ROM_ADDR, "RangeModel") {};
+  RangeModel() : RomModel("RangeModel") {};
 };
 
 #endif //SG_MCU_RANGE_MODEL_H
