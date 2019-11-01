@@ -9,6 +9,8 @@ String ContinuousControlEnumToString(CONTINUOUS_CONTROL_TYPE_ENUM ctrlEnum) {
       return "continuous-timer";
     case CON_CTRL_CRITERIA:
       return "continuous-criteria";
+    case CON_CTRL_RANGE:
+      return "continuous-range";
     default:
       return "none";
   }
@@ -20,6 +22,9 @@ CONTINUOUS_CONTROL_TYPE_ENUM ContinuousControlStringToEnum(const String& ctrlStr
   }
   else if (ctrlString == "continuous-criteria") {
     return CON_CTRL_CRITERIA;
+  }
+  else if (ctrlString == "continuous-range") {
+    return CON_CTRL_RANGE;
   }
   else {
     return CON_CTRL_NONE;

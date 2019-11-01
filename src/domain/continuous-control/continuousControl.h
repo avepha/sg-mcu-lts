@@ -1,21 +1,22 @@
 #include <TaskScheduler.h>
 #include "validationError.h"
-#include "./state.h"
 #include "continuousControlTypeEnum.h"
 #include "domain/precondition/precondition.h"
 
 #ifndef SG_MCU_CONTINUOUS_CONTROL_H
 #define SG_MCU_CONTINUOUS_CONTROL_H
-Scheduler ctrlScheduler;
 
-class ContinuousControl: public Task {
+class ContinuousControl : public Task {
 public:
   int channel = -1;
 
-  ContinuousControl(int channel, CONTINUOUS_CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, false),
-                                                                                                                channel(channel),
-                                                                                                                dWrite(dWrite),
-                                                                                                                type(type) {}
+  ContinuousControl(int channel,
+                    CONTINUOUS_CONTROL_TYPE_ENUM type,
+                    void (*dWrite)(int, int),
+                    int interval = TASK_SECOND) : Task(interval, TASK_FOREVER, &ctrlScheduler, false),
+                                                  channel(channel),
+                                                  dWrite(dWrite),
+                                                  type(type) {}
 
   virtual ~ContinuousControl() {
     for (int i = 0; i < precSize; i++) {
@@ -57,7 +58,7 @@ public:
     return precSize;
   }
 
-  Precondition* getPreconditionAt(int index) {
+  Precondition *getPreconditionAt(int index) {
     return preconditions[index];
   }
 

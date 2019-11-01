@@ -76,7 +76,7 @@ public:
     }
 
     for (int i = 0 ; i < reqData["preconditions"].as<JsonArray>().size(); i++) {
-      JsonObject jo = reqData["preconditions"][0];
+      JsonObject jo = reqData["preconditions"][i];
       if (jo["type"].isNull() || jo["value"].isNull()) {
         InvalidInputError err("precondition must have field type and value");
         throw err;
