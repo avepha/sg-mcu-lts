@@ -41,7 +41,7 @@ RomOrganizer *RomOrganizer::s_instance = nullptr;
 template<typename T>
 class RomModel {
 public:
-  RomModel(int addr, String name) :
+  RomModel(String name) :
       writeOpTime(0),
       modelName(name) {
     T sch;

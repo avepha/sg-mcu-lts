@@ -7,8 +7,6 @@
 #define HOUR_IN_MINUTE 60
 #endif
 
-const int PRECONDITION_TIMER_ROM_ADDR = 300;
-
 struct PrecTimerSchema {
   struct timer {
     uint8_t size = 2;
@@ -18,7 +16,7 @@ struct PrecTimerSchema {
 
 class PrecTimerModel : public RomModel<PrecTimerSchema> {
 public:
-  PrecTimerModel() : RomModel(PRECONDITION_TIMER_ROM_ADDR, "PreconditionTimerModel") {};
+  PrecTimerModel() : RomModel("PreconditionTimerModel") {};
 };
 
 #endif //SG_MCU_SENSOR_MODEL_H

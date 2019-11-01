@@ -3,8 +3,6 @@
 #ifndef SG_MCU_PRECONDITION_RANGE_MODEL_H
 #define SG_MCU_PRECONDITION_RANGE_MODEL_H
 
-const int PRECONDITION_RANGE_ROM_ADDR = 1900;
-
 struct PrecRangeSchema {
   struct Range {
     byte sensor = 0;
@@ -15,7 +13,7 @@ struct PrecRangeSchema {
 
 class PrecRangeModel : public RomModel<PrecRangeSchema> {
 public:
-  PrecRangeModel() : RomModel(PRECONDITION_RANGE_ROM_ADDR, "PreConditionRangeModel") {};
+  PrecRangeModel() : RomModel("PreConditionRangeModel") {};
 };
 
 #endif //SG_MCU_CRITERIA_MODEL_H
