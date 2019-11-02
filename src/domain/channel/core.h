@@ -10,9 +10,6 @@
 
 class ChannelCore {
 public:
-  struct ChannelControl {
-    Control *control = nullptr;
-  };
 
   ChannelCore() {
     // initialize pin
@@ -32,16 +29,16 @@ public:
     return channelGpioState;
   }
 
-  ChannelControl getChannelControlAt(int channel) {
+  Control* getChannelControlAt(int channel) {
     return channelControl[channel];
   }
 
   void checkAndActivateControlType(ChannelSchema::Channel channelData, int channel) {
     // check and remove control
-    if (channelControl[channel].control != nullptr) {
-      channelControl[channel].control->disable();
-      delete channelControl[channel].control;
-      channelControl[channel].control = nullptr;
+    if (channelControl[channel] != nullptr) {
+      channelControl[channel]->disable();
+      delete channelControl[channel];
+      channelControl[channel] = nullptr;
     }
 
     if (!channelData.isActive) {
@@ -64,16 +61,16 @@ public:
 
     Control *control = ControlFactory::getControl(channelData.control.type, channel, &dWrite);
     if (control != nullptr) {
-      channelControl[channel].control = control;
+      channelControl[channel] = control;
 
       for (int i = 0; i < sizeof(channelData.preconditions) / sizeof(channelData.preconditions[0]); i++) {
         Precondition *precondition = PreconditionFactory::getPrecondition(channelData.preconditions[i].type, channel);
         if (precondition != nullptr) {
-          channelControl[channel].control->addPrecondition(precondition);
+          channelControl[channel]->addPrecondition(precondition);
         }
       }
 
-      channelControl[channel].control->enable();
+      channelControl[channel]->enable();
     }
     else {
       dWrite(channel, LOW);
@@ -91,7 +88,7 @@ private:
     digitalWrite(CHANNEL_GPIO_MAP[channel], value);
   }
 
-  std::array<ChannelControl, 8> channelControl;
+  std::array<Control*, 8> channelControl{};
 
 };
 

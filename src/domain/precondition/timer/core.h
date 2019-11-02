@@ -38,6 +38,7 @@ public:
     PrecTimerModel model;
     PrecTimerSchema timerSchema = model.get();
     timer = timerSchema.timers[channel];
+    rtcCore = RtcCore::instance();
   }
 
   bool resolve() override {

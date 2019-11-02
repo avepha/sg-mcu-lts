@@ -69,8 +69,8 @@ public:
 
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
-    ChannelCore::ChannelControl channelControl = context->channel->core->getChannelControlAt(index);
-    CONTROL_TYPE_ENUM type = channelControl.control->getType();
+    Control* channelControl = context->channel->core->getChannelControlAt(index);
+    CONTROL_TYPE_ENUM type = channelControl->getType();
 
     DynamicJsonDocument data(1024);
     data["index"] = index;
@@ -78,7 +78,7 @@ public:
 
     switch (type) {
       case CTRL_CRITERIA: {
-        auto *ctrlCore = (CriteriaCore *) (channelControl.control);
+        auto *ctrlCore = (CriteriaCore *) (channelControl);
         for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
           if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
             auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
@@ -93,7 +93,7 @@ public:
         break;
       }
       case CTRL_TIMER: {
-        auto *ctrlCore = (TimerCore *) (channelControl.control);
+        auto *ctrlCore = (TimerCore *) (channelControl);
         chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
         break;
       }
