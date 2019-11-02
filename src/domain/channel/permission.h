@@ -28,6 +28,12 @@ public:
   explicit permission_channel_state(CombineContext *context) : Permission(context) {};
 
   void resolve(JsonObject reqData) override {
+    ControlSchema controlSchema = context->control->model->get();
+    if (controlSchema.type != CTRL_CHANNEL) {
+      InactiveChannelControlError err;
+      throw err;
+    }
+
     if (reqData["index"].isNull()) {
       IndexNotSpecifyError err;
       throw err;
@@ -67,7 +73,7 @@ public:
       throw err;
     }
 
-    if (ControlStringToEnum(reqData["control"]["type"]) == CTRL_UNKNOWN) {
+    if (ChannelControlStringToEnum(reqData["control"]["type"]) == CH_CTRL_UNKNOWN) {
       InvalidInputError err("Unknown control type");
       throw err;
     }
@@ -102,6 +108,12 @@ public:
   explicit permission_channel_activate(CombineContext *context) : Permission(context) {};
 
   void resolve(JsonObject reqData) override {
+    ControlSchema controlSchema = context->control->model->get();
+    if (controlSchema.type != CTRL_CHANNEL) {
+      InactiveChannelControlError err;
+      throw err;
+    }
+
     if (reqData["index"].isNull()) {
       IndexNotSpecifyError err;
       throw err;

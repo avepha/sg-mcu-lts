@@ -36,7 +36,7 @@ public:
 
 class RangeCore : public Control {
 public:
-  explicit RangeCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CTRL_RANGE, dWrite) {
+  explicit RangeCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CH_CTRL_RANGE, dWrite) {
     RangeModel model;
     RangeSchema rangeSchema = model.get();
     range = rangeSchema.ranges[channel];

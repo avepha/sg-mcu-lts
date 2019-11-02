@@ -11,11 +11,11 @@ class ControlFactory {
 public:
   static Control *getControl(CONTROL_TYPE_ENUM controlTypeEnum, int channel, void (*dWrite)(int channel, int value)) {
     switch (controlTypeEnum) {
-      case CTRL_TIMER:
+      case CH_CTRL_TIMER:
         return new TimerCore(channel, dWrite);
-      case CTRL_CRITERIA:
+      case CH_CTRL_CRITERIA:
         return new CriteriaCore(channel, dWrite);
-      case CTRL_RANGE:
+      case CH_CTRL_RANGE:
         return new RangeCore(channel, dWrite);
       default:
         return nullptr;

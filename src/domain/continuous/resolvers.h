@@ -78,7 +78,7 @@ public:
 //    data["isActive"] = newChannelSchema.channels[index].isActive;
 //
 //    // index = channel 0 - 7
-//    context->channel->core->checkAndActivateControlType(newChannelSchema.channels[index], index);
+//    context->channel->core->checkAndActivateControl(newChannelSchema.channels[index], index);
 //
 //    return data;
 //  }
@@ -112,7 +112,7 @@ public:
     }
 
     schema.continuous.isActive = false;
-//    context->channel->core->checkAndActivateControlType(schema.continuous, index);
+//    context->channel->core->checkAndActivateControl(schema.continuous, index);
     context->continuous->model->save(schema);
     delay(10);
 

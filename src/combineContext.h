@@ -12,6 +12,7 @@
 #include "domain/precondition/timer/context.h"
 #include "domain/precondition/range/context.h"
 
+#include "domain/control/context.h"
 #include "domain/channel/context.h"
 #include "domain/continuous/context.h"
 
@@ -23,6 +24,8 @@ public:
   RtcContext *rtc;
   SensorContext *sensor;
   NSensorContext *nsensors;
+
+  ControlContext *control;
   ChannelContext *channel;
   ContinuousContext *continuous;
 
@@ -52,6 +55,7 @@ CombineContext::CombineContext() {
   range = new RangeContext;
   timer = new TimerContext;
 
+  control = new ControlContext;
   continuous = new ContinuousContext;
   continuousCriteria = new ContinuousCriteriaContext;
 }

@@ -37,7 +37,7 @@ public:
 
 class CriteriaCore : public Control {
 public:
-  explicit CriteriaCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CTRL_CRITERIA, dWrite) {
+  explicit CriteriaCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CH_CTRL_CRITERIA, dWrite) {
     CriteriaModel model;
     CriteriaSchema criteriaSchema = model.get();
     criteria = criteriaSchema.criterias[channel];

@@ -82,4 +82,8 @@ class InactiveControlError: public ValidationError {
 public: explicit InactiveControlError(String message = "Control is inactive") : ValidationError("inactive-control", message) {};
 };
 
+class InactiveChannelControlError: public ValidationError {
+public: explicit InactiveChannelControlError(String message = "Channel control is inactive") : ValidationError("inactive-channel-control", message) {};
+};
+
 #endif //SG_MCU_VALIDATIONERROR_H
