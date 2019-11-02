@@ -1,5 +1,7 @@
 #include "domain/permission.h"
 #include "validationError.h"
+#include "domain/continuous-control/util/resolveContinuousControlEnum.h"
+#include "domain/precondition/util/resolvePreconditionEnum.h"
 
 #ifndef SG_MCU_CONTINUOUS_PERMISSION_H
 #define SG_MCU_CONTINUOUS_PERMISSION_H
@@ -27,6 +29,13 @@ public:
       throw err;
     }
 
+    CONTINUOUS_CONTROL_TYPE_ENUM type = ContinuousControlStringToEnum(reqData["control"]["type"]);
+    if (type == CON_CTRL_UNKNOWN) {
+      InvalidInputError err("Unknown continuous control");
+      throw err;
+    }
+
+
     if (reqData["control"]["channelOrders"].isNull() || !reqData["control"]["channelOrders"].is<JsonArray>()) {
       InvalidInputError err("channelOrders field must be an array");
       throw err;
@@ -42,10 +51,15 @@ public:
       throw err;
     }
 
-    for (int i = 0 ; i < reqData["preconditions"].as<JsonArray>().size(); i++) {
+    for (int i = 0; i < reqData["preconditions"].as<JsonArray>().size(); i++) {
       JsonObject jo = reqData["preconditions"][i];
       if (jo["type"].isNull() || jo["value"].isNull()) {
         InvalidInputError err("precondition must have field type and value");
+        throw err;
+      }
+
+      if (PreconditionStringToEnum(jo["type"]) == PREC_UNKNOWN) {
+        InvalidInputError err("Unknown Precondition");
         throw err;
       }
     }

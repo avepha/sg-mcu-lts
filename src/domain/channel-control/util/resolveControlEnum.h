@@ -26,8 +26,11 @@ CONTROL_TYPE_ENUM ControlStringToEnum(String ctrlString) {
   else if (ctrlString == "criteria") {
     return CTRL_CRITERIA;
   }
-  else {
+  else if (ctrlString == "none"){
     return CTRL_NONE;
+  }
+  else {
+    return CTRL_UNKNOWN;
   }
 }
 

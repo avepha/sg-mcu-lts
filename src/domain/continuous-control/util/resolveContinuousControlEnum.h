@@ -26,8 +26,11 @@ CONTINUOUS_CONTROL_TYPE_ENUM ContinuousControlStringToEnum(const String& ctrlStr
   else if (ctrlString == "continuous-range") {
     return CON_CTRL_RANGE;
   }
-  else {
+  else if (ctrlString == "none"){
     return CON_CTRL_NONE;
+  }
+  else {
+    return CON_CTRL_UNKNOWN;
   }
 }
 

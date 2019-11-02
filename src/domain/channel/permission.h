@@ -1,5 +1,7 @@
 #include "domain/permission.h"
 #include "validationError.h"
+#include "domain/channel-control/util/resolveControlEnum.h"
+#include "domain/precondition/util/resolvePreconditionEnum.h"
 
 #ifndef SG_MCU_CHANNEL_PERMISSION_H
 #define SG_MCU_CHANNEL_PERMISSION_H
@@ -65,6 +67,11 @@ public:
       throw err;
     }
 
+    if (ControlStringToEnum(reqData["control"]["type"]) == CTRL_UNKNOWN) {
+      InvalidInputError err("Unknown control type");
+      throw err;
+    }
+
     if (reqData["preconditions"].isNull() || !reqData["preconditions"].is<JsonArray>()) {
       InvalidInputError err("preconditions field must be an array.");
       throw err;
@@ -79,6 +86,11 @@ public:
       JsonObject jo = reqData["preconditions"][i];
       if (jo["type"].isNull() || jo["value"].isNull()) {
         InvalidInputError err("precondition must have field type and value");
+        throw err;
+      }
+
+      if (PreconditionStringToEnum(jo["type"]) == PREC_UNKNOWN) {
+        InvalidInputError err("Unknown Precondition");
         throw err;
       }
     }
