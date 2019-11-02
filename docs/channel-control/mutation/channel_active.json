@@ -1,0 +1,8 @@
+{
+  "topic": "channel_activate",
+  "method": "mutation",
+  "data": {
+    "index": 1,
+    "isActive": true
+  }
+}

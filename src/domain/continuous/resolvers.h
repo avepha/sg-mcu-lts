@@ -83,60 +83,62 @@ public:
 //    return data;
 //  }
 //};
-//
-//class mutation_channel_save : public Resolvers {
-//public:
-//  explicit mutation_channel_save(CombineContext *context) :
-//      Resolvers(
-//          "channel_save", context,
-//          new permission_channel_save(context)) {};
-//
-//  JsonDocument resolve(JsonObject reqData) override {
-//    ChannelSchema channelSchema = context->channel->model->get();
-//    int index = reqData["index"];
-//
-//    channelSchema.channels[index].control.type = ControlStringToEnum(reqData["control"]["type"]);
-//    channelSchema.channels[index].control.value = reqData["control"]["value"];
-//
-//    // set precondition to providing args
-//    for (int i = 0; i < reqData["preconditions"].size(); i++) {
-//      channelSchema.channels[index].preconditions[i].type = PreconditionStringToEnum(
-//          reqData["preconditions"][i]["type"]);
-//      channelSchema.channels[index].preconditions[i].value = reqData["preconditions"][i]["value"];
-//    }
-//
-//    // set precondition to none if providing args size < 3
-//    for (int i = reqData["preconditions"].size(); i < 3; i++) {
-//      channelSchema.channels[index].preconditions[i].type = PREC_NONE;
-//      channelSchema.channels[index].preconditions[i].value = 0;
-//    }
-//
-//    channelSchema.channels[index].isActive = false;
-//    context->channel->core->checkAndActivateControlType(channelSchema.channels[index], index);
-//    context->channel->model->save(channelSchema);
-//    delay(10);
-//
-//    ChannelSchema newChannelSchema = context->channel->model->get();
-//    ChannelSchema::Channel channel = newChannelSchema.channels[index];
-//
-//    DynamicJsonDocument data(1024);
-//    data["index"] = index;
-//    data["isActive"] = channel.isActive;
-//    JsonObject control = data.createNestedObject("control");
-//    control["type"] = ControlEnumToString(channel.control.type);
-//    control["value"] = channel.control.value;
-//
-//    JsonArray jarrPreconditions = data.createNestedArray("preconditions");
-//    for (int i = 0; i < sizeof(channel.preconditions) / sizeof(channel.preconditions[0]); i++) {
-//      ChannelSchema::Channel::Precondition precondition = channel.preconditions[i];
-//      if (precondition.type != PREC_NONE) {
-//        JsonObject joPrecondition = jarrPreconditions.createNestedObject();
-//        joPrecondition["type"] = PreconditionEnumToString(precondition.type);
-//        joPrecondition["value"] = precondition.value;
-//      }
-//    }
-//    return data;
-//  }
-//};
+
+class mutation_continuous_save : public Resolvers {
+public:
+  explicit mutation_continuous_save(CombineContext *context) :
+      Resolvers(
+          "continuous_save", context,
+          new permission_continuous_save(context)) {};
+
+  JsonDocument resolve(JsonObject reqData) override {
+    ContinuousSchema schema = context->continuous->model->get();
+
+    schema.continuous.control.type = ContinuousControlStringToEnum(reqData["control"]["type"]);
+    for(int i = 0 ; i < reqData["control"]["channelOrders"].size(); i++) {
+      schema.continuous.control.channelOrders[i] =  reqData["control"]["channelOrders"][i];
+    }
+
+    // set precondition by providing args
+    for (int i = 0; i < reqData["preconditions"].size(); i++) {
+      schema.continuous.preconditions[i].type = PreconditionStringToEnum(reqData["preconditions"][i]["type"]);
+      schema.continuous.preconditions[i].value = reqData["preconditions"][i]["value"];
+    }
+
+    // set precondition to none if providing args size < 3
+    for (int i = reqData["preconditions"].size(); i < 3; i++) {
+      schema.continuous.preconditions[i].type = PREC_NONE;
+      schema.continuous.preconditions[i].value = 0;
+    }
+
+    schema.continuous.isActive = false;
+//    context->channel->core->checkAndActivateControlType(schema.continuous, index);
+    context->continuous->model->save(schema);
+    delay(10);
+
+    ContinuousSchema newSchema = context->continuous->model->get();
+    ContinuousSchema::Continuous continuous = newSchema.continuous;
+
+    DynamicJsonDocument data(1024);
+    data["isActive"] = continuous.isActive;
+    JsonObject control = data.createNestedObject("control");
+    control["type"] = ContinuousControlEnumToString(continuous.control.type);
+    JsonArray channelOrders = control.createNestedArray("channelOrders");
+    for (uint8_t channelOrder : continuous.control.channelOrders) {
+      channelOrders.add(channelOrder);
+    }
+
+    JsonArray jarrPreconditions = data.createNestedArray("preconditions");
+    for (int i = 0; i < sizeof(continuous.preconditions) / sizeof(continuous.preconditions[0]); i++) {
+      ContinuousSchema::Continuous::Precondition precondition = continuous.preconditions[i];
+      if (precondition.type != PREC_NONE) {
+        JsonObject joPrecondition = jarrPreconditions.createNestedObject();
+        joPrecondition["type"] = PreconditionEnumToString(precondition.type);
+        joPrecondition["value"] = precondition.value;
+      }
+    }
+    return data;
+  }
+};
 
 #endif //SG_MCU_CONTINUOUS_RESOLVERS_H

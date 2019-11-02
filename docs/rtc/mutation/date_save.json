@@ -1,0 +1,7 @@
+{
+  "topic": "date_save",
+  "method": "mutation",
+  "data": {
+    "date": "2019-08-12T17:00:17.613Z"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "topic": "continuous_save",
+  "method": "mutation",
+  "data": {
+    "control": {
+      "type": "continuous-criteria",
+      "channelOrders": [
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        0
+      ]
+    },
+    "preconditions": [
+      {
+        "type": "timer",
+        "value": 0
+      },
+      {
+        "type": "criteria",
+        "value": 0
+      }
+    ]
+  }
+}

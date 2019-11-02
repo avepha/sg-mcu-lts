@@ -1,0 +1,10 @@
+{
+  "topic": "sensor_order_save",
+  "method": "mutation",
+  "data": {
+    "names": [
+      "sensor1",
+      "sensor2"
+    ]
+  }
+}

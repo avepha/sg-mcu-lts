@@ -1,0 +1,13 @@
+{
+  "topic": "timer_save",
+  "method": "mutation",
+  "data": {
+    "index": 1,
+    "timers": [
+      [
+        1,
+        1440
+      ]
+    ]
+  }
+}

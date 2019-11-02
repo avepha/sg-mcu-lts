@@ -1,0 +1,7 @@
+{
+  "topic": "channel",
+  "method": "query",
+  "data": {
+    "index": 1
+  }
+}

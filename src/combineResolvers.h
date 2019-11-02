@@ -29,10 +29,10 @@ public:
 
 private:
   static const int QUERY_SIZE = 19;
-  static const int MUTATION_SIZE = 13;
+  static const int MUTATION_SIZE = 14;
   CombineContext *context;
-  Resolvers *mutation[MUTATION_SIZE];
-  Resolvers *query[QUERY_SIZE];
+  Resolvers *mutation[MUTATION_SIZE]{};
+  Resolvers *query[QUERY_SIZE]{};
 };
 
 CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
@@ -69,6 +69,7 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   mutation[10] = new mutation_precondition_range_save(context);
   mutation[11] = new mutation_timezone_save(context);
   mutation[12] = new mutation_continuous_criteria_save(context);
+  mutation[13] = new mutation_continuous_save(context);
 };
 
 JsonDocument CombineResolvers::execute(JsonDocument json) {

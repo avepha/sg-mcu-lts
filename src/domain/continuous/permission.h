@@ -22,8 +22,13 @@ public:
   explicit permission_continuous_save(CombineContext *context) : Permission(context) {};
 
   void resolve(JsonObject reqData) override {
-    if (reqData["control"].isNull() || reqData["control"]["type"].isNull() || reqData["control"]["value"].isNull()) {
-      InvalidInputError err("control field must have type and value.");
+    if (reqData["control"].isNull() || reqData["control"]["type"].isNull()) {
+      InvalidInputError err("control field must have type.");
+      throw err;
+    }
+
+    if (reqData["control"]["channelOrders"].isNull() || !reqData["control"]["channelOrders"].is<JsonArray>()) {
+      InvalidInputError err("channelOrders field must be an array");
       throw err;
     }
 

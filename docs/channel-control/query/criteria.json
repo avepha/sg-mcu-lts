@@ -1,0 +1,7 @@
+{
+  "topic": "criteria",
+  "method": "query",
+  "data": {
+    "index": 1
+  }
+}
