@@ -21,7 +21,6 @@ public:
         dWrite(dWrite),
         selfDestruct(selfDestruct){}
 
-
   std::string getTaskName() {
     return name;
   }
