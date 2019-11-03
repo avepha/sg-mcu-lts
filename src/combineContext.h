@@ -1,6 +1,7 @@
 #include "domain/rtc/context.h"
 #include "domain/sensor/context.h"
 #include "domain/nsensor/context.h"
+#include "domain/gpio/context.h"
 
 #include "domain/channel-control/criteria/context.h"
 #include "domain/channel-control/timer/context.h"
@@ -24,6 +25,7 @@ public:
   RtcContext *rtc;
   SensorContext *sensor;
   NSensorContext *nsensors;
+  GpioContext *gpio;
 
   ControlContext *control;
   ChannelContext *channel;
@@ -45,6 +47,7 @@ CombineContext::CombineContext() {
   rtc = new RtcContext;
   sensor = new SensorContext;
   nsensors = new NSensorContext;
+  gpio = new GpioContext;
 
   precTimer = new PrecTimerContext;
   precCriteria = new PrecCriteriaContext;
@@ -58,6 +61,7 @@ CombineContext::CombineContext() {
   control = new ControlContext;
   continuous = new ContinuousContext;
   continuousCriteria = new ContinuousCriteriaContext;
+
 }
 
 #endif //SG_MCU_COMBINECONTEXT_H
