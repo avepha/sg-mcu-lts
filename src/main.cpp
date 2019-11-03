@@ -1,5 +1,6 @@
 //#define SG_TEST
 #define _TASK_OO_CALLBACKS
+#define _TASK_PRIORITY
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -14,6 +15,8 @@
 #define COMCORE 0
 #define MAINCORE 1
 #define EEPROM_SIZE 4096
+
+Scheduler controlScheduler, gpioScheduler;
 
 #include "util/util.h"
 #include "combineContext.h"
@@ -43,6 +46,8 @@ void setup() {
   Serial.begin(115200);
   entryPort.begin(115200, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   sensorPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
+
+  controlScheduler.setHighPriorityScheduler(&gpioScheduler);
 
   serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
   deviceEndpoint = new DeviceEndpoint(&entryPort);
@@ -118,7 +123,7 @@ void loop() {
 #ifdef SG_TEST
   simulateScheduler.execute();
 #endif
-  ctrlScheduler.execute();
+  controlScheduler.execute();
 }
 
 
