@@ -19,7 +19,7 @@ public:
       return addrMap[name];
     }
 
-    uint16_t startAddr = 200;
+    uint16_t startAddr = 50;
     for (std::pair<std::string, uint16_t> size : sizeMap) {
       startAddr += size.second;
     }

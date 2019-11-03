@@ -1,13 +1,13 @@
 #include "TaskScheduler.h"
 #include "domain/nsensor/core.h"
-#include "domain/channel-control/state.h"
-#include "domain/channel-control/control.h"
+#include "domain/continuous-control/continuousState.h"
+#include "domain/continuous-control/continuousControl.h"
 #include "./model.h"
 
 #ifndef SG_MCU_CONTINUOUS_CRITERIA_CORE_H
 #define SG_MCU_CONTINUOUS_CRITERIA_CORE_H
 
-class CriteriaState : public State {
+class ContinuousCriteriaState : public ContinuousState {
 public:
   enum CRITERIA_STATE_ENUM {
     CRITERIA_STATE_WAITING = 0,
@@ -35,78 +35,32 @@ public:
   }
 };
 
-class CriteriaCore : public Control {
+class ContinuousCriteriaCore : public ContinuousControl {
 public:
-  explicit CriteriaCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CTRL_CRITERIA, dWrite) {
-    CriteriaModel model;
-    CriteriaSchema criteriaSchema = model.get();
-    criteria = criteriaSchema.criterias[channel];
+  explicit ContinuousCriteriaCore(int channel, void (*dWrite)(int channel, int value)) : ContinuousControl(channel, CON_CTRL_CRITERIA, dWrite) {
+    ContinuousCriteriaModel model;
+    ContinuousCriteriaSchema criteriaSchema = model.get();
+    criteria = criteriaSchema.criteria;
 
     nSensorCore = NSensorCore::instance();
     timeStamp = millis();
   }
 
-  ~CriteriaCore() override = default;
+  ~ContinuousCriteriaCore() override = default;
 
-  CriteriaState getControlState() {
+  ContinuousCriteriaState getControlState() {
     return state;
   }
 
   bool controlTask() override {
-//  CriteriaModel::ShowModel(criteria, channel);
-    NSensor averageSensor = nSensorCore->getAverageSensor();
-    state.sensorValue = averageSensor.sensors[criteria.sensor];
-
-    state.isTimingEnable = criteria.timing.enable;
-
-    // check direction
-    state.isReachThreshold = (criteria.greater) ? (state.sensorValue >= criteria.criteria)
-                                                : (state.sensorValue <= criteria.criteria);
-    // if timing is enables
-    if (state.isTimingEnable) {
-      switch (state.criteriaState) {
-        case CriteriaState::CRITERIA_STATE_WAITING: {
-          state.currentWaitingTimeInSecond = (millis() - timeStamp) / 1000;
-          if (state.currentWaitingTimeInSecond < criteria.timing.waitingTimeInSecond) {
-            return true;
-          }
-
-          if (state.isReachThreshold) {
-            // go to working state
-            dWrite(channel, HIGH);
-            state.criteriaState = CriteriaState::CRITERIA_STATE_WORKING;
-          }
-          else {
-            // stay at waiting state
-            state.criteriaState = CriteriaState::CRITERIA_STATE_WAITING;
-          }
-          timeStamp = millis();
-        }
-        case CriteriaState::CRITERIA_STATE_WORKING: {
-          state.currentWorkingTimeInSecond = (millis() - timeStamp) / 1000;
-          if (state.currentWorkingTimeInSecond < criteria.timing.workingTimeInSecond) {
-            return true;
-          }
-
-          // go to waiting state
-          dWrite(channel, LOW);
-          timeStamp = millis();
-          state.criteriaState = CriteriaState::CRITERIA_STATE_WAITING;
-        }
-      }
-    }
-    else { // if timing is disable
-      state.isReachThreshold ? dWrite(channel, HIGH) : dWrite(channel, LOW);
-    }
-
-    return true;
+    Serial.println("running");
   }
 
 private:
-  CriteriaState state;
+  ContinuousCriteriaState state;
   unsigned long timeStamp = 0;
   NSensorCore *nSensorCore;
-  CriteriaSchema::Criteria criteria;
+  ContinuousCriteriaSchema::Criteria criteria;
 };
 
 #endif //SG_MCU_CONTINUOUS_CRITERIA_CORE_H

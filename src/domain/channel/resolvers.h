@@ -26,7 +26,7 @@ public:
     data["index"] = index;
     data["isActive"] = channel.isActive;
     JsonObject control = data.createNestedObject("control");
-    control["type"] = ControlEnumToString(channel.control.type);
+    control["type"] = ChannelControlEnumToString(channel.control.type);
     control["value"] = channel.control.value;
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");
@@ -69,16 +69,16 @@ public:
 
   JsonDocument resolve(JsonObject reqData) override {
     int index = reqData["index"];
-    ChannelCore::ChannelControl channelControl = context->channel->core->getChannelControlAt(index);
-    CONTROL_TYPE_ENUM type = channelControl.control->getType();
+    Control* channelControl = context->channel->core->getControlByChannel(index);
+    CONTROL_TYPE_ENUM type = channelControl->getType();
 
     DynamicJsonDocument data(1024);
     data["index"] = index;
     JsonArray chainOfControlAndPreconditions = data.createNestedArray("states");
 
     switch (type) {
-      case CTRL_CRITERIA: {
-        auto *ctrlCore = (CriteriaCore *) (channelControl.control);
+      case CH_CTRL_CRITERIA: {
+        auto *ctrlCore = (CriteriaCore *) (channelControl);
         for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
           if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
             auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
@@ -92,15 +92,14 @@ public:
         chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
         break;
       }
-      case CTRL_TIMER: {
-        auto *ctrlCore = (TimerCore *) (channelControl.control);
+      case CH_CTRL_TIMER: {
+        auto *ctrlCore = (TimerCore *) (channelControl);
         chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
         break;
       }
       default: {
       }
     }
-
 
     return data;
   }
@@ -129,7 +128,7 @@ public:
     data["isActive"] = newChannelSchema.channels[index].isActive;
 
     // index = channel 0 - 7
-    context->channel->core->checkAndActivateControlType(newChannelSchema.channels[index], index);
+    context->channel->core->checkAndActivateControl(newChannelSchema.channels[index], index);
 
     return data;
   }
@@ -146,7 +145,7 @@ public:
     ChannelSchema channelSchema = context->channel->model->get();
     int index = reqData["index"];
 
-    channelSchema.channels[index].control.type = ControlStringToEnum(reqData["control"]["type"]);
+    channelSchema.channels[index].control.type = ChannelControlStringToEnum(reqData["control"]["type"]);
     channelSchema.channels[index].control.value = reqData["control"]["value"];
 
     // set precondition to providing args
@@ -163,7 +162,7 @@ public:
     }
 
     channelSchema.channels[index].isActive = false;
-    context->channel->core->checkAndActivateControlType(channelSchema.channels[index], index);
+    context->channel->core->checkAndActivateControl(channelSchema.channels[index], index);
     context->channel->model->save(channelSchema);
     delay(10);
 
@@ -174,7 +173,7 @@ public:
     data["index"] = index;
     data["isActive"] = channel.isActive;
     JsonObject control = data.createNestedObject("control");
-    control["type"] = ControlEnumToString(channel.control.type);
+    control["type"] = ChannelControlEnumToString(channel.control.type);
     control["value"] = channel.control.value;
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");

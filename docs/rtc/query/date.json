@@ -1,0 +1,7 @@
+{
+  "topic": "date",
+  "method": "query",
+  "data": {
+    "local": true
+  }
+}

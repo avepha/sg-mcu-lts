@@ -1,0 +1,7 @@
+{
+  "topic": "control_type_save",
+  "method": "mutation",
+  "data": {
+    "type": "channel"
+  }
+}

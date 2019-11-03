@@ -1,0 +1,7 @@
+{
+  "topic": "timezone_save",
+  "method": "mutation",
+  "data": {
+    "offset": "-02:00"
+  }
+}

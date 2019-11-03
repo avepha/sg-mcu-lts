@@ -1,0 +1,7 @@
+{
+  "topic": "precondition_criteria",
+  "method": "query",
+  "data": {
+    "index": 1
+  }
+}

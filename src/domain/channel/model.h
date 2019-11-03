@@ -10,7 +10,7 @@ struct ChannelSchema {
     bool isActive = false;
 
     struct Control {
-      CONTROL_TYPE_ENUM type = CTRL_NONE;
+      CONTROL_TYPE_ENUM type = CH_CTRL_NONE;
       uint8_t value = 0; // manual
     } control;
 

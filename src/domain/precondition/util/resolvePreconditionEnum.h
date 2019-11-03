@@ -11,7 +11,7 @@ String PreconditionEnumToString(PRECONDITION_TYPE_ENUM precEnum) {
   else if (precEnum == PREC_TIMER) {
     return "timer";
   }
-  else if(precEnum == PREC_CRITERIA) {
+  else if (precEnum == PREC_CRITERIA) {
     return "criteria";
   }
   else {
@@ -23,11 +23,14 @@ PRECONDITION_TYPE_ENUM PreconditionStringToEnum(String precString) {
   if (precString == "timer") {
     return PREC_TIMER;
   }
-  else if(precString == "criteria") {
+  else if (precString == "criteria") {
     return PREC_CRITERIA;
   }
-  else {
+  else if (precString == "none") {
     return PREC_NONE;
+  }
+  else {
+    return PREC_UNKNOWN;
   }
 }
 

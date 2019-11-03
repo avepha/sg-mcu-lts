@@ -1,0 +1,7 @@
+{
+  "topic": "precondition_range",
+  "method": "query",
+  "data": {
+    "index": 1
+  }
+}

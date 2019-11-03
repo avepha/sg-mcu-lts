@@ -1,0 +1,7 @@
+{
+  "topic": "range",
+  "method": "query",
+  "data": {
+    "index": 1
+  }
+}

@@ -1,5 +1,7 @@
 #include "domain/permission.h"
 #include "validationError.h"
+#include "domain/channel-control/util/resolveControlEnum.h"
+#include "domain/precondition/util/resolvePreconditionEnum.h"
 
 #ifndef SG_MCU_CHANNEL_PERMISSION_H
 #define SG_MCU_CHANNEL_PERMISSION_H
@@ -26,6 +28,12 @@ public:
   explicit permission_channel_state(CombineContext *context) : Permission(context) {};
 
   void resolve(JsonObject reqData) override {
+    ControlSchema controlSchema = context->control->model->get();
+    if (controlSchema.type != CTRL_CHANNEL) {
+      InactiveChannelControlError err;
+      throw err;
+    }
+
     if (reqData["index"].isNull()) {
       IndexNotSpecifyError err;
       throw err;
@@ -65,6 +73,11 @@ public:
       throw err;
     }
 
+    if (ChannelControlStringToEnum(reqData["control"]["type"]) == CH_CTRL_UNKNOWN) {
+      InvalidInputError err("Unknown control type");
+      throw err;
+    }
+
     if (reqData["preconditions"].isNull() || !reqData["preconditions"].is<JsonArray>()) {
       InvalidInputError err("preconditions field must be an array.");
       throw err;
@@ -76,9 +89,14 @@ public:
     }
 
     for (int i = 0 ; i < reqData["preconditions"].as<JsonArray>().size(); i++) {
-      JsonObject jo = reqData["preconditions"][0];
+      JsonObject jo = reqData["preconditions"][i];
       if (jo["type"].isNull() || jo["value"].isNull()) {
         InvalidInputError err("precondition must have field type and value");
+        throw err;
+      }
+
+      if (PreconditionStringToEnum(jo["type"]) == PREC_UNKNOWN) {
+        InvalidInputError err("Unknown Precondition");
         throw err;
       }
     }
@@ -90,6 +108,12 @@ public:
   explicit permission_channel_activate(CombineContext *context) : Permission(context) {};
 
   void resolve(JsonObject reqData) override {
+    ControlSchema controlSchema = context->control->model->get();
+    if (controlSchema.type != CTRL_CHANNEL) {
+      InactiveChannelControlError err;
+      throw err;
+    }
+
     if (reqData["index"].isNull()) {
       IndexNotSpecifyError err;
       throw err;

@@ -12,7 +12,9 @@
 #include "domain/precondition/timer/context.h"
 #include "domain/precondition/range/context.h"
 
+#include "domain/control/context.h"
 #include "domain/channel/context.h"
+#include "domain/continuous/context.h"
 
 #ifndef SG_MCU_COMBINE_CONTEXT_H
 #define SG_MCU_COMBINE_CONTEXT_H
@@ -22,7 +24,10 @@ public:
   RtcContext *rtc;
   SensorContext *sensor;
   NSensorContext *nsensors;
+
+  ControlContext *control;
   ChannelContext *channel;
+  ContinuousContext *continuous;
 
   CriteriaContext *criteria;
   TimerContext *timer;
@@ -39,14 +44,19 @@ public:
 CombineContext::CombineContext() {
   rtc = new RtcContext;
   sensor = new SensorContext;
-  criteria = new CriteriaContext;
-  range = new RangeContext;
-  timer = new TimerContext;
   nsensors = new NSensorContext;
-  channel = new ChannelContext;
+
   precTimer = new PrecTimerContext;
   precCriteria = new PrecCriteriaContext;
   precRange = new PrecRangeContext;
+
+  channel = new ChannelContext;
+  criteria = new CriteriaContext;
+  range = new RangeContext;
+  timer = new TimerContext;
+
+  control = new ControlContext;
+  continuous = new ContinuousContext;
   continuousCriteria = new ContinuousCriteriaContext;
 }
 

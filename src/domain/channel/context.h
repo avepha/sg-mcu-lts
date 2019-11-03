@@ -13,7 +13,7 @@ public:
 
 ChannelContext::ChannelContext() {
   model = new ChannelModel();
-  core = new ChannelCore();
+  core = ChannelCore::instance();
 }
 
 #endif //SG_MCU_CONTEXT_H

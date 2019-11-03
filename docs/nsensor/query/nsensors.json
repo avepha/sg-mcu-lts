@@ -1,0 +1,7 @@
+{
+  "topic": "nsensors",
+  "method": "query",
+  "data": {
+    "withSensor": false
+  }
+}
