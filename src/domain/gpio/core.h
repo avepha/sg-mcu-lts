@@ -11,14 +11,23 @@ public:
 
   bool createGpioTaskTimeout(const std::string& name, uint8_t channel, uint16_t timeout);
 
-  bool removeGpioTask(const std::string& name);
+  bool removeGpioTaskByName(const std::string& name);
+  bool removeGpioTaskByChannel(uint8_t channel);
+
+  std::map<std::string, GpioTask*> getGpioTaskMap() {
+    return gpioTaskMap;
+  }
+
+  std::array<uint8_t , 8> getGpioState() {
+    return channelGpioState;
+  }
 
 private:
   GpioCore();
 
   static GpioCore *s_instance;
 
-  static std::array<int, 8> channelGpioState;
+  static std::array<uint8_t , 8> channelGpioState;
 
   static void dWrite(int channel = 0, int value = LOW);
 
@@ -30,7 +39,7 @@ private:
 // Implementation
 GpioCore *GpioCore::s_instance = nullptr;
 
-std::array<int, 8> GpioCore::channelGpioState = {{LOW}};
+std::array<uint8_t , 8> GpioCore::channelGpioState = {{LOW}};
 
 std::map<std::string, GpioTask*> GpioCore::gpioTaskMap{};
 
@@ -48,7 +57,7 @@ void GpioCore::selfDestructGpioTask(GpioTask *gpioTask) {
     gpioTaskMap.erase(taskName);
   }
 
-  delete &gpioTask;
+  delete gpioTask; // [-Wdelete-non-virtual-dtor] occur
 }
 
 GpioCore *GpioCore::instance() {
@@ -70,7 +79,7 @@ bool GpioCore::createGpioTaskTimeout(const std::string& name, uint8_t channel, u
 
   auto *gpioTask = new GpioTask(name, channel, timeout, &dWrite, &selfDestructGpioTask);
   gpioTaskMap[name] = gpioTask;
-  gpioTask->enable();
+  gpioTask->enableDelayed();
   return true;
 }
 
@@ -85,12 +94,25 @@ bool GpioCore::createGpioTaskForever(const std::string &name, uint8_t channel) {
   return true;
 }
 
-bool GpioCore::removeGpioTask(const std::string& name) {
-  if (gpioTaskMap.find(name) != gpioTaskMap.end()) {
+bool GpioCore::removeGpioTaskByName(const std::string& name) {
+  if (gpioTaskMap.find(name) == gpioTaskMap.end()) {
     return false;
   }
+
   selfDestructGpioTask(gpioTaskMap[name]);
   return true;
+}
+
+bool GpioCore::removeGpioTaskByChannel(uint8_t channel) {
+  for (std::pair<std::string, GpioTask*> task: gpioTaskMap) {
+    if (channel == task.second->getChannel()) {
+      selfDestructGpioTask(gpioTaskMap[task.first]);
+      return true;
+    }
+  }
+
+
+  return false;
 }
 
 #endif //SG_MCU_GPIO_CORE_H

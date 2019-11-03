@@ -43,25 +43,6 @@ public:
   }
 };
 
-class query_gpio : public Resolvers {
-public:
-  explicit query_gpio(CombineContext *context) :
-      Resolvers("gpio", context) {};
-
-  JsonDocument resolve(JsonObject reqData) override {
-    std::array<int, 8> channelState = context->channel->core->getChannelGpioState();
-
-    DynamicJsonDocument data(1024);
-    for (int i = 0; i < channelState.size(); i++) {
-      JsonObject channel = data.createNestedObject();
-      channel["channel"] = i;
-      channel["state"] = channelState[i] == HIGH ? "HIGH" : "LOW";
-    }
-
-    return data;
-  }
-};
-
 class query_channel_state : public Resolvers {
 public:
   explicit query_channel_state(CombineContext *context) :
