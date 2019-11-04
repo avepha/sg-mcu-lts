@@ -13,7 +13,7 @@ public:
   ContinuousControl(int channel,
                     CONTINUOUS_CONTROL_TYPE_ENUM type,
                     void (*dWrite)(int, int),
-                    int interval = TASK_SECOND) : Task(interval, TASK_FOREVER, &ctrlScheduler, false),
+                    int interval = TASK_SECOND) : Task(interval, TASK_FOREVER, &controlScheduler, false),
                                                   channel(channel),
                                                   dWrite(dWrite),
                                                   type(type) {}

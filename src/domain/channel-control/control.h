@@ -6,13 +6,12 @@
 
 #ifndef SG_MCU_CONTROL_H
 #define SG_MCU_CONTROL_H
-Scheduler ctrlScheduler;
 
 class Control: public Task {
 public:
   int channel = -1;
 
-  Control(int channel, CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &ctrlScheduler, false),
+  Control(int channel, CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &controlScheduler, false),
       channel(channel),
       dWrite(dWrite),
       type(type) {}

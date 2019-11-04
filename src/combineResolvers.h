@@ -8,6 +8,7 @@
 #include "domain/rtc/resolvers.h"
 #include "domain/sensor/resolvers.h"
 #include "domain/nsensor/resolvers.h"
+#include "domain/gpio/resolvers.h"
 
 #include "domain/control/resolvers.h"
 
@@ -30,7 +31,7 @@ public:
   JsonDocument execute(JsonDocument);
 
 private:
-  static const int QUERY_SIZE = 20;
+  static const int QUERY_SIZE = 21;
   static const int MUTATION_SIZE = 15;
   CombineContext *context;
   Resolvers *mutation[MUTATION_SIZE]{};
@@ -47,17 +48,18 @@ CombineResolvers::CombineResolvers(CombineContext *context) : context(context) {
   query[6] = new query_nsensor(context);
   query[7] = new query_info(context);
   query[8] = new query_channel(context);
-  query[9] = new query_gpio(context);
-  query[10] = new query_channel_state(context);
-  query[11] = new query_precondition_criteria(context);
-  query[12] = new query_precondition_timer(context);
-  query[13] = new query_range(context);
-  query[14] = new query_precondition_range(context);
-  query[15] = new query_timezone(context);
-  query[16] = new query_continuous_criteria(context);
-  query[17] = new query_continuous(context);
-  query[18] = new query_continuous_state(context);
-  query[19] = new query_control_type(context);
+  query[9] = new query_channel_state(context);
+  query[10] = new query_precondition_criteria(context);
+  query[11] = new query_precondition_timer(context);
+  query[12] = new query_range(context);
+  query[13] = new query_precondition_range(context);
+  query[14] = new query_timezone(context);
+  query[15] = new query_continuous_criteria(context);
+  query[16] = new query_continuous(context);
+  query[17] = new query_continuous_state(context);
+  query[18] = new query_control_type(context);
+  query[19] = new query_gpio_task(context);
+  query[20] = new query_gpio_state(context);
 
   mutation[0] = new mutation_date_save(context);
   mutation[1] = new mutation_sensor_order_save(context);
