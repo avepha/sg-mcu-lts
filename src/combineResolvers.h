@@ -84,7 +84,7 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
 
   if (json["method"] == "query") {
     for (int i = 0; i < QUERY_SIZE; i++) {
-      if (query[i]->getName() == json["topic"]) {
+      if (query[i]->getName().c_str() == json["topic"]) {
         try {
           JsonDocument data = query[i]->exec(json["data"]);
           response["topic"] = json["topic"];
@@ -107,7 +107,7 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
   }
   else if (json["method"] == "mutation") {
     for (int i = 0; i < MUTATION_SIZE; i++) {
-      if (mutation[i]->getName() == json["topic"]) {
+      if (mutation[i]->getName().c_str() == json["topic"]) {
         try {
           JsonDocument data = mutation[i]->exec(json["data"]);
           response["topic"] = json["topic"];

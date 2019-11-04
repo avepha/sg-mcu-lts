@@ -1,4 +1,6 @@
 #include <ArduinoJson.h>
+
+#include <utility>
 #include "combineContext.h"
 #include "domain/permission.h"
 
@@ -7,8 +9,8 @@
 
 class Resolvers {
 public:
-  Resolvers(String , CombineContext *, Permission *);
-  String getName() {return name;}
+  Resolvers(std::string , CombineContext *, Permission *);
+  std::string getName() {return name;}
   virtual JsonDocument resolve(JsonObject reqData) {
     DynamicJsonDocument json(64);
     return json;
@@ -23,13 +25,13 @@ public:
   }
 
 protected:
-  String name;
+  std::string name;
   CombineContext *context;
   Permission *permission;
 };
 
-Resolvers::Resolvers(String name, CombineContext *context, Permission *permission = nullptr) :
-  name(name),
+Resolvers::Resolvers(std::string name, CombineContext *context, Permission *permission = nullptr) :
+  name(std::move(name)),
   context(context),
   permission(permission){};
 
