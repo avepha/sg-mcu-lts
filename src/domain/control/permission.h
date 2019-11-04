@@ -6,9 +6,9 @@
 
 class permission_control_type_save : public Permission {
 public:
-  explicit permission_control_type_save(CombineContext *context) : Permission(context) {};
+  explicit permission_control_type_save() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["type"].isNull() || !reqData["type"].is<String>()) {
       InvalidInputError err("type field must be a string");
       throw err;

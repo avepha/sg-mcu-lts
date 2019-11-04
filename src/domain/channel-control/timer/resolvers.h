@@ -1,6 +1,6 @@
 #include "util/util.h"
 
-#include "domain/resolvers.h"
+
 #include "validationError.h"
 #include "combineContext.h"
 
@@ -8,11 +8,11 @@
 #define SG_MCU_TIMER_RESOLVERS_H
 
 // @mutation
-class mutation_timer_save : public Resolvers {
+class mutation_timer_save : public Mutation {
 public:
-  explicit mutation_timer_save(CombineContext *context) : Resolvers("timer_save", context) {};
+  explicit mutation_timer_save() : Mutation("timer_save") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull() || reqData["timers"].isNull()) {
       InvalidInputError err("index or timers field is not specified.");
       throw err;
@@ -52,11 +52,11 @@ public:
 };
 
 // @query: date
-class query_timer : public Resolvers {
+class query_timer : public Query {
 public:
-  explicit query_timer(CombineContext *context) : Resolvers("timer", context) {};
+  explicit query_timer() : Query("timer") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;

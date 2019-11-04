@@ -8,9 +8,9 @@
 
 class permission_channel : public Permission {
 public:
-  explicit permission_channel(CombineContext *context) : Permission(context) {};
+  explicit permission_channel() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["index"].isNull()) {
       IndexNotSpecifyError err;
       throw err;
@@ -25,9 +25,9 @@ public:
 
 class permission_channel_state : public Permission {
 public:
-  explicit permission_channel_state(CombineContext *context) : Permission(context) {};
+  explicit permission_channel_state() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     ControlSchema controlSchema = context->control->model->get();
     if (controlSchema.type != CTRL_CHANNEL) {
       InactiveChannelControlError err;
@@ -55,9 +55,9 @@ public:
 
 class permission_channel_save : public Permission {
 public:
-  explicit permission_channel_save(CombineContext *context) : Permission(context) {};
+  explicit permission_channel_save() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["index"].isNull()) {
       IndexNotSpecifyError err;
       throw err;
@@ -105,9 +105,9 @@ public:
 
 class permission_channel_activate : public Permission {
 public:
-  explicit permission_channel_activate(CombineContext *context) : Permission(context) {};
+  explicit permission_channel_activate() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     ControlSchema controlSchema = context->control->model->get();
     if (controlSchema.type != CTRL_CHANNEL) {
       InactiveChannelControlError err;

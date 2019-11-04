@@ -6,9 +6,9 @@
 
 class permission_range_save : public Permission {
 public:
-  explicit permission_range_save(CombineContext *context) : Permission(context) {};
+  explicit permission_range_save() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;
@@ -86,9 +86,9 @@ public:
 
 class permission_range : public Permission {
 public:
-  explicit permission_range(CombineContext *context) : Permission(context) {};
+  explicit permission_range() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;

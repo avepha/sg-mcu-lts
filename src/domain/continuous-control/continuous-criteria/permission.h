@@ -6,9 +6,9 @@
 
 class permission_continuous_criteria_save : public Permission {
 public:
-  explicit permission_continuous_criteria_save(CombineContext *context) : Permission(context) {};
+  explicit permission_continuous_criteria_save() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
 
     if (reqData["criteria"].isNull()) {
       InvalidInputError err("criteria is not specified.");

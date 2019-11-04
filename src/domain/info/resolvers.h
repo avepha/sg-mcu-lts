@@ -1,6 +1,6 @@
 #include "util/util.h"
 
-#include "../resolvers.h"
+#include "domain/query.h"
 #include "validationError.h"
 #include "combineContext.h"
 
@@ -8,13 +8,13 @@
 #define SG_MCU_INFO_RESOLVERS_H
 
 // @query: info
-class query_info : public Resolvers {
+class query_info : public Query {
 public:
-  explicit query_info(CombineContext *context) : Resolvers("info", context) {};
+  explicit query_info() : Query("info") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(128);
-    data["version"] = VERSION;
+    data["version"] = VERSION; //TODO: fix this
 #ifdef SG_TEST
     data["device_env"] = "test";
 #endif

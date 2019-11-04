@@ -8,11 +8,11 @@
 #define SG_MCU_SENSOR_RESOLVERS_H
 
 // @mutation: date_save
-class mutation_sensor_order_save : public Resolvers {
+class mutation_sensor_order_save : public Mutation {
 public:
-  explicit mutation_sensor_order_save(CombineContext *context) : Resolvers("sensor_order_save", context) {};
+  explicit mutation_sensor_order_save() : Mutation("sensor_order_save") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["names"].isNull()) {
       InvalidInputError err;
       throw err;
@@ -42,11 +42,11 @@ public:
 };
 
 // @query: date
-class query_sensor : public Resolvers {
+class query_sensor : public Query {
 public:
-  explicit query_sensor(CombineContext *context) : Resolvers("sensor", context) {};
+  explicit query_sensor() : Query("sensor") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SensorSchema sensorNames = context->sensor->model->get();
     float *sensors = context->sensor->core->getSensors();
     DynamicJsonDocument data(256);
@@ -57,11 +57,11 @@ public:
   };
 };
 
-class query_sensor_order : public Resolvers {
+class query_sensor_order : public Query {
 public:
-  explicit query_sensor_order(CombineContext *context) : Resolvers("sensor_order", context) {};
+  explicit query_sensor_order() : Query("sensor_order") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SensorSchema sensorNames = context->sensor->model->get();
 
     DynamicJsonDocument data(256);

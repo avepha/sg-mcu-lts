@@ -1,6 +1,6 @@
 #include "util/util.h"
 
-#include "domain/resolvers.h"
+
 #include "validationError.h"
 #include "combineContext.h"
 
@@ -10,11 +10,11 @@
 #define SG_MCU_RANGE_RESOLVERS_H
 
 // @mutation
-class mutation_range_save : public Resolvers {
+class mutation_range_save : public Mutation {
 public:
-  explicit mutation_range_save(CombineContext *context) : Resolvers("range_save", context, new permission_range_save(context)) {};
+  explicit mutation_range_save() : Mutation("range_save", new permission_range_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     RangeSchema schema = context->range->model->get();
 
@@ -56,12 +56,12 @@ public:
   };
 };
 
-// @query: date
-class query_range : public Resolvers {
+// @query
+class query_range : public Query {
 public:
-  explicit query_range(CombineContext *context) : Resolvers("range", context, new permission_range(context)) {};
+  explicit query_range() : Query("range", new permission_range()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     RangeSchema schema = context->range->model->get();
 

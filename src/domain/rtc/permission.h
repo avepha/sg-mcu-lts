@@ -6,9 +6,9 @@
 
 class permission_timezone_save : public Permission {
 public:
-  explicit permission_timezone_save(CombineContext *context) : Permission(context) {};
+  explicit permission_timezone_save() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["offset"].isNull()) {
       InvalidInputError err("offset is not specified.");
       throw err;

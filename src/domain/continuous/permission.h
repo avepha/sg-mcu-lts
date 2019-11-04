@@ -8,9 +8,9 @@
 
 class permission_continuous_state : public Permission {
 public:
-  explicit permission_continuous_state(CombineContext *context) : Permission(context) {};
+  explicit permission_continuous_state() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     ContinuousSchema schema = context->continuous->model->get();
     if (!schema.continuous.isActive) {
       InactiveControlError err;
@@ -21,9 +21,9 @@ public:
 
 class permission_continuous_save : public Permission {
 public:
-  explicit permission_continuous_save(CombineContext *context) : Permission(context) {};
+  explicit permission_continuous_save() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["control"].isNull() || reqData["control"]["type"].isNull()) {
       InvalidInputError err("control field must have type.");
       throw err;
@@ -68,9 +68,9 @@ public:
 
 class permission_continuous_activate : public Permission {
 public:
-  explicit permission_continuous_activate(CombineContext *context) : Permission(context) {};
+  explicit permission_continuous_activate() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["isActive"].isNull()) {
       InvalidInputError err("data field must have isActive and value.");
       throw err;

@@ -1,6 +1,6 @@
 #include "util/util.h"
 
-#include "domain/resolvers.h"
+
 #include "validationError.h"
 #include "combineContext.h"
 
@@ -8,11 +8,11 @@
 #define SG_MCU_NSENSOR_RESOLVERS_H
 
 // @query: date
-class query_nsensors : public Resolvers {
+class query_nsensors : public Query {
 public:
-  explicit query_nsensors(CombineContext *context) : Resolvers("nsensors", context) {};
+  explicit query_nsensors() : Query("nsensors") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     std::array<NSensor, 8> nodes = context->nsensors->core->getNSensor();
     SensorSchema sensorSchema = context->sensor->model->get();
 
@@ -51,11 +51,11 @@ public:
   };
 };
 
-class query_nsensor : public Resolvers {
+class query_nsensor : public Query {
 public:
-  explicit query_nsensor(CombineContext *context) : Resolvers("nsensor", context) {};
+  explicit query_nsensor() : Query("nsensor") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index field is not specified.");
       throw err;

@@ -1,6 +1,6 @@
 #include "util/util.h"
 
-#include "domain/resolvers.h"
+
 #include "validationError.h"
 #include "combineContext.h"
 
@@ -10,11 +10,11 @@
 #define SG_MCU_CRITERIA_RESOLVERS_H
 
 // @mutation
-class mutation_criteria_save : public Resolvers {
+class mutation_criteria_save : public Mutation {
 public:
-  explicit mutation_criteria_save(CombineContext *context) : Resolvers("criteria_save", context, new permission_criteria_save(context)) {};
+  explicit mutation_criteria_save() : Mutation("criteria_save", new permission_criteria_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     CriteriaSchema schema = context->criteria->model->get();
 
@@ -54,11 +54,11 @@ public:
 };
 
 // @query: date
-class query_criteria : public Resolvers {
+class query_criteria : public Query {
 public:
-  explicit query_criteria(CombineContext *context) : Resolvers("criteria", context, new permission_criteria(context)) {};
+  explicit query_criteria() : Query("criteria", new permission_criteria()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     CriteriaSchema schema = context->criteria->model->get();
 

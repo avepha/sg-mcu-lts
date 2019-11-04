@@ -1,17 +1,16 @@
 #include "validationError.h"
 #include "combineContext.h"
-#include "domain/resolvers.h"
+
 #include "util/util.h"
 
 #ifndef SG_MCU_GPIO_RESOLVERS_H
 #define SG_MCU_GPIO_RESOLVERS_H
 
-class query_gpio_task : public Resolvers {
+class query_gpio_task : public Query {
 public:
-  explicit query_gpio_task(CombineContext *context) :
-      Resolvers("gpio_task", context) {};
+  explicit query_gpio_task() : Query("gpio_task") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     std::map<std::string, GpioTask*> gpioTaskMap = context->gpio->core->getGpioTaskMap();
 
     DynamicJsonDocument data(1024);
@@ -26,12 +25,11 @@ public:
   }
 };
 
-class query_gpio_state : public Resolvers {
+class query_gpio_state : public Query {
 public:
-  explicit query_gpio_state(CombineContext *context) :
-      Resolvers("gpio_state", context) {};
+  explicit query_gpio_state() : Query("gpio_state") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     std::array<uint8_t , 8> channelState = context->gpio->core->getGpioState();
 
     DynamicJsonDocument data(1024);
