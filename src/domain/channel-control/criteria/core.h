@@ -37,7 +37,7 @@ public:
 
 class CriteriaCore : public Control {
 public:
-  explicit CriteriaCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CH_CTRL_CRITERIA, dWrite) {
+  explicit CriteriaCore(int channel) : Control(channel, CH_CTRL_CRITERIA) {
     CriteriaModel model;
     CriteriaSchema criteriaSchema = model.get();
     criteria = criteriaSchema.criterias[channel];
@@ -73,7 +73,7 @@ public:
 
           if (state.isReachThreshold) {
             // go to working state
-            dWrite(channel, HIGH);
+            gpioCore->createGpioTaskTimeout(taskName, channel, criteria.timing.workingTimeInSecond * 1000);
             state.criteriaState = CriteriaState::CRITERIA_STATE_WORKING;
           }
           else {
@@ -89,14 +89,15 @@ public:
           }
 
           // go to waiting state
-          dWrite(channel, LOW);
+          gpioCore->removeGpioTaskByChannel(channel);
           timeStamp = millis();
           state.criteriaState = CriteriaState::CRITERIA_STATE_WAITING;
         }
       }
     }
     else { // if timing is disable
-      state.isReachThreshold ? dWrite(channel, HIGH) : dWrite(channel, LOW);
+      state.isReachThreshold ? gpioCore->createGpioTaskForever(taskName, channel)
+                             : gpioCore->removeGpioTaskByChannel(channel);
     }
 
     return true;

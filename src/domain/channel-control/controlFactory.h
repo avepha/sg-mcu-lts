@@ -9,14 +9,14 @@
 
 class ControlFactory {
 public:
-  static Control *getControl(CONTROL_TYPE_ENUM controlTypeEnum, int channel, void (*dWrite)(int channel, int value)) {
+  static Control *getControl(CONTROL_TYPE_ENUM controlTypeEnum, int channel) {
     switch (controlTypeEnum) {
       case CH_CTRL_TIMER:
-        return new TimerCore(channel, dWrite);
+        return new TimerCore(channel);
       case CH_CTRL_CRITERIA:
-        return new CriteriaCore(channel, dWrite);
+        return new CriteriaCore(channel);
       case CH_CTRL_RANGE:
-        return new RangeCore(channel, dWrite);
+        return new RangeCore(channel);
       default:
         return nullptr;
     }

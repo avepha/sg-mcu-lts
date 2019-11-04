@@ -36,7 +36,7 @@ public:
 
 class RangeCore : public Control {
 public:
-  explicit RangeCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CH_CTRL_RANGE, dWrite) {
+  explicit RangeCore(int channel) : Control(channel, CH_CTRL_RANGE) {
     RangeModel model;
     RangeSchema rangeSchema = model.get();
     range = rangeSchema.ranges[channel];
@@ -68,7 +68,7 @@ public:
 
           if (state.isReachThreshold) {
             // go to working state
-            dWrite(channel, HIGH);
+            gpioCore->createGpioTaskTimeout(taskName, channel, range.timing.workingTimeInSecond * 1000);
             state.rangeState = RangeState::RANGE_STATE_WORKING;
           }
 
@@ -86,14 +86,15 @@ public:
             return true;
           }
 
-          dWrite(channel, LOW);
+          gpioCore->removeGpioTaskByChannel(channel);
           timeStamp = millis();
           state.rangeState = RangeState::RANGE_STATE_WAITING;
         }
       }
     }
     else {
-      state.isReachThreshold ? dWrite(channel, HIGH) : dWrite(channel, LOW);
+      state.isReachThreshold ? gpioCore->createGpioTaskForever(taskName, channel)
+                             : gpioCore->removeGpioTaskByChannel(channel);
     }
 
     return true;

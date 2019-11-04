@@ -1,5 +1,6 @@
 #include <Arduino.h>
-#include "domain/channel-control/control.h"
+#include "domain/channel-control/controlTypeEnum.h"
+
 #ifndef SG_MCU_RESOLVE_CHANNEL_CONTROL_TO_ENUM_H
 #define SG_MCU_RESOLVE_CHANNEL_CONTROL_TO_ENUM_H
 

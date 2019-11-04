@@ -4,7 +4,7 @@
   "data": {
     "index": 1,
     "control": {
-      "type": "criteria",
+      "type": "timer",
       "value": 0
     },
     "preconditions": [
@@ -14,6 +14,10 @@
       },
       {
         "type": "criteria",
+        "value": 0
+      },
+      {
+        "type": "range",
         "value": 0
       }
     ]

@@ -54,22 +54,22 @@ public:
       return;
     }
 
-//    Control *control = ControlFactory::getControl(channelData.control.type, channel, &dWrite);
-//    if (control != nullptr) {
-//      channelControl[channel] = control;
-//
-//      for (int i = 0; i < sizeof(channelData.preconditions) / sizeof(channelData.preconditions[0]); i++) {
-//        Precondition *precondition = PreconditionFactory::getPrecondition(channelData.preconditions[i].type, channel);
-//        if (precondition != nullptr) {
-//          channelControl[channel]->addPrecondition(precondition);
-//        }
-//      }
-//
-//      channelControl[channel]->enable();
-//    }
-//    else {
-//      dWrite(channel, LOW);
-//    }
+    Control *control = ControlFactory::getControl(channelData.control.type, channel);
+    if (control != nullptr) {
+      channelControl[channel] = control;
+
+      for (int i = 0; i < sizeof(channelData.preconditions) / sizeof(channelData.preconditions[0]); i++) {
+        Precondition *precondition = PreconditionFactory::getPrecondition(channelData.preconditions[i].type, channel);
+        if (precondition != nullptr) {
+          channelControl[channel]->addPrecondition(precondition);
+        }
+      }
+
+      channelControl[channel]->enable();
+    }
+    else {
+      gpioCore->removeGpioTaskByChannel(channel);
+    }
   }
 
   void activateControls() {

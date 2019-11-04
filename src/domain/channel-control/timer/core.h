@@ -36,15 +36,11 @@ public:
 
 class TimerCore : public Control {
 public:
-  explicit TimerCore(int channel, void (*dWrite)(int channel, int value)) : Control(channel, CH_CTRL_TIMER, dWrite) {
+  explicit TimerCore(int channel) : Control(channel, CH_CTRL_TIMER) {
     TimerModel model;
     TimerSchema timerSchema = model.get();
     timer = timerSchema.timers[channel];
     rtcCore = RtcCore::instance();
-  }
-
-  ~TimerCore() override {
-    delete rtcCore;
   }
 
   TimerState getControlState() {
@@ -61,7 +57,7 @@ public:
         state.currentIntervalTimerInSeconds[0] = timer.data[i][0] * 60; // start time
         state.currentIntervalTimerInSeconds[1] = timer.data[i][1] * 60; // stop time
 
-        dWrite(channel, HIGH);
+        gpioCore->createGpioTaskForever(taskName, channel);
         break;
       }
 
@@ -71,7 +67,7 @@ public:
         state.nextIntervalTimerInSeconds[1] = timer.data[i][1] * 60; // stop time
       }
 
-      dWrite(channel, LOW);
+      gpioCore->removeGpioTaskByChannel(channel);
     }
     return true;
   }

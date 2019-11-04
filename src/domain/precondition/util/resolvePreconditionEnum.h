@@ -14,6 +14,9 @@ String PreconditionEnumToString(PRECONDITION_TYPE_ENUM precEnum) {
   else if (precEnum == PREC_CRITERIA) {
     return "criteria";
   }
+  else if (precEnum == PREC_RANGE) {
+    return "range";
+  }
   else {
     return "none";
   }
@@ -25,6 +28,9 @@ PRECONDITION_TYPE_ENUM PreconditionStringToEnum(String precString) {
   }
   else if (precString == "criteria") {
     return PREC_CRITERIA;
+  }
+  else if (precString == "range") {
+    return PREC_RANGE;
   }
   else if (precString == "none") {
     return PREC_NONE;

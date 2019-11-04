@@ -65,6 +65,10 @@ public:
             auto *precCoreAtN = (PrecTimerCore *) (ctrlCore->getPreconditionAt(i));
             chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
           }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_RANGE) {
+            auto *precCoreAtN = (PrecRangeCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
         }
         chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
         break;
@@ -75,6 +79,7 @@ public:
         break;
       }
       default: {
+        break;
       }
     }
 

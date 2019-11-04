@@ -1,5 +1,6 @@
 #include <TaskScheduler.h>
 #include "validationError.h"
+#include "./util/resolveControlEnum.h"
 #include "./controlTypeEnum.h"
 #include "domain/channel-control/state.h"
 #include "domain/precondition/precondition.h"
@@ -11,12 +12,15 @@ class Control: public Task {
 public:
   int channel = -1;
 
-  Control(int channel, CONTROL_TYPE_ENUM type, void (*dWrite)(int, int), int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &controlScheduler, false),
+  Control(int channel, CONTROL_TYPE_ENUM type, int interval = TASK_SECOND): Task(interval, TASK_FOREVER, &controlScheduler, false),
       channel(channel),
-      dWrite(dWrite),
-      type(type) {}
+      type(type)
+      {
+        taskName = (ChannelControlEnumToString(type) + "-" + String(channel)).c_str();
+        gpioCore = GpioCore::instance();
+      }
 
-  virtual ~Control() {
+  ~Control() override {
     for (int i = 0; i < precSize; i++) {
       delete preconditions[i];
     }
@@ -35,8 +39,6 @@ public:
 
     return controlTask();
   };
-
-  void (*dWrite)(int, int);
 
   CONTROL_TYPE_ENUM getType() {
     return type;
@@ -60,10 +62,14 @@ public:
     return preconditions[index];
   }
 
+protected:
+  GpioCore *gpioCore = nullptr;
+  std::string taskName;
+
 private:
   CONTROL_TYPE_ENUM type;
   uint8_t precSize = 0;
-  Precondition *preconditions[3];
+  Precondition *preconditions[3]{};
 };
 
 #endif //SG_MCU_CONTROL_H
