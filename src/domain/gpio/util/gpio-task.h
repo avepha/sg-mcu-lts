@@ -42,6 +42,10 @@ public:
     return channel;
   }
 
+  GpioTaskEnum getType() {
+    return gpioTaskType;
+  }
+
   bool Callback() override {
     if (gpioTaskType == GPIO_TASK_ONCE) {
       selfDestruct(this);
