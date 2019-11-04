@@ -53,7 +53,7 @@ public:
   };
 };
 
-// @query: date
+// @query
 class query_criteria : public Query {
 public:
   explicit query_criteria() : Query("criteria", new permission_criteria()) {};
