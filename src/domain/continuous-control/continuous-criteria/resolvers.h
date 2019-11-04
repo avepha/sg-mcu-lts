@@ -1,6 +1,6 @@
 #include "util/util.h"
 
-#include "domain/resolvers.h"
+
 #include "validationError.h"
 #include "combineContext.h"
 
@@ -10,11 +10,11 @@
 #define SG_MCU_CONTINUOUS_CRITERIA_RESOLVERS_H
 
 // @mutation
-class mutation_continuous_criteria_save : public Resolvers {
+class mutation_continuous_criteria_save : public Mutation {
 public:
-  explicit mutation_continuous_criteria_save(CombineContext *context) : Resolvers("continuous_criteria_save", context, new permission_continuous_criteria_save(context)) {};
+  explicit mutation_continuous_criteria_save() : Mutation("continuous_criteria_save", new permission_continuous_criteria_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ContinuousCriteriaSchema schema = context->continuousCriteria->model->get();
 
     JsonObject criteria = reqData["criteria"];
@@ -52,11 +52,11 @@ public:
 };
 
 // @query: date
-class query_continuous_criteria : public Resolvers {
+class query_continuous_criteria : public Query {
 public:
-  explicit query_continuous_criteria(CombineContext *context) : Resolvers("continuous_criteria", context) {};
+  explicit query_continuous_criteria() : Query("continuous_criteria") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ContinuousCriteriaSchema schema = context->continuousCriteria->model->get();
 
     DynamicJsonDocument data(256);

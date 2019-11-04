@@ -1,6 +1,6 @@
 #include "validationError.h"
 #include "combineContext.h"
-#include "domain/resolvers.h"
+
 #include "util/util.h"
 
 #include "./permission.h"
@@ -9,12 +9,11 @@
 #define SG_MCU_PRECONDITION_TIMER_RESOLVERS_H
 
 // @mutation
-class mutation_precondition_timer_save : public Resolvers {
+class mutation_precondition_timer_save : public Mutation {
 public:
-  explicit mutation_precondition_timer_save(CombineContext *context) :
-      Resolvers("precondition_timer_save", context, new permission_precondition_timer_save(context)) {};
+  explicit mutation_precondition_timer_save() : Mutation("precondition_timer_save", new permission_precondition_timer_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecTimerSchema schema = context->precTimer->model->get();
 
@@ -42,12 +41,11 @@ public:
   };
 };
 
-class query_precondition_timer : public Resolvers {
+class query_precondition_timer : public Query {
 public:
-  explicit query_precondition_timer(CombineContext *context) :
-      Resolvers("precondition_timer", context, new permission_precondition_timer(context)) {};
+  explicit query_precondition_timer() : Query("precondition_timer", new permission_precondition_timer()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecTimerSchema newSchema = context->precTimer->model->get();
 

@@ -1,6 +1,6 @@
 #include "validationError.h"
 #include "combineContext.h"
-#include "domain/resolvers.h"
+
 #include "util/util.h"
 
 #include "./permission.h"
@@ -9,12 +9,11 @@
 #define SG_MCU_PRECONDITION_CRITERIA_RESOLVERS_H
 
 // @mutation
-class mutation_precondition_criteria_save : public Resolvers {
+class mutation_precondition_criteria_save : public Mutation {
 public:
-  explicit mutation_precondition_criteria_save(CombineContext *context) :
-      Resolvers("precondition_criteria_save", context, new permission_precondition_criteria_save(context)) {};
+  explicit mutation_precondition_criteria_save() : Mutation("precondition_criteria_save", new permission_precondition_criteria_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
 
     PrecCriteriaSchema criteriaSchema = context->precCriteria->model->get();
@@ -37,12 +36,11 @@ public:
   };
 };
 
-class query_precondition_criteria : public Resolvers {
+class query_precondition_criteria : public Query {
 public:
-  explicit query_precondition_criteria(CombineContext *context) :
-      Resolvers("precondition_criteria", context, new permission_precondition_criteria(context)) {};
+  explicit query_precondition_criteria() : Query("precondition_criteria", new permission_precondition_criteria()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecCriteriaSchema criteriaSchema = context->precCriteria->model->get();
 

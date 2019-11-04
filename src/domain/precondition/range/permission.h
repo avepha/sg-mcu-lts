@@ -6,9 +6,9 @@
 
 class permission_precondition_range_save : public Permission {
 public:
-  explicit permission_precondition_range_save(CombineContext *context) : Permission(context) {};
+  explicit permission_precondition_range_save() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;
@@ -70,9 +70,9 @@ public:
 
 class permission_precondition_range : public Permission {
 public:
-  explicit permission_precondition_range(CombineContext *context) : Permission(context) {};
+  explicit permission_precondition_range() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;

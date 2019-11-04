@@ -1,6 +1,6 @@
 #include "util/util.h"
 
-#include "domain/resolvers.h"
+
 #include "validationError.h"
 #include "combineContext.h"
 
@@ -10,11 +10,11 @@
 #define SG_MCU_PRECONDITION_RANGE_RESOLVERS_H
 
 // @mutation
-class mutation_precondition_range_save : public Resolvers {
+class mutation_precondition_range_save : public Mutation {
 public:
-  explicit mutation_precondition_range_save(CombineContext *context) : Resolvers("precondition_range_save", context, new permission_precondition_range_save(context)) {};
+  explicit mutation_precondition_range_save() : Mutation("precondition_range_save", new permission_precondition_range_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecRangeSchema schema = context->precRange->model->get();
 
@@ -41,11 +41,11 @@ public:
 };
 
 // @query: date
-class query_precondition_range : public Resolvers {
+class query_precondition_range : public Query {
 public:
-  explicit query_precondition_range(CombineContext *context) : Resolvers("precondition_range", context, new permission_precondition_range(context)) {};
+  explicit query_precondition_range() : Query("precondition_range", new permission_precondition_range()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecRangeSchema schema = context->precRange->model->get();
 

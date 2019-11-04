@@ -6,9 +6,9 @@
 
 class permission_precondition_timer_save : public Permission {
 public:
-  explicit permission_precondition_timer_save(CombineContext *context) : Permission(context) {};
+  explicit permission_precondition_timer_save() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;
@@ -38,9 +38,9 @@ public:
 
 class permission_precondition_timer : public Permission {
 public:
-  explicit permission_precondition_timer(CombineContext *context) : Permission(context) {};
+  explicit permission_precondition_timer() : Permission() {};
 
-  void resolve(JsonObject reqData) override {
+  void resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData.isNull() || reqData["index"].isNull()) {
       InvalidInputError err("index is not specified.");
       throw err;

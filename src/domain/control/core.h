@@ -13,7 +13,7 @@ public:
 
     channelCore = ChannelCore::instance();
 
-    checkAndActiveControl(type);
+    activateControl(type);
   }
 
   CONTROL_ENUM getType() {
@@ -24,7 +24,15 @@ public:
     if (_type == type) {
       return false;
     }
+    activateControl(_type);
 
+    return true;
+  }
+
+private:
+  ChannelCore *channelCore;
+  CONTROL_ENUM type = CTRL_NONE;
+  void activateControl(CONTROL_ENUM _type) {
     type = _type;
     channelCore->deactivateControls();
 
@@ -39,12 +47,6 @@ public:
 
       }
     }
-
-    return true;
   }
-
-private:
-  ChannelCore *channelCore;
-  CONTROL_ENUM type = CTRL_NONE;
 };
 #endif //SG_MCU_CONTROL_CORE_H

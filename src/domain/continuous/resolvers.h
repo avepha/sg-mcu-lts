@@ -1,6 +1,6 @@
 #include "validationError.h"
 #include "combineContext.h"
-#include "domain/resolvers.h"
+
 #include "util/util.h"
 #include "./permission.h"
 #include "domain/continuous-control/util/resolveContinuousControlEnum.h"
@@ -10,12 +10,11 @@
 #define SG_MCU_CONTINUOUS_RESOLVERS_H
 
 // @query
-class query_continuous : public Resolvers {
+class query_continuous : public Query {
 public:
-  explicit query_continuous(CombineContext *context) :
-      Resolvers("continuous", context) {};
+  explicit query_continuous() : Query("continuous") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ContinuousSchema schema = context->continuous->model->get();
     ContinuousSchema::Continuous continuous = schema.continuous;
 
@@ -44,26 +43,25 @@ public:
 
 
 //TODO: complete this
-class query_continuous_state : public Resolvers {
+class query_continuous_state : public Query {
 public:
-  explicit query_continuous_state(CombineContext *context) :
-      Resolvers("channel_state", context, new permission_continuous_state(context)) {};
+  explicit query_continuous_state() : Query("channel_state", new permission_continuous_state()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(64);
     return data;
   }
 };
 
-//class mutation_channel_activate : public Resolvers {
+//class mutation_channel_activate : public Mutation {
 //public:
-//  explicit mutation_channel_activate(CombineContext *context) :
+//  explicit mutation_channel_activate() :
 //      Resolvers(
 //          "channel_activate",
 //          context,
-//          new permission_channel_activate(context)) {};
+//          new permission_channel_activate()) {};
 //
-//  JsonDocument resolve(JsonObject reqData) override {
+//  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
 //    int index = reqData["index"];
 //    boolean isActive = reqData["isActive"];
 //    ChannelSchema channelSchema = context->channel->model->get();
@@ -84,14 +82,11 @@ public:
 //  }
 //};
 
-class mutation_continuous_save : public Resolvers {
+class mutation_continuous_save : public Mutation {
 public:
-  explicit mutation_continuous_save(CombineContext *context) :
-      Resolvers(
-          "continuous_save", context,
-          new permission_continuous_save(context)) {};
+  explicit mutation_continuous_save() : Mutation("continuous_save", new permission_continuous_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ContinuousSchema schema = context->continuous->model->get();
 
     schema.continuous.control.type = ContinuousControlStringToEnum(reqData["control"]["type"]);

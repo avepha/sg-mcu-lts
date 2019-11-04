@@ -1,6 +1,6 @@
 #include "validationError.h"
 #include "combineContext.h"
-#include "domain/resolvers.h"
+
 #include "util/util.h"
 #include "./permission.h"
 #include "domain/channel-control/util/resolveControlEnum.h"
@@ -10,14 +10,11 @@
 #define SG_MCU_CHANNEL_RESOLVERS_H
 
 // @query
-class query_channel : public Resolvers {
+class query_channel : public Query {
 public:
-  explicit query_channel(CombineContext *context) :
-      Resolvers(
-          "channel", context,
-          new permission_channel(context)) {};
+  explicit query_channel() : Query("channel", new permission_channel()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     ChannelSchema channelSchema = context->channel->model->get();
     ChannelSchema::Channel channel = channelSchema.channels[index];
@@ -43,14 +40,13 @@ public:
   }
 };
 
-class query_channel_state : public Resolvers {
+class query_channel_state : public Query {
 public:
-  explicit query_channel_state(CombineContext *context) :
-      Resolvers("channel_state", context, new permission_channel_state(context)) {};
+  explicit query_channel_state() : Query("channel_state", new permission_channel_state()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
-    Control* channelControl = context->channel->core->getControlByChannel(index);
+    Control *channelControl = context->channel->core->getControlByChannel(index);
     CONTROL_TYPE_ENUM type = channelControl->getType();
 
     DynamicJsonDocument data(1024);
@@ -86,15 +82,11 @@ public:
   }
 };
 
-class mutation_channel_activate : public Resolvers {
+class mutation_channel_activate : public Mutation {
 public:
-  explicit mutation_channel_activate(CombineContext *context) :
-      Resolvers(
-          "channel_activate",
-          context,
-          new permission_channel_activate(context)) {};
+  explicit mutation_channel_activate() : Mutation("channel_activate", new permission_channel_activate()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     boolean isActive = reqData["isActive"];
     ChannelSchema channelSchema = context->channel->model->get();
@@ -115,14 +107,11 @@ public:
   }
 };
 
-class mutation_channel_save : public Resolvers {
+class mutation_channel_save : public Mutation {
 public:
-  explicit mutation_channel_save(CombineContext *context) :
-      Resolvers(
-          "channel_save", context,
-          new permission_channel_save(context)) {};
+  explicit mutation_channel_save() : Mutation("channel_save", new permission_channel_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ChannelSchema channelSchema = context->channel->model->get();
     int index = reqData["index"];
 

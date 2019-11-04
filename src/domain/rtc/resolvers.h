@@ -2,7 +2,6 @@
 
 #include "validationError.h"
 #include "combineContext.h"
-#include "domain/resolvers.h"
 #include "util/util.h"
 #include "./permission.h"
 
@@ -13,11 +12,11 @@
 
 // TODO: check iso string
 // @mutation: date_save
-class mutation_date_save : public Resolvers {
+class mutation_date_save : public Mutation {
 public:
-  explicit mutation_date_save(CombineContext *context) : Resolvers("date_save", context) {};
+  explicit mutation_date_save() : Mutation("date_save") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["date"].isNull()) {
       InvalidInputError err;
       throw err;
@@ -34,12 +33,11 @@ public:
   };
 };
 
-class mutation_timezone_save : public Resolvers {
+class mutation_timezone_save : public Mutation {
 public:
-  explicit mutation_timezone_save(CombineContext *context) : Resolvers("timezone_save", context,
-                                                                       new permission_timezone_save(context)) {};
+  explicit mutation_timezone_save() : Mutation("timezone_save", new permission_timezone_save()) {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     String offset = reqData["offset"];
     String sign = offset.substring(0, 1);
     String hourOffset = offset.substring(1, 3);
@@ -66,11 +64,11 @@ public:
 };
 
 // @query: date
-class query_date : public Resolvers {
+class query_date : public Query {
 public:
-  explicit query_date(CombineContext *context) : Resolvers("date", context) {};
+  explicit query_date() : Query("date") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DateTime dateTime;
     if (!reqData["local"].isNull()) {
       dateTime = context->rtc->core->getDate();
@@ -86,11 +84,11 @@ public:
   };
 };
 
-class query_timezone : public Resolvers {
+class query_timezone : public Query {
 public:
-  explicit query_timezone(CombineContext *context) : Resolvers("timezone", context) {};
+  explicit query_timezone() : Query("timezone") {};
 
-  JsonDocument resolve(JsonObject reqData) override {
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
 
     RtcSchema schema = context->rtc->model->get();
     DynamicJsonDocument data(64);
