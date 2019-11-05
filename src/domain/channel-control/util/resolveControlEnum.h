@@ -12,6 +12,8 @@ String ChannelControlEnumToString(CONTROL_TYPE_ENUM ctrlEnum) {
       return "timer";
     case CH_CTRL_CRITERIA:
       return "criteria";
+    case CH_CTRL_RANGE:
+      return "range";
     default:
       return "none";
   }
@@ -26,6 +28,9 @@ CONTROL_TYPE_ENUM ChannelControlStringToEnum(const String& ctrlString) {
   }
   else if (ctrlString == "criteria") {
     return CH_CTRL_CRITERIA;
+  }
+  else if (ctrlString == "range") {
+    return CH_CTRL_RANGE;
   }
   else if (ctrlString == "none"){
     return CH_CTRL_NONE;

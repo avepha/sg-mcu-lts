@@ -73,6 +73,25 @@ public:
         chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
         break;
       }
+      case CH_CTRL_RANGE: {
+        auto *ctrlCore = (RangeCore *) (channelControl);
+        for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
+          if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
+            auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_TIMER) {
+            auto *precCoreAtN = (PrecTimerCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_RANGE) {
+            auto *precCoreAtN = (PrecRangeCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+        }
+        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
+        break;
+      }
       case CH_CTRL_TIMER: {
         auto *ctrlCore = (TimerCore *) (channelControl);
         chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());

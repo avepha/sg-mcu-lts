@@ -1,6 +1,7 @@
 //#define SG_TEST
 #define _TASK_OO_CALLBACKS
 #define _TASK_PRIORITY
+#define _TASK_TIMEOUT
 
 #include <Arduino.h>
 #include <Wire.h>
