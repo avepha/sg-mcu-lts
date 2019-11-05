@@ -53,7 +53,7 @@ public:
   }
 
   bool controlTask() override {
-    Serial.println("running");
+
   }
 
 private:
