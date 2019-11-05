@@ -22,9 +22,11 @@ public:
     data["isActive"] = continuous.isActive;
     JsonObject control = data.createNestedObject("control");
     control["type"] = ContinuousControlEnumToString(continuous.control.type);
-    JsonArray channelOrders = control.createNestedArray("channelOrders");
-    for (uint8_t channelOrder : continuous.control.channelOrders) {
-      channelOrders.add(channelOrder);
+    JsonArray channelOrders = control.createNestedArray("channelOrderAndTiming");
+    for (int i = 0; i < continuous.control.channelOrderAndTimingSize; i++) {
+      JsonObject jo = channelOrders.createNestedObject();
+      jo["channel"] = continuous.control.channelOrderAndTiming[i].channel;
+      jo["workingTimeInSec"] = continuous.control.channelOrderAndTiming[i].workingTimeInSec;
     }
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");
@@ -40,7 +42,6 @@ public:
     return data;
   }
 };
-
 
 //TODO: complete this
 class query_continuous_state : public Query {
@@ -82,9 +83,11 @@ public:
     ContinuousSchema schema = context->continuous->model->get();
 
     schema.continuous.control.type = ContinuousControlStringToEnum(reqData["control"]["type"]);
-    for(int i = 0 ; i < reqData["control"]["channelOrders"].size(); i++) {
-      schema.continuous.control.channelOrders[i] =  reqData["control"]["channelOrders"][i];
+    for(int i = 0 ; i < reqData["control"]["channelOrderAndTiming"].size(); i++) {
+      schema.continuous.control.channelOrderAndTiming[i].channel =  reqData["control"]["channelOrderAndTiming"][i]["channel"];
+      schema.continuous.control.channelOrderAndTiming[i].workingTimeInSec =  reqData["control"]["channelOrderAndTiming"][i]["workingTimeInSec"];
     }
+    schema.continuous.control.channelOrderAndTimingSize = reqData["control"]["channelOrderAndTiming"].size();
 
     // set precondition by providing args
     for (int i = 0; i < reqData["preconditions"].size(); i++) {
@@ -110,9 +113,11 @@ public:
     data["isActive"] = continuous.isActive;
     JsonObject control = data.createNestedObject("control");
     control["type"] = ContinuousControlEnumToString(continuous.control.type);
-    JsonArray channelOrders = control.createNestedArray("channelOrders");
-    for (uint8_t channelOrder : continuous.control.channelOrders) {
-      channelOrders.add(channelOrder);
+    JsonArray channelOrderAndTiming = control.createNestedArray("channelOrderAndTiming");
+    for (int i = 0; i < continuous.control.channelOrderAndTimingSize; i++) {
+      JsonObject jo = channelOrderAndTiming.createNestedObject();
+      jo["channel"] = continuous.control.channelOrderAndTiming[i].channel;
+      jo["workingTimeInSec"] = continuous.control.channelOrderAndTiming[i].workingTimeInSec;
     }
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");

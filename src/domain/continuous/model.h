@@ -11,7 +11,20 @@ struct ContinuousSchema {
 
     struct Control {
       CONTINUOUS_CONTROL_TYPE_ENUM type = CON_CTRL_NONE;
-      uint8_t channelOrders[8] = {0, 1, 2, 3, 4, 5, 6, 7};
+      uint8_t channelOrderAndTimingSize = 3;
+      struct channelOrderAndTiming {
+        uint8_t channel;
+        uint32_t workingTimeInSec;
+      } channelOrderAndTiming[8] = {
+          {0, 5},
+          {1, 5},
+          {2, 5},
+          {3, 5},
+          {4, 5},
+          {5, 5},
+          {6, 5},
+          {7, 5}
+      };
     } control;
 
     struct Precondition {

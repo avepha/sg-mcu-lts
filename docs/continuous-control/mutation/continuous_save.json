@@ -4,15 +4,39 @@
   "data": {
     "control": {
       "type": "continuous-criteria",
-      "channelOrders": [
-        7,
-        6,
-        5,
-        4,
-        3,
-        2,
-        1,
-        0
+      "channelOrderAndTiming": [
+        {
+          "channel": 0,
+          "workingTimeInSec": 5
+        },
+        {
+          "channel": 1,
+          "workingTimeInSec": 5
+        },
+        {
+          "channel": 2,
+          "workingTimeInSec": 5
+        },
+        {
+          "channel": 3,
+          "workingTimeInSec": 5
+        },
+        {
+          "channel": 4,
+          "workingTimeInSec": 5
+        },
+        {
+          "channel": 5,
+          "workingTimeInSec": 5
+        },
+        {
+          "channel": 6,
+          "workingTimeInSec": 5
+        },
+        {
+          "channel": 7,
+          "workingTimeInSec": 5
+        }
       ]
     },
     "preconditions": [
@@ -22,6 +46,10 @@
       },
       {
         "type": "criteria",
+        "value": 0
+      },
+      {
+        "type": "range",
         "value": 0
       }
     ]

@@ -35,10 +35,26 @@ public:
       throw err;
     }
 
-
-    if (reqData["control"]["channelOrders"].isNull() || !reqData["control"]["channelOrders"].is<JsonArray>()) {
+    if (reqData["control"]["channelOrderAndTiming"].isNull() || !reqData["control"]["channelOrderAndTiming"].is<JsonArray>()) {
       InvalidInputError err("channelOrders field must be an array");
       throw err;
+    }
+
+    if (reqData["control"]["channelOrderAndTiming"].size() > 8 ) {
+      IndexOutOfBoundError err("channelOrderAndTiming index out of bound");
+      throw err;
+    }
+
+    JsonArray channelOrderAndTiming = reqData["control"]["channelOrderAndTiming"];
+    for (int i = 0 ; i < channelOrderAndTiming.size(); i++) {
+      if (channelOrderAndTiming[i]["channel"].isNull() || !channelOrderAndTiming[i]["channel"].is<int>()) {
+        InvalidInputError err("channel field must be an integer.");
+        throw err;
+      }
+      if (channelOrderAndTiming[i]["workingTimeInSec"].isNull() || !channelOrderAndTiming[i]["workingTimeInSec"].is<int>()) {
+        InvalidInputError err("workingTimeInSec field must be an integer.");
+        throw err;
+      }
     }
 
     if (reqData["preconditions"].isNull() || !reqData["preconditions"].is<JsonArray>()) {
