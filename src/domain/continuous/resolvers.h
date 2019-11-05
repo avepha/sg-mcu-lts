@@ -53,34 +53,26 @@ public:
   }
 };
 
-//class mutation_channel_activate : public Mutation {
-//public:
-//  explicit mutation_channel_activate() :
-//      Resolvers(
-//          "channel_activate",
-//          context,
-//          new permission_channel_activate()) {};
-//
-//  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
-//    int index = reqData["index"];
-//    boolean isActive = reqData["isActive"];
-//    ChannelSchema channelSchema = context->channel->model->get();
-//    channelSchema.channels[index].isActive = isActive;
-//
-//    context->channel->model->save(channelSchema);
-//    delay(10);
-//
-//    ChannelSchema newChannelSchema = context->channel->model->get();
-//    DynamicJsonDocument data(1024);
-//    data["index"] = index;
-//    data["isActive"] = newChannelSchema.channels[index].isActive;
-//
-//    // index = channel 0 - 7
-//    context->channel->core->checkAndActivateControl(newChannelSchema.channels[index], index);
-//
-//    return data;
-//  }
-//};
+class mutation_continuous_activate : public Mutation {
+public:
+  explicit mutation_continuous_activate() : Mutation("mutation_continuous_activate", new permission_continuous_activate) {};
+
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    ContinuousSchema schema = context->continuous->model->get();
+    schema.continuous.isActive = reqData["isActive"];
+
+    int writeOps = context->continuous->model->save(schema);
+
+    ContinuousSchema newSchema = context->continuous->model->get();
+
+    DynamicJsonDocument data(1024);
+    data["writeOps"] = writeOps;
+    data["isActive"] = newSchema.continuous.isActive;
+
+    context->continuous->core->activateControls();
+    return data;
+  }
+};
 
 class mutation_continuous_save : public Mutation {
 public:
@@ -107,7 +99,7 @@ public:
     }
 
     schema.continuous.isActive = false;
-//    context->channel->core->checkAndActivateControl(schema.continuous, index);
+    context->continuous->core->deactivateControls();
     context->continuous->model->save(schema);
     delay(10);
 

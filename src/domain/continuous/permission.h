@@ -71,6 +71,12 @@ public:
   explicit permission_continuous_activate() : Permission() {};
 
   void resolve(JsonObject reqData, CombineContext *context) override {
+    ControlSchema controlSchema = context->control->model->get();
+    if (controlSchema.type != CTRL_CONTINUOUS) {
+      InactiveContinuousControlError err;
+      throw err;
+    }
+
     if (reqData["isActive"].isNull()) {
       InvalidInputError err("data field must have isActive and value.");
       throw err;

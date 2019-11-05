@@ -212,5 +212,8 @@ void CombineResolvers::CombineMutation() {
   auto *sensor_order_save = new mutation_sensor_order_save;
   mutationMap[sensor_order_save->getName()] = sensor_order_save;
 
+  auto *continuous_activate = new mutation_continuous_activate;
+  mutationMap[continuous_activate->getName()] = continuous_activate;
+
 
 }

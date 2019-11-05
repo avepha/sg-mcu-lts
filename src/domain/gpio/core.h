@@ -13,6 +13,7 @@ public:
 
   bool removeGpioTaskByName(const std::string& name);
   bool removeGpioTaskByChannel(uint8_t channel);
+  bool removeGpioTaskAll();
 
   std::map<std::string, GpioTask*> getGpioTaskMap() {
     return gpioTaskMap;
@@ -111,8 +112,14 @@ bool GpioCore::removeGpioTaskByChannel(uint8_t channel) {
     }
   }
 
-
   return false;
+}
+
+bool GpioCore::removeGpioTaskAll() {
+  for (int i = 0; i < sizeof(CHANNEL_GPIO_MAP) / sizeof(CHANNEL_GPIO_MAP[0]); i++) {
+    removeGpioTaskByChannel(i);
+  }
+  return true;
 }
 
 #endif //SG_MCU_GPIO_CORE_H

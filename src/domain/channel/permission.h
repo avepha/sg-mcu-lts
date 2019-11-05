@@ -114,16 +114,6 @@ public:
       throw err;
     }
 
-    if (reqData["index"].isNull()) {
-      IndexNotSpecifyError err;
-      throw err;
-    }
-
-    if (reqData["index"] < 0 || reqData["index"] > 7) {
-      IndexOutOfBoundError err;
-      throw err;
-    }
-
     if (reqData["isActive"].isNull()) {
       InvalidInputError err("data field must have isActive and value.");
       throw err;

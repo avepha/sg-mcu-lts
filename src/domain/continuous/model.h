@@ -1,7 +1,6 @@
-#include "domain/continuous-control/continuousControl.h"
+#include "domain/continuous-control/continuousControlTypeEnum.h"
 #include "domain/precondition/precondition.h"
 #include "domain/model.h"
-#include "./core.h"
 
 #ifndef SG_MCU_CONTINUOUS_MODEL_H
 #define SG_MCU_CONTINUOUS_MODEL_H

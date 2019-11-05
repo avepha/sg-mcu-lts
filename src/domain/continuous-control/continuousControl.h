@@ -1,6 +1,7 @@
 #include <TaskScheduler.h>
 #include "validationError.h"
 #include "continuousControlTypeEnum.h"
+#include "util/resolveContinuousControlEnum.h"
 #include "domain/precondition/precondition.h"
 
 #ifndef SG_MCU_CONTINUOUS_CONTROL_H
@@ -10,13 +11,13 @@ class ContinuousControl : public Task {
 public:
   int channel = -1;
 
-  ContinuousControl(int channel,
-                    CONTINUOUS_CONTROL_TYPE_ENUM type,
-                    void (*dWrite)(int, int),
-                    int interval = TASK_SECOND) : Task(interval, TASK_FOREVER, &controlScheduler, false),
-                                                  channel(channel),
-                                                  dWrite(dWrite),
-                                                  type(type) {}
+  ContinuousControl(int channel, CONTINUOUS_CONTROL_TYPE_ENUM type, int interval = TASK_SECOND) : Task(interval, TASK_FOREVER, &controlScheduler, false),
+    channel(channel),
+    type(type)
+    {
+      taskName = (ContinuousControlEnumToString(type) + "-" + String(channel)).c_str();
+      gpioCore = GpioCore::instance();
+    }
 
   virtual ~ContinuousControl() {
     for (int i = 0; i < precSize; i++) {
@@ -37,8 +38,6 @@ public:
 
     return controlTask();
   };
-
-  void (*dWrite)(int, int);
 
   CONTINUOUS_CONTROL_TYPE_ENUM getType() {
     return type;
@@ -61,6 +60,10 @@ public:
   Precondition *getPreconditionAt(int index) {
     return preconditions[index];
   }
+
+protected:
+  GpioCore *gpioCore = nullptr;
+  std::string taskName;
 
 private:
   CONTINUOUS_CONTROL_TYPE_ENUM type;

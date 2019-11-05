@@ -37,7 +37,7 @@ public:
 
 class ContinuousCriteriaCore : public ContinuousControl {
 public:
-  explicit ContinuousCriteriaCore(int channel, void (*dWrite)(int channel, int value)) : ContinuousControl(channel, CON_CTRL_CRITERIA, dWrite) {
+  explicit ContinuousCriteriaCore(int channel) : ContinuousControl(channel, CON_CTRL_CRITERIA) {
     ContinuousCriteriaModel model;
     ContinuousCriteriaSchema criteriaSchema = model.get();
     criteria = criteriaSchema.criteria;
