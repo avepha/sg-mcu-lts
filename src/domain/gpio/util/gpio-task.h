@@ -4,8 +4,8 @@
 #define SG_MCU_GPIO_TASK_H
 
 enum GpioTaskEnum {
-  GPIO_TASK_ONCE = 0,
-  GPIO_TASK_FOREVER = 1,
+  GPIO_TASK_EXPIRED = 0,
+  GPIO_TASK_NO_EXPIRED = 1,
 };
 
 class GpioTask : public Task {
@@ -15,7 +15,7 @@ public:
       : Task(TASK_MINUTE, TASK_FOREVER, &gpioScheduler, false),
         name(std::move(name)),
         channel(channel),
-        gpioTaskType(GPIO_TASK_FOREVER),
+        gpioTaskType(GPIO_TASK_NO_EXPIRED),
         dWrite(dWrite),
         selfDestruct(selfDestruct)
         {}
@@ -25,10 +25,12 @@ public:
       : Task(timeout, TASK_ONCE, &gpioScheduler, false),
         name(std::move(name)),
         channel(channel),
-        gpioTaskType(GPIO_TASK_ONCE),
+        gpioTaskType(GPIO_TASK_EXPIRED),
         dWrite(dWrite),
         selfDestruct(selfDestruct)
-        {}
+        {
+          setTimeout(timeout);
+        }
 
   ~GpioTask() {
     dWrite(channel, LOW);
@@ -47,7 +49,7 @@ public:
   }
 
   bool Callback() override {
-    if (gpioTaskType == GPIO_TASK_ONCE) {
+    if (gpioTaskType == GPIO_TASK_EXPIRED) {
       selfDestruct(this);
     }
     return true;
