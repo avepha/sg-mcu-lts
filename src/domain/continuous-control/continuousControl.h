@@ -3,19 +3,18 @@
 #include "continuousControlTypeEnum.h"
 #include "util/resolveContinuousControlEnum.h"
 #include "domain/precondition/precondition.h"
+#include "domain/continuous/util/continuousGpioChain.h"
 
 #ifndef SG_MCU_CONTINUOUS_CONTROL_H
 #define SG_MCU_CONTINUOUS_CONTROL_H
 
 class ContinuousControl : public Task {
 public:
-  int channel = -1;
-
-  ContinuousControl(int channel, CONTINUOUS_CONTROL_TYPE_ENUM type, int interval = TASK_SECOND) : Task(interval, TASK_FOREVER, &controlScheduler, false),
-    channel(channel),
+  ContinuousControl(CONTINUOUS_CONTROL_TYPE_ENUM type, ContinuousGpioChain *gpioChain,int interval = TASK_SECOND) : Task(interval, TASK_FOREVER, &controlScheduler, false),
+    gpioChain(gpioChain),
     type(type)
     {
-      taskName = (ContinuousControlEnumToString(type) + "-" + String(channel)).c_str();
+      taskName = (ContinuousControlEnumToString(type)).c_str();
       gpioCore = GpioCore::instance();
     }
 
@@ -62,6 +61,7 @@ public:
   }
 
 protected:
+  ContinuousGpioChain *gpioChain;
   GpioCore *gpioCore = nullptr;
   std::string taskName;
 

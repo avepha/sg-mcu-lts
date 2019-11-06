@@ -10,7 +10,6 @@ struct ContinuousCriteriaSchema {
     bool greater = false;
     struct Timing {
       bool enable = false;
-      uint16_t workingTimeInSecond = 10;
       uint16_t waitingTimeInSecond = 10;
     } timing;
   } criteria;

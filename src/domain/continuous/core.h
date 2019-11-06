@@ -1,13 +1,14 @@
 #include "domain/continuous-control/continuousControl.h"
+#include "domain/continuous-control/continuousControlFactory.h"
 #include "./model.h"
+#include "./util/continuousGpioChain.h"
 
 #ifndef SG_MCU_CONTINUOUS_CORE_H
 #define SG_MCU_CONTINUOUS_CORE_H
 
 class ContinuousCore {
 public:
-  static ContinuousCore* instance()
-  {
+  static ContinuousCore *instance() {
     if (!s_instance)
       s_instance = new ContinuousCore;
     return s_instance;
@@ -21,26 +22,29 @@ public:
   }
 
   void activateControls() {
-    if (continuousControl != nullptr) {
-      continuousControl->disable();
-      delete continuousControl;
-      continuousControl = nullptr;
-    }
+    deactivateControls();
 
     ContinuousModel model;
     ContinuousSchema::Continuous continuous = model.get().continuous;
 
     if (!continuous.isActive) {
-      for (int i = 0; i < sizeof(CHANNEL_GPIO_MAP) / sizeof(CHANNEL_GPIO_MAP[0]); i++) {
-        gpioCore->removeGpioTaskAll();
-      }
+      gpioCore->removeGpioTaskAll();
       return;
+    }
+
+    gpioChain = new ContinuousGpioChain();
+    for (int i = 0; i < continuous.control.channelOrderAndTimingSize; i++) {
+      gpioChain->add(
+          continuous.control.channelOrderAndTiming[i].channel,
+          continuous.control.channelOrderAndTiming[i].workingTimeInSec
+      );
     }
 
     switch (continuous.control.type) {
       case CON_CTRL_TIMER:
         break;
       case CON_CTRL_CRITERIA:
+        ContinuousControlFactory::getControl(CON_CTRL_CRITERIA, gpioChain);
         break;
       case CON_CTRL_RANGE:
         break;
@@ -56,12 +60,19 @@ public:
       delete continuousControl;
       continuousControl = nullptr;
     }
+
+    if (gpioChain != nullptr) {
+      gpioChain->disable();
+      delete gpioChain;
+      gpioChain = nullptr;
+    }
   }
 
 private:
   static ContinuousCore *s_instance;
   ContinuousControl *continuousControl = nullptr;
   GpioCore *gpioCore;
+  ContinuousGpioChain *gpioChain = nullptr;
 };
 
 ContinuousCore *ContinuousCore::s_instance = nullptr;

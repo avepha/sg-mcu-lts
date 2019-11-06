@@ -36,12 +36,17 @@ public:
     }
 
     if (reqData["control"]["channelOrderAndTiming"].isNull() || !reqData["control"]["channelOrderAndTiming"].is<JsonArray>()) {
-      InvalidInputError err("channelOrders field must be an array");
+      InvalidInputError err("channelOrderAndTiming field must be an array");
       throw err;
     }
 
     if (reqData["control"]["channelOrderAndTiming"].size() > 8 ) {
       IndexOutOfBoundError err("channelOrderAndTiming index out of bound");
+      throw err;
+    }
+
+    if (reqData["control"]["channelOrderAndTiming"].size() == 0 ) {
+      InvalidInputError err("channelOrderAndTiming field must not be empty array");
       throw err;
     }
 

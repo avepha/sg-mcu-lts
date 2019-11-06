@@ -2,6 +2,7 @@
 #include "domain/nsensor/core.h"
 #include "domain/continuous-control/continuousState.h"
 #include "domain/continuous-control/continuousControl.h"
+#include "domain/continuous/util/continuousGpioChain.h"
 #include "./model.h"
 
 #ifndef SG_MCU_CONTINUOUS_CRITERIA_CORE_H
@@ -37,7 +38,7 @@ public:
 
 class ContinuousCriteriaCore : public ContinuousControl {
 public:
-  explicit ContinuousCriteriaCore(int channel) : ContinuousControl(channel, CON_CTRL_CRITERIA) {
+  explicit ContinuousCriteriaCore(ContinuousGpioChain *gpioChain) : ContinuousControl(CON_CTRL_CRITERIA, gpioChain) {
     ContinuousCriteriaModel model;
     ContinuousCriteriaSchema criteriaSchema = model.get();
     criteria = criteriaSchema.criteria;
@@ -53,7 +54,59 @@ public:
   }
 
   bool controlTask() override {
+//  CriteriaModel::ShowModel(criteria, channel);
+    NSensor averageSensor = nSensorCore->getAverageSensor();
+    state.sensorValue = averageSensor.sensors[criteria.sensor];
 
+    state.isTimingEnable = criteria.timing.enable;
+
+    // check direction
+    state.isReachThreshold = (criteria.greater) ? (state.sensorValue >= criteria.criteria)
+                                                : (state.sensorValue <= criteria.criteria);
+
+//     if timing is enables
+    if (state.isTimingEnable) {
+      switch (state.criteriaState) {
+        case ContinuousCriteriaState::CRITERIA_STATE_WAITING: {
+          state.currentWaitingTimeInSecond = (millis() - timeStamp) / 1000;
+          if (state.currentWaitingTimeInSecond < criteria.timing.waitingTimeInSecond) {
+            return true;
+          }
+
+          if (state.isReachThreshold) {
+            // go to working state
+            // start gpio chain // TODO: complete this
+            gpioChain->enable();
+            state.criteriaState = ContinuousCriteriaState::CRITERIA_STATE_WORKING;
+          }
+          else {
+            // stay at waiting state
+            state.criteriaState = ContinuousCriteriaState::CRITERIA_STATE_WAITING;
+          }
+          timeStamp = millis();
+        }
+        case ContinuousCriteriaState::CRITERIA_STATE_WORKING: {
+          state.currentWorkingTimeInSecond = (millis() - timeStamp) / 1000;
+          if (state.currentWorkingTimeInSecond < gpioChain->getTotalWorkingTimeInSecond()) { // TODO: use total time of gpio chain
+            return true;
+          }
+
+          // go to waiting state
+          timeStamp = millis();
+          state.criteriaState = ContinuousCriteriaState::CRITERIA_STATE_WAITING;
+        }
+      }
+    }
+    else { // if timing is disable
+      if (state.isReachThreshold) {
+        gpioChain->enable();
+      }
+      else {
+        gpioChain->disable();
+      }
+    }
+
+    return true;
   }
 
 private:

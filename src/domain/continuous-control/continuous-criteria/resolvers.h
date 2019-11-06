@@ -25,7 +25,6 @@ public:
 
     if (!criteria["timing"].isNull()) {
       schema.criteria.timing.enable = true;
-      schema.criteria.timing.workingTimeInSecond = criteria["timing"]["working"];
       schema.criteria.timing.waitingTimeInSecond = criteria["timing"]["waiting"];
     }
     else {
@@ -44,7 +43,6 @@ public:
 
     JsonObject timing = data.createNestedObject("timing");
     timing["enable"] = newSchema.criteria.timing.enable;
-    timing["working"] = newSchema.criteria.timing.workingTimeInSecond;
     timing["waiting"] = newSchema.criteria.timing.waitingTimeInSecond;
 
     return data;
@@ -67,7 +65,6 @@ public:
 
     JsonObject timing = criteria.createNestedObject("timing");
     timing["enable"] = schema.criteria.timing.enable;
-    timing["working"] = schema.criteria.timing.workingTimeInSecond;
     timing["waiting"] = schema.criteria.timing.waitingTimeInSecond;
 
     return data;
