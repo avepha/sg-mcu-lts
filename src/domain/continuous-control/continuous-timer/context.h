@@ -10,7 +10,7 @@ public:
 };
 
 ContinuousTimerContext::ContinuousTimerContext() {
-  model = new ContinuousCriteriaModel;
+  model = new ContinuousTimerModel;
 }
 
 #endif //SG_MCU_CONTEXT_H

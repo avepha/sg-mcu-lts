@@ -74,7 +74,7 @@ public:
 
 private:
   TimerState state;
-  TimerSchema::timer timer;
+  TimerSchema::Timer timer;
   RtcCore *rtcCore;
 };
 

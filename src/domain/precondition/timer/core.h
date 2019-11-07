@@ -70,7 +70,7 @@ public:
 
 private:
   PrecTimerState state;
-  PrecTimerSchema::timer timer;
+  PrecTimerSchema::Timer timer;
   RtcCore *rtcCore{};
 };
 

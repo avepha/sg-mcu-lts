@@ -8,6 +8,7 @@
 #include "domain/channel-control/range/context.h"
 
 #include "domain/continuous-control/continuous-criteria/context.h"
+#include "domain/continuous-control/continuous-timer/context.h"
 
 #include "domain/precondition/criteria/context.h"
 #include "domain/precondition/timer/context.h"
@@ -36,6 +37,7 @@ public:
   RangeContext *range;
 
   ContinuousCriteriaContext *continuousCriteria;
+  ContinuousTimerContext *continuousTimer;
 
   PrecTimerContext *precTimer;
   PrecCriteriaContext *precCriteria;
@@ -61,6 +63,7 @@ CombineContext::CombineContext() {
   control = new ControlContext;
   continuous = new ContinuousContext;
   continuousCriteria = new ContinuousCriteriaContext;
+  continuousTimer = new ContinuousTimerContext;
 
 }
 
