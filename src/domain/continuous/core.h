@@ -14,11 +14,8 @@ public:
     return s_instance;
   }
 
-  ContinuousCore() {
-    gpioCore = GpioCore::instance();
-    for (int i = 0; i < sizeof(CHANNEL_GPIO_MAP) / sizeof(CHANNEL_GPIO_MAP[0]); i++) {
-      pinMode(CHANNEL_GPIO_MAP[i], OUTPUT);
-    }
+  ContinuousControl *getControl() {
+    return continuousControl;
   }
 
   void activateControls() {
@@ -40,17 +37,20 @@ public:
       );
     }
 
-    switch (continuous.control.type) {
-      case CON_CTRL_TIMER:
-        break;
-      case CON_CTRL_CRITERIA:
-        ContinuousControlFactory::getControl(CON_CTRL_CRITERIA, gpioChain);
-        break;
-      case CON_CTRL_RANGE:
-        break;
-      default:
-        gpioCore->removeGpioTaskAll();
-        break;
+    ContinuousControl *control = ContinuousControlFactory::getControl(CON_CTRL_CRITERIA, gpioChain);
+    if (control != nullptr) {
+      continuousControl = control;
+
+      for (int i = 0; i < sizeof(continuous.preconditions) / sizeof(continuous.preconditions[0]); i++) {
+        Precondition *precondition = PreconditionFactory::getPrecondition(continuous.preconditions[i].type, 1);
+        if (precondition != nullptr) {
+          continuousControl->addPrecondition(precondition);
+        }
+      }
+      continuousControl->enable();
+    }
+    else {
+      gpioCore->removeGpioTaskAll();
     }
   }
 
@@ -69,12 +69,19 @@ public:
   }
 
 private:
+  ContinuousCore() {
+    gpioCore = GpioCore::instance();
+    for (int i = 0; i < sizeof(CHANNEL_GPIO_MAP) / sizeof(CHANNEL_GPIO_MAP[0]); i++) {
+      pinMode(CHANNEL_GPIO_MAP[i], OUTPUT);
+    }
+  }
+
   static ContinuousCore *s_instance;
   ContinuousControl *continuousControl = nullptr;
   GpioCore *gpioCore;
   ContinuousGpioChain *gpioChain = nullptr;
 };
 
-ContinuousCore *ContinuousCore::s_instance = nullptr;
+ContinuousCore *ContinuousCore::s_instance = 0;
 
 #endif //SG_MCU_CONTINUOUS_CORE_H

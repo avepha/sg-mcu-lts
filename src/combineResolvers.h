@@ -163,6 +163,9 @@ void CombineResolvers::CombineQuery() {
   auto *sensor_order = new query_sensor_order;
   queryMap[sensor_order->getName()] = sensor_order;
 
+  auto *continuous_state = new query_continuous_state;
+  queryMap[continuous_state->getName()] = continuous_state;
+
 
 }
 

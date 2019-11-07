@@ -1,3 +1,7 @@
+#ifndef HOUR_IN_MINUTE
+#define HOUR_IN_MINUTE 60
+#endif
+
 #ifndef SG_MCU_CONFIG_H
 #define SG_MCU_CONFIG_H
 

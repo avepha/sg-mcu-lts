@@ -54,8 +54,10 @@ public:
       }
     }
 
-    for (int i = 0 ; i < averageSensor.sensors.size(); i++) {
-      averageSensor.sensors[i] = averageSensor.sensors[i] / (float)activeNode;
+    if (activeNode != 0) {
+      for (int i = 0 ; i < averageSensor.sensors.size(); i++) {
+        averageSensor.sensors[i] = averageSensor.sensors[i] / (float)activeNode;
+      }
     }
 
     return averageSensor;

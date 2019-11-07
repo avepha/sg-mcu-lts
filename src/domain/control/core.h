@@ -38,6 +38,7 @@ private:
   void activateControl(CONTROL_ENUM _type) {
     type = _type;
     channelCore->deactivateControls();
+    continuousCore->deactivateControls();
 
     switch (_type) {
       case CTRL_CHANNEL: {

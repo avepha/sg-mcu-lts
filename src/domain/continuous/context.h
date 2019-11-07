@@ -13,7 +13,7 @@ public:
 
 ContinuousContext::ContinuousContext() {
   model = new ContinuousModel;
-  core = new ContinuousCore;
+  core = ContinuousCore::instance();
 }
 
 #endif //SG_MCU_CONTINUOUS_CONTEXT_H

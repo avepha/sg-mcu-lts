@@ -46,17 +46,50 @@ public:
 //TODO: complete this
 class query_continuous_state : public Query {
 public:
-  explicit query_continuous_state() : Query("channel_state", new permission_continuous_state()) {};
+  explicit query_continuous_state() : Query("continuous_state", new permission_continuous_state()) {};
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
-    DynamicJsonDocument data(64);
+    ContinuousControl *continuousControl = context->continuous->core->getControl();
+    CONTINUOUS_CONTROL_TYPE_ENUM type = continuousControl->getType();
+    DynamicJsonDocument data(1024);
+    JsonArray chainOfControlAndPreconditions = data.createNestedArray("states");
+    switch (type) {
+      case CON_CTRL_TIMER: {
+        break;
+      }
+      case CON_CTRL_CRITERIA: {
+        auto *ctrlCore = (ContinuousCriteriaCore *) (continuousControl);
+        for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
+          if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
+            auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_TIMER) {
+            auto *precCoreAtN = (PrecTimerCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_RANGE) {
+            auto *precCoreAtN = (PrecRangeCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+        }
+        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
+        break;
+      }
+      case CON_CTRL_RANGE: {
+        break;
+      }
+      default: {
+        break;
+      }
+    }
     return data;
   }
 };
 
 class mutation_continuous_activate : public Mutation {
 public:
-  explicit mutation_continuous_activate() : Mutation("mutation_continuous_activate", new permission_continuous_activate) {};
+  explicit mutation_continuous_activate() : Mutation("continuous_activate",new permission_continuous_activate) {};
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ContinuousSchema schema = context->continuous->model->get();
@@ -83,9 +116,9 @@ public:
     ContinuousSchema schema = context->continuous->model->get();
 
     schema.continuous.control.type = ContinuousControlStringToEnum(reqData["control"]["type"]);
-    for(int i = 0 ; i < reqData["control"]["channelOrderAndTiming"].size(); i++) {
-      schema.continuous.control.channelOrderAndTiming[i].channel =  reqData["control"]["channelOrderAndTiming"][i]["channel"];
-      schema.continuous.control.channelOrderAndTiming[i].workingTimeInSec =  reqData["control"]["channelOrderAndTiming"][i]["workingTimeInSec"];
+    for (int i = 0; i < reqData["control"]["channelOrderAndTiming"].size(); i++) {
+      schema.continuous.control.channelOrderAndTiming[i].channel = reqData["control"]["channelOrderAndTiming"][i]["channel"];
+      schema.continuous.control.channelOrderAndTiming[i].workingTimeInSec = reqData["control"]["channelOrderAndTiming"][i]["workingTimeInSec"];
     }
     schema.continuous.control.channelOrderAndTimingSize = reqData["control"]["channelOrderAndTiming"].size();
 

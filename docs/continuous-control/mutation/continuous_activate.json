@@ -1,0 +1,7 @@
+{
+  "topic": "continuous_activate",
+  "method": "mutation",
+  "data": {
+    "isActive": true
+  }
+}

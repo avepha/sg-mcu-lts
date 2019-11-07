@@ -57,7 +57,6 @@ public:
 //  CriteriaModel::ShowModel(criteria, channel);
     NSensor averageSensor = nSensorCore->getAverageSensor();
     state.sensorValue = averageSensor.sensors[criteria.sensor];
-
     state.isTimingEnable = criteria.timing.enable;
 
     // check direction
@@ -75,7 +74,6 @@ public:
 
           if (state.isReachThreshold) {
             // go to working state
-            // start gpio chain // TODO: complete this
             gpioChain->enable();
             state.criteriaState = ContinuousCriteriaState::CRITERIA_STATE_WORKING;
           }
@@ -87,7 +85,7 @@ public:
         }
         case ContinuousCriteriaState::CRITERIA_STATE_WORKING: {
           state.currentWorkingTimeInSecond = (millis() - timeStamp) / 1000;
-          if (state.currentWorkingTimeInSecond < gpioChain->getTotalWorkingTimeInSecond()) { // TODO: use total time of gpio chain
+          if (state.currentWorkingTimeInSecond < gpioChain->getTotalWorkingTimeInSecond()) {
             return true;
           }
 
@@ -98,11 +96,13 @@ public:
       }
     }
     else { // if timing is disable
-      if (state.isReachThreshold) {
+      if (state.isReachThreshold && !gpioChain->isEnabled()) {
         gpioChain->enable();
+        return true;
       }
-      else {
+      else if (!state.isReachThreshold && gpioChain->isEnabled()) {
         gpioChain->disable();
+        return true;
       }
     }
 

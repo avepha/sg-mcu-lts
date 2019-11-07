@@ -12,7 +12,7 @@ public:
     uint32_t timeoutInSecond = 5;
   } ChannelAndTimeoutStruct;
 
-  ContinuousGpioChain() : Task(500, TASK_FOREVER, &controlScheduler, false) {
+  ContinuousGpioChain() : Task(1000, TASK_FOREVER, &controlScheduler, false) {
     gpioCore = GpioCore::instance();
   }
 
@@ -20,25 +20,32 @@ public:
     ChannelAndTimeoutStruct channelAndTimeoutStruct;
     channelAndTimeoutStruct.channel = channel;
     channelAndTimeoutStruct.timeoutInSecond = timeoutInSec;
-    channelAndTimeoutStack.push(channelAndTimeoutStruct);
+    channelAndTimeouts.push_back(channelAndTimeoutStruct);
     totalWorkingTimeInSecond += timeoutInSec;
   }
 
   bool OnEnable() override {
+    currentChannelIndex = 0;
     timestamp = millis();
-    runGpioTask();
+    runGpioTask(channelAndTimeouts[currentChannelIndex]);
     return true;
   }
 
   bool Callback() override {
-    if (channelAndTimeoutStack.empty()) {
-      disable();
+    currentTimeInSecond = (millis() - timestamp) / 1000;
+    if (currentTimeInSecond < channelAndTimeouts[currentChannelIndex].timeoutInSecond) {
+      return false;
     }
 
-    currentTimeInSecond = (millis() - timestamp) / 1000;
-    if (currentTimeInSecond >= currentChannelAndTimeout.timeoutInSecond) {
-      runGpioTask();
+    currentChannelIndex++;
+
+    if (currentChannelIndex >= channelAndTimeouts.size()) {
+      disable();
+      return false;
     }
+
+    timestamp = millis();
+    runGpioTask(channelAndTimeouts[currentChannelIndex]);
     return true;
   }
 
@@ -47,16 +54,14 @@ public:
   }
 
 private:
-  std::stack<ChannelAndTimeoutStruct> channelAndTimeoutStack{};
-  ChannelAndTimeoutStruct currentChannelAndTimeout;
+  std::vector<ChannelAndTimeoutStruct> channelAndTimeouts{};
   GpioCore *gpioCore = nullptr;
+  int currentChannelIndex = 0;
   uint32_t timestamp = 0, currentTimeInSecond = 0, totalWorkingTimeInSecond = 0;
 
-  void runGpioTask() {
-    currentChannelAndTimeout = channelAndTimeoutStack.top();
-    channelAndTimeoutStack.pop();
-    std::string taskName = ("continuous-channel-" + String(currentChannelAndTimeout.channel)).c_str();
-    gpioCore->createGpioTaskTimeout(taskName, currentChannelAndTimeout.channel, currentChannelAndTimeout.timeoutInSecond * 1000);
+  void runGpioTask(ChannelAndTimeoutStruct channelAndTimeout) {
+    std::string taskName = ("continuous-channel-" + String(channelAndTimeout.channel)).c_str();
+    gpioCore->createGpioTaskTimeout(taskName, channelAndTimeout.channel, channelAndTimeout.timeoutInSecond * 1000);
   }
 };
 
