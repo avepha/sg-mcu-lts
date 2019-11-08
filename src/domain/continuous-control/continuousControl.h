@@ -61,7 +61,7 @@ public:
   }
 
 protected:
-  ContinuousGpioChain *gpioChain;
+  ContinuousGpioChain *gpioChain = nullptr;
   GpioCore *gpioCore = nullptr;
   std::string taskName;
 

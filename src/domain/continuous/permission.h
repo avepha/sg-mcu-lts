@@ -67,6 +67,11 @@ public:
       throw err;
     }
 
+    if (type == CON_CTRL_TIMER && reqData["preconditions"].size() > 0) {
+      InvalidInputError err("preconditions field must be an empty array when applying continuous-timer");
+      throw err;
+    }
+
     if (reqData["preconditions"].size() > 3) {
       InvalidInputError err("preconditions field must have maximum length of 3");
       throw err;

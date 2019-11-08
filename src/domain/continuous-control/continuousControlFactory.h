@@ -1,7 +1,10 @@
 #include "continuousControl.h"
 #include "domain/channel-control/control.h"
-#include "domain/channel-control/criteria/core.h"
 #include "./continuous-criteria/core.h"
+
+#include "domain/continuous-control/continuous-criteria/core.h"
+#include "domain/continuous-control/continuous-timer/core.h"
+
 #include "domain/continuous/util/continuousGpioChain.h"
 
 #ifndef SG_MCU_CONTINUOUS_CONTROL_FACTORY_H
@@ -13,6 +16,8 @@ public:
     switch (controlTypeEnum) {
       case CON_CTRL_CRITERIA:
         return new ContinuousCriteriaCore(gpioChain);
+      case CON_CTRL_TIMER:
+        return new ContinuousTimerCore(gpioChain);
       default:
         return nullptr;
     }

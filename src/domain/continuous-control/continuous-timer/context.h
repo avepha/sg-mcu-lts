@@ -1,5 +1,4 @@
 #include "./model.h"
-
 #ifndef SG_MCU_CONTINUOUS_TIMER_CONTEXT_H
 #define SG_MCU_CONTINUOUS_TIMER_CONTEXT_H
 
