@@ -74,7 +74,7 @@ public:
 
           if (state.isReachThreshold) {
             // go to working state
-            gpioChain->enable();
+            if (!gpioChain->isEnabled()) gpioChain->enable();
             state.criteriaState = ContinuousCriteriaState::CRITERIA_STATE_WORKING;
           }
           else {

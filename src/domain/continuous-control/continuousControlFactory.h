@@ -4,6 +4,7 @@
 
 #include "domain/continuous-control/continuous-criteria/core.h"
 #include "domain/continuous-control/continuous-timer/core.h"
+#include "domain/continuous-control/continuous-range/core.h"
 
 #include "domain/continuous/util/continuousGpioChain.h"
 
@@ -18,6 +19,8 @@ public:
         return new ContinuousCriteriaCore(gpioChain);
       case CON_CTRL_TIMER:
         return new ContinuousTimerCore(gpioChain);
+      case CON_CTRL_RANGE:
+        return new ContinuousRangeCore(gpioChain);
       default:
         return nullptr;
     }

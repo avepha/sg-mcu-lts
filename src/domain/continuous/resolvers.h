@@ -79,6 +79,22 @@ public:
         break;
       }
       case CON_CTRL_RANGE: {
+        auto *ctrlCore = (ContinuousRangeCore *) (continuousControl);
+        for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
+          if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
+            auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_TIMER) {
+            auto *precCoreAtN = (PrecTimerCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_RANGE) {
+            auto *precCoreAtN = (PrecRangeCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+        }
+        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
         break;
       }
       default: {
