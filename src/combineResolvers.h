@@ -23,6 +23,7 @@
 #include "domain/continuous/resolvers.h"
 #include "domain/continuous-control/continuous-criteria/resolvers.h"
 #include "domain/continuous-control/continuous-timer/resolvers.h"
+#include "domain/continuous-control/continuous-range/resolvers.h"
 
 #include "domain/precondition/criteria/resolvers.h"
 #include "domain/precondition/timer/resolvers.h"
@@ -170,6 +171,9 @@ void CombineResolvers::CombineQuery() {
   auto *continuous_timer = new query_continuous_timer;
   queryMap[continuous_timer->getName()] = continuous_timer;
 
+  auto *continuous_range = new query_continuous_range;
+  queryMap[continuous_range->getName()] = continuous_range;
+
 
 }
 
@@ -224,6 +228,9 @@ void CombineResolvers::CombineMutation() {
 
   auto *continuous_timer_save = new mutation_continuous_timer_save;
   mutationMap[continuous_timer_save->getName()] = continuous_timer_save;
+
+  auto *continuous_range_save = new mutation_continuous_range_save;
+  mutationMap[continuous_range_save->getName()] = continuous_range_save;
 
 
 }

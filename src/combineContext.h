@@ -9,6 +9,7 @@
 
 #include "domain/continuous-control/continuous-criteria/context.h"
 #include "domain/continuous-control/continuous-timer/context.h"
+#include "domain/continuous-control/continuous-range/context.h"
 
 #include "domain/precondition/criteria/context.h"
 #include "domain/precondition/timer/context.h"
@@ -38,6 +39,7 @@ public:
 
   ContinuousCriteriaContext *continuousCriteria;
   ContinuousTimerContext *continuousTimer;
+  ContinuousRangeContext *continuousRange;
 
   PrecTimerContext *precTimer;
   PrecCriteriaContext *precCriteria;
@@ -64,6 +66,7 @@ CombineContext::CombineContext() {
   continuous = new ContinuousContext;
   continuousCriteria = new ContinuousCriteriaContext;
   continuousTimer = new ContinuousTimerContext;
+  continuousRange = new ContinuousRangeContext;
 
 }
 
