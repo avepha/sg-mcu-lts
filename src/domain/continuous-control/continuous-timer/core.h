@@ -19,7 +19,7 @@ public:
     DynamicJsonDocument data(256);
     data["type"] = "timer";
     data["currentTimeInSecond"] = currentTimeInSecond;
-    data["isReachThreshold"] =  isReachThreshold;
+    data["isReachThreshold"] = isReachThreshold;
     if (isReachThreshold) {
       JsonObject _currentTime = data.createNestedObject("currentIntervalTimerInSeconds");
       _currentTime["start"] = currentIntervalTimerInSeconds[0];
@@ -54,7 +54,8 @@ public:
     state.currentTimeInSecond = dt.hour() * 3600 + dt.minute() * 60 + dt.second();
 
     for (int i = 0; i < timer.size; i++) {
-      state.isReachThreshold = state.currentTimeInSecond >= timer.data[i][0] * 60 && state.currentTimeInSecond <= timer.data[i][1] * 60;
+      state.isReachThreshold =
+          state.currentTimeInSecond >= timer.data[i][0] * 60 && state.currentTimeInSecond <= timer.data[i][1] * 60;
       if (state.isReachThreshold) {
         state.currentIntervalTimerInSeconds[0] = timer.data[i][0] * 60; // start time
         state.currentIntervalTimerInSeconds[1] = timer.data[i][1] * 60; // stop time

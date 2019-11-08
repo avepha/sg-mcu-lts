@@ -55,6 +55,8 @@ public:
     JsonArray chainOfControlAndPreconditions = data.createNestedArray("states");
     switch (type) {
       case CON_CTRL_TIMER: {
+        auto *ctrlCore = (ContinuousTimerCore *) (continuousControl);
+        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
         break;
       }
       case CON_CTRL_CRITERIA: {

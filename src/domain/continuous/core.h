@@ -37,7 +37,7 @@ public:
       );
     }
 
-    ContinuousControl *control = ContinuousControlFactory::getControl(CON_CTRL_CRITERIA, gpioChain);
+    ContinuousControl *control = ContinuousControlFactory::getControl(continuous.control.type, gpioChain);
     if (control != nullptr) {
       continuousControl = control;
 
