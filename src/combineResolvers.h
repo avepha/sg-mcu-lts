@@ -19,6 +19,7 @@
 #include "domain/channel-control/criteria/resolvers.h"
 #include "domain/channel-control/timer/resolvers.h"
 #include "domain/channel-control/range/resolvers.h"
+#include "domain/channel-control/par/resolvers.h"
 
 #include "domain/continuous/resolvers.h"
 #include "domain/continuous-control/continuous-criteria/resolvers.h"
@@ -174,6 +175,12 @@ void CombineResolvers::CombineQuery() {
   auto *continuous_range = new query_continuous_range;
   queryMap[continuous_range->getName()] = continuous_range;
 
+  auto *par = new query_par;
+  queryMap[par->getName()] = par;
+
+  auto *par_sensor_index = new query_par_sensor_index;
+  queryMap[par_sensor_index->getName()] = par_sensor_index;
+
 
 }
 
@@ -231,6 +238,12 @@ void CombineResolvers::CombineMutation() {
 
   auto *continuous_range_save = new mutation_continuous_range_save;
   mutationMap[continuous_range_save->getName()] = continuous_range_save;
+
+  auto *par_save = new mutation_par_save;
+  mutationMap[par_save->getName()] = par_save;
+
+  auto *par_sensor_index_save = new mutation_par_sensor_index_save;
+  mutationMap[par_sensor_index_save->getName()] = par_sensor_index_save;
 
 
 }

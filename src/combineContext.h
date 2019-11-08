@@ -6,6 +6,7 @@
 #include "domain/channel-control/criteria/context.h"
 #include "domain/channel-control/timer/context.h"
 #include "domain/channel-control/range/context.h"
+#include "domain/channel-control/par/context.h"
 
 #include "domain/continuous-control/continuous-criteria/context.h"
 #include "domain/continuous-control/continuous-timer/context.h"
@@ -36,6 +37,7 @@ public:
   CriteriaContext *criteria;
   TimerContext *timer;
   RangeContext *range;
+  ParContext *par;
 
   ContinuousCriteriaContext *continuousCriteria;
   ContinuousTimerContext *continuousTimer;
@@ -61,6 +63,7 @@ CombineContext::CombineContext() {
   criteria = new CriteriaContext;
   range = new RangeContext;
   timer = new TimerContext;
+  par = new ParContext;
 
   control = new ControlContext;
   continuous = new ContinuousContext;

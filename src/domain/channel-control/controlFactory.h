@@ -3,6 +3,7 @@
 #include "./timer/core.h"
 #include "./range/core.h"
 #include "./criteria/core.h"
+#include "./par/core.h"
 
 #ifndef SG_MCU_CONTROL_FACTORY_H
 #define SG_MCU_CONTROL_FACTORY_H
@@ -17,6 +18,8 @@ public:
         return new CriteriaCore(channel);
       case CH_CTRL_RANGE:
         return new RangeCore(channel);
+      case CH_CTRL_PAR:
+        return new ParCore(channel);
       default:
         return nullptr;
     }

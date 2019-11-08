@@ -14,7 +14,7 @@ struct CriteriaSchema {
       uint16_t waitingTimeInSecond = 10;
     } timing;
   } criterias[8];
-}; // total size: 128
+};
 
 class CriteriaModel : public RomModel<CriteriaSchema> {
 public:

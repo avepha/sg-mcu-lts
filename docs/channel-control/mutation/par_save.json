@@ -1,0 +1,13 @@
+{
+  "topic": "par_save",
+  "method": "mutation",
+  "data": {
+    "index": 1,
+    "par": {
+      "parSumInKJ": 1000,
+      "timing": {
+        "working": 10
+      }
+    }
+  }
+}

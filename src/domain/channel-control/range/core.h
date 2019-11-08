@@ -93,8 +93,12 @@ public:
       }
     }
     else {
-      state.isReachThreshold ? gpioCore->createGpioTaskForever(taskName, channel)
-                             : gpioCore->removeGpioTaskByChannel(channel);
+      if (state.isReachThreshold) {
+        gpioCore->createGpioTaskForever(taskName, channel);
+      }
+      else {
+        gpioCore->removeGpioTaskByChannel(channel);
+      }
     }
 
     return true;
