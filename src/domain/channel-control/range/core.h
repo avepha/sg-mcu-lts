@@ -57,7 +57,7 @@ public:
 
     state.isReachThreshold = (range.greater) ? state.sensorValue >= range.lower && state.sensorValue >= range.upper
                                              : state.sensorValue <= range.lower && state.sensorValue <= range.upper;
-
+    state.isTimingEnable = range.timing.enable;
     if (state.isTimingEnable) {
       switch (state.rangeState) {
         case RangeState::RANGE_STATE_WAITING : {
