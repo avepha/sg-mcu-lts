@@ -90,4 +90,8 @@ class InactiveContinuousControlError: public ValidationError {
 public: explicit InactiveContinuousControlError(String message = "Continuous control is inactive") : ValidationError("inactive-continuous-control", message) {};
 };
 
+class NoControlStateError: public ValidationError {
+public: explicit NoControlStateError(String message = "Control has no state.") : ValidationError("no-control-state", message) {};
+};
+
 #endif //SG_MCU_VALIDATIONERROR_H

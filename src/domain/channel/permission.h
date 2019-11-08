@@ -50,6 +50,12 @@ public:
       InactiveControlError err;
       throw err;
     }
+
+    Control *channelControl = context->channel->core->getControlByChannel(index);
+    if (channelControl == nullptr) {
+      NoControlStateError err;
+      throw err;
+    }
   }
 };
 
