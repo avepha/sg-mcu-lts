@@ -72,14 +72,19 @@ public:
       InvalidInputError err("control field must have type and value.");
       throw err;
     }
-
-    if (ChannelControlStringToEnum(reqData["control"]["type"]) == CH_CTRL_UNKNOWN) {
+    CONTROL_TYPE_ENUM type = ChannelControlStringToEnum(reqData["control"]["type"]);
+    if (type == CH_CTRL_UNKNOWN) {
       InvalidInputError err("Unknown control type");
       throw err;
     }
 
     if (reqData["preconditions"].isNull() || !reqData["preconditions"].is<JsonArray>()) {
       InvalidInputError err("preconditions field must be an array.");
+      throw err;
+    }
+
+    if (type == CH_CTRL_TIMER && reqData["preconditions"].size() > 0) {
+      InvalidInputError err("preconditions field must be an empty array when applying channel-timer");
       throw err;
     }
 
