@@ -44,7 +44,6 @@ public:
 
     nSensorCore = NSensorCore::instance();
     timeStamp = millis();
-    state.isTimingEnable = range.timing.enable;
   }
 
   ~ContinuousRangeCore() override = default;
@@ -56,7 +55,7 @@ public:
   bool controlTask() override {
     NSensor sensor = nSensorCore->getAverageSensor();
     state.sensorValue = sensor.sensors[range.sensor];
-
+    state.isTimingEnable = range.timing.enable;
     state.isReachThreshold = (range.greater) ? state.sensorValue >= range.lower && state.sensorValue >= range.upper
                                              : state.sensorValue <= range.lower && state.sensorValue <= range.upper;
 
