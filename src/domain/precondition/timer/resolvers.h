@@ -19,8 +19,8 @@ public:
 
     schema.timers[index].size = reqData["timers"].size();
     for (int i = 0 ; i < schema.timers[index].size; i++) {
-      schema.timers[index].data[i][0] = reqData["timers"][i][0];
-      schema.timers[index].data[i][1] = reqData["timers"][i][1];
+      schema.timers[index].timePair[i].start = reqData["timers"][i]["start"];
+      schema.timers[index].timePair[i].end = reqData["timers"][i]["end"];
     }
 
     int writeOps = context->precTimer->model->save(schema);
@@ -32,9 +32,9 @@ public:
     data["writeOps"] = writeOps;
     JsonArray timers = data.createNestedArray("timers");
     for (int i = 0; i < newSchema.timers[index].size; i++) {
-      JsonArray d_i = timers.createNestedArray();
-      d_i.add(newSchema.timers[index].data[i][0]);
-      d_i.add(newSchema.timers[index].data[i][1]);
+      JsonObject jo = timers.createNestedObject();
+      jo["start"] = newSchema.timers[index].timePair[i].start;
+      jo["end"] = newSchema.timers[index].timePair[i].end;
     }
 
     return data;
@@ -53,9 +53,9 @@ public:
     data["index"] = index;
     JsonArray timers = data.createNestedArray("timers");
     for (int i = 0; i < newSchema.timers[index].size; i++) {
-      JsonArray d_i = timers.createNestedArray();
-      d_i.add(newSchema.timers[index].data[i][0]);
-      d_i.add(newSchema.timers[index].data[i][1]);
+      JsonObject jo = timers.createNestedObject();
+      jo["start"] = newSchema.timers[index].timePair[i].start;
+      jo["end"] = newSchema.timers[index].timePair[i].end;
     }
 
     return data;
