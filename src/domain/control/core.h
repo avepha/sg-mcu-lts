@@ -1,7 +1,7 @@
 #include "./model.h"
 #include "./controlEnum.h"
 #include "domain/channel/core.h"
-#include "domain/continuous/core.h"
+#include "domain/sequence/core.h"
 
 #ifndef SG_MCU_CONTROL_CORE_H
 #define SG_MCU_CONTROL_CORE_H
@@ -13,7 +13,7 @@ public:
     type = model.get().type;
 
     channelCore = ChannelCore::instance();
-    continuousCore = ContinuousCore::instance();
+    sequenceCore = SequenceCore::instance();
 
     activateControl(type);
   }
@@ -33,19 +33,19 @@ public:
 
 private:
   ChannelCore *channelCore;
-  ContinuousCore *continuousCore;
+  SequenceCore *sequenceCore;
   CONTROL_ENUM type = CTRL_NONE;
   void activateControl(CONTROL_ENUM _type) {
     type = _type;
     channelCore->deactivateControls();
-    continuousCore->deactivateControls();
+    sequenceCore->deactivateControls();
 
     switch (_type) {
       case CTRL_CHANNEL: {
         channelCore->activateControls();
       }
-      case CTRL_CONTINUOUS: {
-        continuousCore->activateControls();
+      case CTRL_SEQUENCE: {
+        sequenceCore->activateControls();
       }
       default: {
 

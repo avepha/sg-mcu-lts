@@ -8,9 +8,9 @@
 #include "domain/channel-control/range/context.h"
 #include "domain/channel-control/par/context.h"
 
-#include "domain/continuous-control/continuous-criteria/context.h"
-#include "domain/continuous-control/continuous-timer/context.h"
-#include "domain/continuous-control/continuous-range/context.h"
+#include "domain/sequence-control/sequence-criteria/context.h"
+#include "domain/sequence-control/sequence-timer/context.h"
+#include "domain/sequence-control/sequence-range/context.h"
 
 #include "domain/precondition/criteria/context.h"
 #include "domain/precondition/timer/context.h"
@@ -18,7 +18,7 @@
 
 #include "domain/control/context.h"
 #include "domain/channel/context.h"
-#include "domain/continuous/context.h"
+#include "domain/sequence/context.h"
 
 #ifndef SG_MCU_COMBINE_CONTEXT_H
 #define SG_MCU_COMBINE_CONTEXT_H
@@ -32,16 +32,16 @@ public:
 
   ControlContext *control;
   ChannelContext *channel;
-  ContinuousContext *continuous;
+  SequenceContext *sequence;
 
   CriteriaContext *criteria;
   TimerContext *timer;
   RangeContext *range;
   ParContext *par;
 
-  ContinuousCriteriaContext *continuousCriteria;
-  ContinuousTimerContext *continuousTimer;
-  ContinuousRangeContext *continuousRange;
+  SequenceCriteriaContext *sequenceCriteria;
+  SequenceTimerContext *sequenceTimer;
+  SequenceRangeContext *sequenceRange;
 
   PrecTimerContext *precTimer;
   PrecCriteriaContext *precCriteria;
@@ -66,10 +66,10 @@ CombineContext::CombineContext() {
   par = new ParContext;
 
   control = new ControlContext;
-  continuous = new ContinuousContext;
-  continuousCriteria = new ContinuousCriteriaContext;
-  continuousTimer = new ContinuousTimerContext;
-  continuousRange = new ContinuousRangeContext;
+  sequence = new SequenceContext;
+  sequenceCriteria = new SequenceCriteriaContext;
+  sequenceTimer = new SequenceTimerContext;
+  sequenceRange = new SequenceRangeContext;
 
 }
 

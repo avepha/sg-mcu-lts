@@ -21,10 +21,10 @@
 #include "domain/channel-control/range/resolvers.h"
 #include "domain/channel-control/par/resolvers.h"
 
-#include "domain/continuous/resolvers.h"
-#include "domain/continuous-control/continuous-criteria/resolvers.h"
-#include "domain/continuous-control/continuous-timer/resolvers.h"
-#include "domain/continuous-control/continuous-range/resolvers.h"
+#include "domain/sequence/resolvers.h"
+#include "domain/sequence-control/sequence-criteria/resolvers.h"
+#include "domain/sequence-control/sequence-timer/resolvers.h"
+#include "domain/sequence-control/sequence-range/resolvers.h"
 
 #include "domain/precondition/criteria/resolvers.h"
 #include "domain/precondition/timer/resolvers.h"
@@ -124,11 +124,11 @@ void CombineResolvers::CombineQuery() {
   auto *timer = new query_timer;
   queryMap[timer->getName()] = timer;
 
-  auto *continuous = new query_continuous;
-  queryMap[continuous->getName()] = continuous;
+  auto *sequence = new query_sequence;
+  queryMap[sequence->getName()] = sequence;
 
-  auto *continuous_criteria = new query_continuous_criteria;
-  queryMap[continuous_criteria->getName()] = continuous_criteria;
+  auto *sequence_criteria = new query_sequence_criteria;
+  queryMap[sequence_criteria->getName()] = sequence_criteria;
 
   auto *control_type = new query_control_type;
   queryMap[control_type->getName()] = control_type;
@@ -166,14 +166,14 @@ void CombineResolvers::CombineQuery() {
   auto *sensor_order = new query_sensor_order;
   queryMap[sensor_order->getName()] = sensor_order;
 
-  auto *continuous_state = new query_continuous_state;
-  queryMap[continuous_state->getName()] = continuous_state;
+  auto *sequence_state = new query_sequence_state;
+  queryMap[sequence_state->getName()] = sequence_state;
 
-  auto *continuous_timer = new query_continuous_timer;
-  queryMap[continuous_timer->getName()] = continuous_timer;
+  auto *sequence_timer = new query_sequence_timer;
+  queryMap[sequence_timer->getName()] = sequence_timer;
 
-  auto *continuous_range = new query_continuous_range;
-  queryMap[continuous_range->getName()] = continuous_range;
+  auto *sequence_range = new query_sequence_range;
+  queryMap[sequence_range->getName()] = sequence_range;
 
   auto *par = new query_par;
   queryMap[par->getName()] = par;
@@ -200,11 +200,11 @@ void CombineResolvers::CombineMutation() {
   auto *timer_save = new mutation_timer_save;
   mutationMap[timer_save->getName()] = timer_save;
 
-  auto *continuous_criteria_save = new mutation_continuous_criteria_save;
-  mutationMap[continuous_criteria_save->getName()] = continuous_criteria_save;
+  auto *sequence_criteria_save = new mutation_sequence_criteria_save;
+  mutationMap[sequence_criteria_save->getName()] = sequence_criteria_save;
 
-  auto *continuous_save = new mutation_continuous_save;
-  mutationMap[continuous_save->getName()] = continuous_save;
+  auto *sequence_save = new mutation_sequence_save;
+  mutationMap[sequence_save->getName()] = sequence_save;
 
   auto *control_type_save = new mutation_control_type_save;
   mutationMap[control_type_save->getName()] = control_type_save;
@@ -230,14 +230,14 @@ void CombineResolvers::CombineMutation() {
   auto *sensor_order_save = new mutation_sensor_order_save;
   mutationMap[sensor_order_save->getName()] = sensor_order_save;
 
-  auto *continuous_activate = new mutation_continuous_activate;
-  mutationMap[continuous_activate->getName()] = continuous_activate;
+  auto *sequence_activate = new mutation_sequence_activate;
+  mutationMap[sequence_activate->getName()] = sequence_activate;
 
-  auto *continuous_timer_save = new mutation_continuous_timer_save;
-  mutationMap[continuous_timer_save->getName()] = continuous_timer_save;
+  auto *sequence_timer_save = new mutation_sequence_timer_save;
+  mutationMap[sequence_timer_save->getName()] = sequence_timer_save;
 
-  auto *continuous_range_save = new mutation_continuous_range_save;
-  mutationMap[continuous_range_save->getName()] = continuous_range_save;
+  auto *sequence_range_save = new mutation_sequence_range_save;
+  mutationMap[sequence_range_save->getName()] = sequence_range_save;
 
   auto *par_save = new mutation_par_save;
   mutationMap[par_save->getName()] = par_save;

@@ -86,8 +86,8 @@ class InactiveChannelControlError: public ValidationError {
 public: explicit InactiveChannelControlError(String message = "Channel control is inactive") : ValidationError("inactive-channel-control", message) {};
 };
 
-class InactiveContinuousControlError: public ValidationError {
-public: explicit InactiveContinuousControlError(String message = "Continuous control is inactive") : ValidationError("inactive-continuous-control", message) {};
+class InactiveSequenceControlError: public ValidationError {
+public: explicit InactiveSequenceControlError(String message = "Sequence control is inactive") : ValidationError("inactive-sequence-control", message) {};
 };
 
 class NoControlStateError: public ValidationError {

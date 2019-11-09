@@ -1,0 +1,15 @@
+{
+  "topic": "sequence_range_save",
+  "method": "mutation",
+  "data": {
+    "range": {
+      "sensor": 1,
+      "upper": 30.5,
+      "lower": 25.3,
+      "greater": false,
+      "timing": {
+        "waiting": 10
+      }
+    }
+  }
+}
