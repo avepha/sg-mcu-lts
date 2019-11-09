@@ -60,7 +60,6 @@ public:
       return;
     }
 
-    Serial.println("Get model " + String(modelName) + " size: " + String(sizeof(sch)) + " addr:" + String(INIT_ADDR));
     EEPROM.get(SCHEMA_ADDR, sch);
   };
 
