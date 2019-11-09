@@ -40,11 +40,12 @@ public:
     DynamicJsonDocument data(256);
     data["index"] = index;
     data["writeOps"] = writeOps;
-    data["sensor"] = newSchema.criterias[index].sensor;
-    data["criteria"] = newSchema.criterias[index].criteria;
-    data["greater"] = newSchema.criterias[index].greater;
+    JsonObject _criteria = data.createNestedObject("criteria");
+    _criteria["sensor"] = newSchema.criterias[index].sensor;
+    _criteria["criteria"] = newSchema.criterias[index].criteria;
+    _criteria["greater"] = newSchema.criterias[index].greater;
 
-    JsonObject timing = data.createNestedObject("timing");
+    JsonObject timing = _criteria.createNestedObject("timing");
     timing["enable"] = newSchema.criterias[index].timing.enable;
     timing["working"] = newSchema.criterias[index].timing.workingTimeInSecond;
     timing["waiting"] = newSchema.criterias[index].timing.waitingTimeInSecond;
@@ -60,6 +61,7 @@ public:
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
+
     CriteriaSchema schema = context->criteria->model->get();
 
     DynamicJsonDocument data(256);
