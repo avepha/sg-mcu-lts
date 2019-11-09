@@ -1,0 +1,12 @@
+{
+  "topic": "sequence_timer_save",
+  "method": "mutation",
+  "data": {
+    "timers": [
+      [
+        1,
+        1440
+      ]
+    ]
+  }
+}

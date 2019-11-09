@@ -8,8 +8,8 @@ String ControlEnumToString(CONTROL_ENUM ctrlEnum) {
   switch (ctrlEnum) {
     case CTRL_CHANNEL:
       return "channel";
-    case CTRL_CONTINUOUS:
-      return "continuous";
+    case CTRL_SEQUENCE:
+      return "sequence";
     default:
       return "none";
   }
@@ -19,8 +19,8 @@ CONTROL_ENUM ControlStringToEnum(const String& ctrlString) {
   if (ctrlString == "channel") {
     return CTRL_CHANNEL;
   }
-  else if (ctrlString == "continuous") {
-    return CTRL_CONTINUOUS;
+  else if (ctrlString == "sequence") {
+    return CTRL_SEQUENCE;
   }
   else if (ctrlString == "none"){
     return CTRL_NONE;
