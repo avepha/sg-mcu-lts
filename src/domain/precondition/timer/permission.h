@@ -29,9 +29,17 @@ public:
       throw err;
     }
 
-    if (reqData["timers"].size() < 0) {
+    if (reqData["timers"].size() <= 0) {
       InvalidInputError err("timers field size must not be zero.");
       throw err;
+    }
+
+    JsonArray timers = reqData["timers"];
+    for (int i = 0 ; i < timers.size(); i++) {
+      if (timers[i]["start"].isNull() || timers[i]["end"].isNull()) {
+        InvalidInputError err("timers.start must not be null");
+        throw err;
+      }
     }
   }
 };

@@ -3,6 +3,11 @@
   "method": "mutation",
   "data": {
     "index": 1,
-    "timers": [[0, 1440]]
+    "timers": [
+      {
+        "start": 0,
+        "end": 1440
+      }
+    ]
   }
 }
