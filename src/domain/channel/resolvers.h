@@ -135,11 +135,12 @@ public:
     ChannelSchema channelSchema = context->channel->model->get();
     channelSchema.channels[index].isActive = isActive;
 
-    context->channel->model->save(channelSchema);
+    int writeOps = context->channel->model->save(channelSchema);
     delay(10);
 
     ChannelSchema newChannelSchema = context->channel->model->get();
     DynamicJsonDocument data(1024);
+    data["writeOps"] = writeOps;
     data["index"] = index;
     data["isActive"] = newChannelSchema.channels[index].isActive;
 
@@ -176,13 +177,14 @@ public:
 
     channelSchema.channels[index].isActive = false;
     context->channel->core->checkAndActivateControl(channelSchema.channels[index], index);
-    context->channel->model->save(channelSchema);
+    int writeOps = context->channel->model->save(channelSchema);
     delay(10);
 
     ChannelSchema newChannelSchema = context->channel->model->get();
     ChannelSchema::Channel channel = newChannelSchema.channels[index];
 
     DynamicJsonDocument data(1024);
+    data["writeOps"] = writeOps;
     data["index"] = index;
     data["isActive"] = channel.isActive;
     JsonObject control = data.createNestedObject("control");

@@ -119,7 +119,7 @@ void CombineResolvers::CombineQuery() {
   queryMap[criteria->getName()] = criteria;
 
   auto *range = new query_range;
-  queryMap[criteria->getName()] = range;
+  queryMap[range->getName()] = range;
 
   auto *timer = new query_timer;
   queryMap[timer->getName()] = timer;
