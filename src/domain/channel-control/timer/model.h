@@ -6,9 +6,15 @@
 struct TimerSchema {
   struct Timer {
     uint8_t size = 2;
-    uint16_t data[10][2] = {{6 * HOUR_IN_MINUTE, 12 * HOUR_IN_MINUTE}, {13 * HOUR_IN_MINUTE, 18 * HOUR_IN_MINUTE}};
+    struct TimePair {
+      uint16_t start;
+      uint16_t stop;
+    } timePair[10] = {
+        {.start = 6 * HOUR_IN_MINUTE, .stop = 12 * HOUR_IN_MINUTE},
+        {.start = 13 * HOUR_IN_MINUTE, .stop = 18 * HOUR_IN_MINUTE}
+    };
   } timers[8];
-}; // total size: 336
+};
 
 class TimerModel : public RomModel<TimerSchema> {
 public:
