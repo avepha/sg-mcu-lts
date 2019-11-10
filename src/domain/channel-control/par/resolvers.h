@@ -76,6 +76,7 @@ public:
     int index = reqData["index"];
     ParSchema schema = context->par->model->get();
     DynamicJsonDocument data(128);
+    data["index"] = index;
     data["par"]["parSumInJK"] = schema.pars[index].parSumInKJ;
     data["par"]["timing"]["working"] = schema.pars[index].timing.workingTimeInSecond;
 
