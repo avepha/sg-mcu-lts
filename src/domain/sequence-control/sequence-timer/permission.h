@@ -23,6 +23,29 @@ public:
       InvalidInputError err("timers field must not be an empty array");
       throw err;
     }
+
+    JsonArray timers = reqData["timers"];
+    for (int i = 0; i < timers.size(); i++) {
+      if (timers[i]["start"].isNull()) {
+        InvalidInputError err("timers.start must not be null");
+        throw err;
+      }
+
+      if (!timers[i]["start"].is<int>()) {
+        InvalidInputError err("timers.start must not be a number");
+        throw err;
+      }
+
+      if (timers[i]["stop"].isNull()) {
+        InvalidInputError err("timers.stop must not be null");
+        throw err;
+      }
+
+      if (!timers[i]["stop"].is<int>()) {
+        InvalidInputError err("timers.stop must not be a number");
+        throw err;
+      }
+    }
   }
 };
 

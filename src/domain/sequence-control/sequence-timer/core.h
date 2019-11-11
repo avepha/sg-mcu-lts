@@ -55,10 +55,10 @@ public:
 
     for (int i = 0; i < timer.size; i++) {
       state.isReachThreshold =
-          state.currentTimeInSecond >= timer.data[i][0] * 60 && state.currentTimeInSecond <= timer.data[i][1] * 60;
+          state.currentTimeInSecond >= timer.timePair[i].start * 60 && state.currentTimeInSecond <= timer.timePair[i].stop * 60;
       if (state.isReachThreshold) {
-        state.currentIntervalTimerInSeconds[0] = timer.data[i][0] * 60; // start time
-        state.currentIntervalTimerInSeconds[1] = timer.data[i][1] * 60; // stop time
+        state.currentIntervalTimerInSeconds[0] = timer.timePair[i].start * 60; // start time
+        state.currentIntervalTimerInSeconds[1] = timer.timePair[i].stop * 60; // stop time
 
         if (!gpioChain->isEnabled())
           gpioChain->enable();
@@ -66,9 +66,9 @@ public:
       }
 
       // if isReachThreshold = false, store next coming timer in state.nextIntervalTimerInSeconds
-      if (state.currentTimeInSecond < timer.data[i][0] * 60) {
-        state.nextIntervalTimerInSeconds[0] = timer.data[i][0] * 60; // start time
-        state.nextIntervalTimerInSeconds[1] = timer.data[i][1] * 60; // stop time
+      if (state.currentTimeInSecond < timer.timePair[i].start * 60) {
+        state.nextIntervalTimerInSeconds[0] = timer.timePair[i].start * 60; // start time
+        state.nextIntervalTimerInSeconds[1] = timer.timePair[i].stop * 60; // stop time
       }
 
       if (!gpioChain->isEnabled())

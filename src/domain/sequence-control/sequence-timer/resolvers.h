@@ -18,8 +18,8 @@ public:
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceTimerSchema schema = context->sequenceTimer->model->get();
     for (int i = 0 ; i < reqData["timers"].size(); i++) {
-      schema.timer.data[i][0] = reqData["timers"][i][0];
-      schema.timer.data[i][1] = reqData["timers"][i][1];
+      schema.timer.timePair[i].start = reqData["timers"][i]["start"];
+      schema.timer.timePair[i].stop = reqData["timers"][i]["stop"];
     }
     schema.timer.size = reqData["timers"].size();
 
@@ -29,10 +29,10 @@ public:
     DynamicJsonDocument data(1024);
     data["writeOps"] = writeOps;
     JsonArray timers = data.createNestedArray("timers");
-    for (int i = 0 ; i < newSchema.timer.size; i++) {
-      JsonArray jarr = timers.createNestedArray();
-      jarr.add(newSchema.timer.data[i][0]);
-      jarr.add(newSchema.timer.data[i][1]);
+    for (int i = 0; i < newSchema.timer.size; i++) {
+      JsonObject jo = timers.createNestedObject();
+      jo["start"] = newSchema.timer.timePair[i].start;
+      jo["stop"] = newSchema.timer.timePair[i].stop;
     }
 
     return data;
@@ -49,10 +49,10 @@ public:
 
     DynamicJsonDocument data(1024);
     JsonArray timers = data.createNestedArray("timers");
-    for (int i = 0 ; i < schema.timer.size; i++) {
-      JsonArray jarr = timers.createNestedArray();
-      jarr.add(schema.timer.data[i][0]);
-      jarr.add(schema.timer.data[i][1]);
+    for (int i = 0; i < schema.timer.size; i++) {
+      JsonObject jo = timers.createNestedObject();
+      jo["start"] = schema.timer.timePair[i].start;
+      jo["stop"] = schema.timer.timePair[i].stop;
     }
 
     return data;
