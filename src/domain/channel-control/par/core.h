@@ -17,12 +17,14 @@ public:
   float sensorValue = 0;
   float currentParSumInKJ = 0;
   float parSumInKJ = 0;
+  bool isReachThreshold = false;
   PAR_STATE_ENUM parState = PAR_STATE_ACCUMULATING;
   uint32_t currentWorkingTimeInSecond = 0;
 
   JsonDocument report() override {
     DynamicJsonDocument data(128);
     data["type"] = "par";
+    data["isReachThreshold"] = isReachThreshold;
     data["sensorValue"] = sensorValue;
     data["currentParSumInKJ"] = currentParSumInKJ;
     data["parSumInKJ"] = parSumInKJ;
@@ -59,7 +61,8 @@ public:
     switch (state.parState) {
       case ParState::PAR_STATE_ACCUMULATING: {
         state.currentParSumInKJ += (state.sensorValue / 1000);
-        if (state.currentParSumInKJ >= par.parSumInKJ) {
+        state.isReachThreshold = state.currentParSumInKJ >= par.parSumInKJ;
+        if (state.isReachThreshold) {
           gpioTask = gpioCore->createGpioTaskTimeout(taskName, channel, par.timing.workingTimeInSecond * 1000);
 
           state.currentParSumInKJ = 0;

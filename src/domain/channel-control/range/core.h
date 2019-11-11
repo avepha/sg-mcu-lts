@@ -21,14 +21,15 @@ public:
   unsigned long currentWorkingTimeInSecond = 0;
 
   JsonDocument report() override {
-    DynamicJsonDocument data(64);
+    DynamicJsonDocument data(128);
     data["type"] = "range";
     data["sensorValue"] = sensorValue;
     data["isReachThreshold"] = isReachThreshold;
     if (isTimingEnable) {
-      data["rangeState"] = (rangeState == RANGE_STATE_WAITING) ? "waiting" : "working";
-      data["currentWaitingTimeInSecond"] = currentWaitingTimeInSecond;
-      data["currentWorkingTimeInSecond"] = currentWorkingTimeInSecond;
+      JsonObject timing = data.createNestedObject("timing");
+      timing["rangeState"] = (rangeState == RANGE_STATE_WAITING) ? "waiting" : "working";
+      timing["currentWaitingTimeInSecond"] = currentWaitingTimeInSecond;
+      timing["currentWorkingTimeInSecond"] = currentWorkingTimeInSecond;
     }
     return data;
   }

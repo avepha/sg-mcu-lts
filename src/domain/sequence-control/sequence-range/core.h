@@ -27,9 +27,10 @@ public:
     data["sensorValue"] = sensorValue;
     data["isReachThreshold"] = isReachThreshold;
     if (isTimingEnable) {
-      data["rangeState"] = (rangeState == RANGE_STATE_WAITING) ? "waiting" : "working";
-      data["currentWaitingTimeInSecond"] = currentWaitingTimeInSecond;
-      data["currentWorkingTimeInSecond"] = currentWorkingTimeInSecond;
+      JsonObject timing = data.createNestedObject("timing");
+      timing["rangeState"] = (rangeState == RANGE_STATE_WAITING) ? "waiting" : "working";
+      timing["currentWaitingTimeInSecond"] = currentWaitingTimeInSecond;
+      timing["currentWorkingTimeInSecond"] = currentWorkingTimeInSecond;
     }
     return data;
   }

@@ -51,11 +51,11 @@ public:
     SequenceControl *sequenceControl = context->sequence->core->getControl();
     SEQUENCE_CONTROL_TYPE_ENUM type = sequenceControl->getType();
     DynamicJsonDocument data(1024);
-    JsonArray chainOfControlAndPreconditions = data.createNestedArray("states");
+    JsonArray chainOfPreconditions = data.createNestedArray("preconditions");
     switch (type) {
       case SEQ_CTRL_TIMER: {
         auto *ctrlCore = (SequenceTimerCore *) (sequenceControl);
-        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
+        data["control"] = ctrlCore->getControlState().report();
         break;
       }
       case SEQ_CTRL_CRITERIA: {
@@ -63,18 +63,18 @@ public:
         for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
           if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
             auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
-            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
           }
           else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_TIMER) {
             auto *precCoreAtN = (PrecTimerCore *) (ctrlCore->getPreconditionAt(i));
-            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
           }
           else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_RANGE) {
             auto *precCoreAtN = (PrecRangeCore *) (ctrlCore->getPreconditionAt(i));
-            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
           }
         }
-        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
+        data["control"] = ctrlCore->getControlState().report();
         break;
       }
       case SEQ_CTRL_RANGE: {
@@ -82,18 +82,18 @@ public:
         for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
           if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
             auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
-            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
           }
           else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_TIMER) {
             auto *precCoreAtN = (PrecTimerCore *) (ctrlCore->getPreconditionAt(i));
-            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
           }
           else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_RANGE) {
             auto *precCoreAtN = (PrecRangeCore *) (ctrlCore->getPreconditionAt(i));
-            chainOfControlAndPreconditions.add(precCoreAtN->getPreconditionState().report());
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
           }
         }
-        chainOfControlAndPreconditions.add(ctrlCore->getControlState().report());
+        data["control"] = ctrlCore->getControlState().report();
         break;
       }
       default: {
