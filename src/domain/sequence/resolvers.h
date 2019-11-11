@@ -43,7 +43,6 @@ public:
   }
 };
 
-//TODO: complete this
 class query_sequence_state : public Query {
 public:
   explicit query_sequence_state() : Query("sequence_state", new permission_sequence_state()) {};
@@ -154,7 +153,7 @@ public:
 
     schema.sequence.isActive = false;
     context->sequence->core->deactivateControls();
-    context->sequence->model->save(schema);
+    int writeOps = context->sequence->model->save(schema);
     delay(10);
 
     SequenceSchema newSchema = context->sequence->model->get();
@@ -162,6 +161,7 @@ public:
 
     DynamicJsonDocument data(1024);
     data["isActive"] = sequence.isActive;
+    data["writeOps"] = writeOps;
     JsonObject control = data.createNestedObject("control");
     control["type"] = SequenceControlEnumToString(sequence.control.type);
     JsonArray channelOrderAndTiming = control.createNestedArray("channelOrderAndTiming");

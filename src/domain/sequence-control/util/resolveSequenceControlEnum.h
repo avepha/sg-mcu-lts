@@ -6,24 +6,24 @@
 String SequenceControlEnumToString(SEQUENCE_CONTROL_TYPE_ENUM ctrlEnum) {
   switch (ctrlEnum) {
     case SEQ_CTRL_TIMER:
-      return "sequence-timer";
+      return "sequence_timer";
     case SEQ_CTRL_CRITERIA:
-      return "sequence-criteria";
+      return "sequence_criteria";
     case SEQ_CTRL_RANGE:
-      return "sequence-range";
+      return "sequence_range";
     default:
       return "none";
   }
 }
 
 SEQUENCE_CONTROL_TYPE_ENUM SequenceControlStringToEnum(const String& ctrlString) {
-  if (ctrlString == "sequence-timer") {
+  if (ctrlString == "sequence_timer") {
     return SEQ_CTRL_TIMER;
   }
-  else if (ctrlString == "sequence-criteria") {
+  else if (ctrlString == "sequence_criteria") {
     return SEQ_CTRL_CRITERIA;
   }
-  else if (ctrlString == "sequence-range") {
+  else if (ctrlString == "sequence_range") {
     return SEQ_CTRL_RANGE;
   }
   else if (ctrlString == "none"){

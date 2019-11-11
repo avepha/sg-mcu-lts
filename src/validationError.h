@@ -83,11 +83,11 @@ public: explicit InactiveControlError(String message = "Control is inactive") : 
 };
 
 class InactiveChannelControlError: public ValidationError {
-public: explicit InactiveChannelControlError(String message = "Channel control is inactive") : ValidationError("inactive-channel-control", message) {};
+public: explicit InactiveChannelControlError(String message = "Current control type is not Channel") : ValidationError("inactive-channel-control", message) {};
 };
 
 class InactiveSequenceControlError: public ValidationError {
-public: explicit InactiveSequenceControlError(String message = "Sequence control is inactive") : ValidationError("inactive-sequence-control", message) {};
+public: explicit InactiveSequenceControlError(String message = "Current control type is not Sequence") : ValidationError("inactive-sequence-control", message) {};
 };
 
 class NoControlStateError: public ValidationError {
