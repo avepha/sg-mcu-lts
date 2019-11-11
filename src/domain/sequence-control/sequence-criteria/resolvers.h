@@ -37,11 +37,11 @@ public:
 
     DynamicJsonDocument data(256);
     data["writeOps"] = writeOps;
-    data["sensor"] = newSchema.criteria.sensor;
-    data["criteria"] = newSchema.criteria.criteria;
-    data["greater"] = newSchema.criteria.greater;
-
-    JsonObject timing = data.createNestedObject("timing");
+    JsonObject _criteria = data.createNestedObject("criteria");
+    _criteria["sensor"] = newSchema.criteria.sensor;
+    _criteria["criteria"] = newSchema.criteria.criteria;
+    _criteria["greater"] = newSchema.criteria.greater;
+    JsonObject timing = _criteria.createNestedObject("timing");
     timing["enable"] = newSchema.criteria.timing.enable;
     timing["waiting"] = newSchema.criteria.timing.waitingTimeInSecond;
 

@@ -53,10 +53,6 @@ public:
     }
 
     if (!criteria["timing"].isNull()) {
-      if (criteria["timing"]["working"].isNull()) {
-        InvalidInputError err("timing.working is not specified");
-        throw err;
-      }
       if (criteria["timing"]["waiting"].isNull()) {
         InvalidInputError err("timing.waiting is not specified");
         throw err;
