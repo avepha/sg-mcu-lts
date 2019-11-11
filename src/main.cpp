@@ -1,4 +1,4 @@
-#define SG_TEST
+//#define SG_TEST
 #define _TASK_OO_CALLBACKS
 #define _TASK_PRIORITY
 #define _TASK_TIMEOUT
@@ -10,7 +10,7 @@
 #include <TaskScheduler.h>
 #include <ArduinoJson.h>
 
-#define VERSION "1.1.0"
+#define VERSION "1.1.1"
 #define PROJECT "SMART-FARM"
 #define UPLOADDATE String(__DATE__) + " " + String(__TIME__)
 #define COMCORE 0
