@@ -16,8 +16,8 @@ void DeviceEndpoint::unleash(String message) {
 }
 
 bool DeviceEndpoint::embrace(String *message) {
-  while (!entryPoint->available()) {
-    delay(5);
+  if (!entryPoint->available()) {
+    delay(1);
     return false;
   }
 

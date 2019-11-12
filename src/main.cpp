@@ -80,8 +80,16 @@ void loop1(void *pvParameters) {
         InvalidJsonFormatError err;
         responseJson = err.toJson();
       }
-      else if (requestJson["topic"].isNull() || requestJson["method"].isNull()) {
-        InvalidRequestFormatError err;
+      else if (requestJson["topic"].isNull()) {
+        InvalidRequestFormatError err("Topic must not be null");
+        responseJson = err.toJson();
+      }
+      else if (requestJson["method"].isNull()) {
+        InvalidRequestFormatError err("Method must not be null");
+        responseJson = err.toJson();
+      }
+      else if (requestJson["reqId"].isNull()) {
+        InvalidRequestFormatError err("reqId must not be null");
         responseJson = err.toJson();
       }
       else {
@@ -100,11 +108,12 @@ void loop1(void *pvParameters) {
         serialEndpoint->unleash(responseString);
       }
 
-      DynamicJsonDocument memory(64);
+      // for memory profiling
+      /*DynamicJsonDocument memory(64);
       memory["freeHeap"] = String(xPortGetFreeHeapSize());
       String heapString;
       serializeJson(memory, heapString);
-      Serial.println(heapString);
+      Serial.println(heapString); */
     }
 
     byte bSensors[64];
