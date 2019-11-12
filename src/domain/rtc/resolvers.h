@@ -70,11 +70,12 @@ public:
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DateTime dateTime;
-    if (!reqData["local"].isNull()) {
-      dateTime = context->rtc->core->getDate();
+    if (reqData["local"].isNull()) {
+      dateTime = context->rtc->core->getUtcDate();
     }
     else {
-      dateTime = context->rtc->core->getUtcDate();
+      if (reqData["local"]) dateTime = context->rtc->core->getDate();
+      else dateTime = context->rtc->core->getUtcDate();
     }
 
     DynamicJsonDocument data(64);

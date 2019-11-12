@@ -27,6 +27,7 @@ bool DeviceEndpoint::embrace(String *message) {
   {
     if (entryPoint->read() == '{') {
       raw[readIndex++] = '{';
+      int loop = 0;
       while(true) {
         if (entryPoint->available()) {
           char ch = (char)entryPoint->read();
@@ -38,6 +39,12 @@ bool DeviceEndpoint::embrace(String *message) {
           else {
             raw[readIndex++] = ch;
           }
+        }
+        else {
+          // ensure this process can not hold resource more than 50ms
+          loop++;
+          delay(1);
+          if (loop >= 50) return false; // timeout
         }
       }
     }

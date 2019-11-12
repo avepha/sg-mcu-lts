@@ -1,4 +1,4 @@
 {
-  "topic": "gpio_task",
+  "topic": "gpio_state",
   "method": "query"
 }

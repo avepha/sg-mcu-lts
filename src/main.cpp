@@ -44,8 +44,8 @@ void loop1(void *pvParameters);
 
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
-  Serial.begin(115200);
-  entryPort.begin(115200, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
+  Serial.begin(345600);
+  entryPort.begin(345600, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   sensorPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
 
   controlScheduler.setHighPriorityScheduler(&gpioScheduler);
@@ -99,6 +99,12 @@ void loop1(void *pvParameters) {
       if (isEndpointDataComing) {
         serialEndpoint->unleash(responseString);
       }
+
+      DynamicJsonDocument memory(64);
+      memory["freeHeap"] = String(xPortGetFreeHeapSize());
+      String heapString;
+      serializeJson(memory, heapString);
+      Serial.println(heapString);
     }
 
     byte bSensors[64];
