@@ -10,7 +10,7 @@ struct SequenceSchema {
     bool isActive = false;
 
     struct Control {
-      SEQUENCE_CONTROL_TYPE_ENUM type = SEQ_CTRL_NONE;
+      SEQUENCE_CONTROL_TYPE_ENUM type = SEQ_CTRL_CRITERIA;
       uint8_t channelOrderAndTimingSize = 3;
       struct channelOrderAndTiming {
         uint8_t channel;
