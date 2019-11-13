@@ -16,8 +16,11 @@ const int CHANNEL_GPIO_MAP[8] = {
     29, //ch 8
 };
 
-const int SG_MPU_RX = 18;
-const int SG_MPU_TX = 19;
+//const int SG_MPU_RX = 18;
+//const int SG_MPU_TX = 19;
+
+const int SG_MPU_RX = 19;
+const int SG_MPU_TX = 18;
 
 const int SG_SENSOR_RX = 16;
 const int SG_SENSOR_TX = 17;
