@@ -6,14 +6,14 @@
 #define SG_MCU_CONFIG_H
 
 const int CHANNEL_GPIO_MAP[8] = {
-    22, //ch 1
-    23, //ch 2
-    24, //ch 3
-    25, //ch 4
-    26, //ch 5
-    27, //ch 6
-    28, //ch 7
-    29, //ch 8
+    32, //ch 1
+    33, //ch 2
+    25, //ch 3
+    26, //ch 4
+    27, //ch 5
+    14, //ch 6
+    12, //ch 7
+    13, //ch 8
 };
 
 //const int SG_MPU_RX = 18;
