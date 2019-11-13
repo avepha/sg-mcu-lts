@@ -48,7 +48,7 @@ public:
     state.parSumInKJ = par.parSumInKJ;
   }
 
-  ~ParCore() override = default;
+  ~ParCore() = default;
 
   ParState getControlState() {
     return state;

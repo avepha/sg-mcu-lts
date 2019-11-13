@@ -46,7 +46,7 @@ public:
     timeStamp = millis();
   }
 
-  ~RangeCore() override = default;
+  ~RangeCore() = default;
 
   RangeState getControlState() {
     return state;

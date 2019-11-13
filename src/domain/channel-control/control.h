@@ -20,7 +20,7 @@ public:
         gpioCore = GpioCore::instance();
       }
 
-  ~Control() override {
+  ~Control() {
     for (int i = 0; i < precSize; i++) {
       delete preconditions[i];
     }

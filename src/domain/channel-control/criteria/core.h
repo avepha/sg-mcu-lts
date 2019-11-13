@@ -47,7 +47,7 @@ public:
     timeStamp = millis();
   }
 
-  ~CriteriaCore() override = default;
+  ~CriteriaCore() = default;
 
   CriteriaState getControlState() {
     return state;
