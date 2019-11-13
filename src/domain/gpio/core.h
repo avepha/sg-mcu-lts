@@ -58,7 +58,9 @@ void GpioCore::selfDestructGpioTask(GpioTask *gpioTask) {
     gpioTaskMap.erase(taskName);
   }
 
-  delete gpioTask; // [-Wdelete-non-virtual-dtor] occur
+  if (gpioTask) {
+    delete gpioTask; // [-Wdelete-non-virtual-dtor] occur
+  }
 }
 
 GpioCore *GpioCore::instance() {
@@ -85,6 +87,7 @@ GpioTask* GpioCore::createGpioTaskTimeout(const std::string& name, uint8_t chann
 }
 
 GpioTask* GpioCore::createGpioTaskForever(const std::string &name, uint8_t channel) {
+  Serial.println("Create Task: " + String(name.c_str()));
   if (gpioTaskMap.find(name) != gpioTaskMap.end()) {
     return nullptr;
   }
@@ -96,6 +99,7 @@ GpioTask* GpioCore::createGpioTaskForever(const std::string &name, uint8_t chann
 }
 
 bool GpioCore::removeGpioTaskByName(const std::string& name) {
+  Serial.println("Remove Task: " + String(name.c_str()));
   if (gpioTaskMap.find(name) == gpioTaskMap.end()) {
     return false;
   }
@@ -105,6 +109,11 @@ bool GpioCore::removeGpioTaskByName(const std::string& name) {
 }
 
 bool GpioCore::removeGpioTaskByChannel(uint8_t channel) {
+  Serial.println("Remove Channel: " + String(channel));
+  if (gpioTaskMap.size() <= 0) {
+    return false;
+  }
+
   for (std::pair<std::string, GpioTask*> task: gpioTaskMap) {
     if (channel == task.second->getChannel()) {
       selfDestructGpioTask(gpioTaskMap[task.first]);

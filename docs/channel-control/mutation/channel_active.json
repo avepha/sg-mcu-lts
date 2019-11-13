@@ -4,5 +4,6 @@
   "data": {
     "index": 1,
     "isActive": true
-  }
+  },
+  "reqId": "req-1"
 }

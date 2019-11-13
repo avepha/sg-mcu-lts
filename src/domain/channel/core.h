@@ -42,12 +42,13 @@ public:
     }
 
     if (channelData.control.type == CH_CTRL_MANUAL) {
+      std::string manualTaskName = String("manual-" + String(channel)).c_str();
       switch (channelData.control.value) {
         case 1:
-          gpioCore->createGpioTaskForever("manual-1", channel);
+          gpioCore->createGpioTaskForever(manualTaskName, channel);
           break;
         default:
-          gpioCore->removeGpioTaskByName("manual-1");
+          gpioCore->removeGpioTaskByName(manualTaskName);
           break;
       }
 

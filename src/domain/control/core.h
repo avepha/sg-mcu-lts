@@ -35,6 +35,7 @@ private:
   ChannelCore *channelCore;
   SequenceCore *sequenceCore;
   CONTROL_ENUM type = CTRL_NONE;
+
   void activateControl(CONTROL_ENUM _type) {
     type = _type;
     channelCore->deactivateControls();
@@ -42,15 +43,20 @@ private:
 
     switch (_type) {
       case CTRL_CHANNEL: {
+        Serial.println("Init CTRL_CHANNEL");
         channelCore->activateControls();
+        return;
       }
       case CTRL_SEQUENCE: {
+        Serial.println("Init CTRL_SEQUENCE");
         sequenceCore->activateControls();
+        return;
       }
       default: {
-
+        return;
       }
     }
   }
 };
+
 #endif //SG_MCU_CONTROL_CORE_H
