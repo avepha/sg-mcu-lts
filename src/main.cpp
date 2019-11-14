@@ -44,6 +44,9 @@ void loop1(void *pvParameters);
 
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
+  pinMode(SG_DIR_PIN, OUTPUT);
+  digitalWrite(SG_DIR_PIN, LOW);
+
   Serial.begin(345600);
   entryPort.begin(345600, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   sensorPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
