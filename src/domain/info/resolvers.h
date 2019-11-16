@@ -15,6 +15,7 @@ public:
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(128);
     data["version"] = VERSION; //TODO: fix this
+    data["model"] = SG_MODEL;
 #ifdef SG_TEST
     data["device_env"] = "test";
 #endif
