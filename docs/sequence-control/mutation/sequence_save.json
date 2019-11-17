@@ -1,41 +1,42 @@
 {
   "topic": "sequence_save",
   "method": "mutation",
+  "reqId": "req-1",
   "data": {
     "control": {
-      "type": "sequence-criteria",
+      "type": "sequence_criteria",
       "channelOrderAndTiming": [
         {
           "channel": 0,
-          "workingTimeInSec": 5
+          "working": 5
         },
         {
           "channel": 1,
-          "workingTimeInSec": 5
+          "working": 5
         },
         {
           "channel": 2,
-          "workingTimeInSec": 5
+          "working": 5
         },
         {
           "channel": 3,
-          "workingTimeInSec": 5
+          "working": 5
         },
         {
           "channel": 4,
-          "workingTimeInSec": 5
+          "working": 5
         },
         {
           "channel": 5,
-          "workingTimeInSec": 5
+          "working": 5
         },
         {
           "channel": 6,
-          "workingTimeInSec": 5
+          "working": 5
         },
         {
           "channel": 7,
-          "workingTimeInSec": 5
+          "working": 5
         }
       ]
     },

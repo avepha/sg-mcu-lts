@@ -17,11 +17,10 @@ void DeviceEndpoint::unleash(String message) {
 
 bool DeviceEndpoint::embrace(String *message) {
   if (!entryPoint->available()) {
-    delay(1);
     return false;
   }
 
-  char raw[1024];
+  char raw[2048];
   int readIndex = 0;
   while (entryPoint->available())
   {

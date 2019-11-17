@@ -110,13 +110,13 @@ void loop1(void *pvParameters) {
       if (isEndpointDataComing) {
         serialEndpoint->unleash(responseString);
       }
-
       // for memory profiling
       /*DynamicJsonDocument memory(64);
       memory["freeHeap"] = String(xPortGetFreeHeapSize());
       String heapString;
       serializeJson(memory, heapString);
       Serial.println(heapString); */
+      continue;
     }
 
     byte bSensors[64];
@@ -124,17 +124,22 @@ void loop1(void *pvParameters) {
 
     if (bSize > 0) {
       context->nsensors->core->updateNSensor(bSensors, bSize);
+      continue;
     }
     else if(bSize == -2) { //checksum error
       NSensorInvalidCheckSumError err;
       Serial.println(err.toJsonString());
       deviceEndpoint->unleash(err.toJsonString());
+      continue;
     }
     else if(bSize == -3) { //timeout
       NSensorTimeoutError err;
       Serial.println(err.toJsonString());
       deviceEndpoint->unleash(err.toJsonString());
+      continue;
     }
+
+    delay(1);
   }
 }
 

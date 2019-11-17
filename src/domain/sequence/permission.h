@@ -56,8 +56,8 @@ public:
         InvalidInputError err("channel field must be an integer.");
         throw err;
       }
-      if (channelOrderAndTiming[i]["workingTimeInSec"].isNull() || !channelOrderAndTiming[i]["workingTimeInSec"].is<int>()) {
-        InvalidInputError err("workingTimeInSec field must be an integer.");
+      if (channelOrderAndTiming[i]["working"].isNull() || !channelOrderAndTiming[i]["working"].is<int>()) {
+        InvalidInputError err("working field must be an integer.");
         throw err;
       }
     }

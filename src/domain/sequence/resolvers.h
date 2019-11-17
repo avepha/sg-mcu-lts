@@ -135,7 +135,7 @@ public:
     schema.sequence.control.type = SequenceControlStringToEnum(reqData["control"]["type"]);
     for (int i = 0; i < reqData["control"]["channelOrderAndTiming"].size(); i++) {
       schema.sequence.control.channelOrderAndTiming[i].channel = reqData["control"]["channelOrderAndTiming"][i]["channel"];
-      schema.sequence.control.channelOrderAndTiming[i].workingTimeInSec = reqData["control"]["channelOrderAndTiming"][i]["workingTimeInSec"];
+      schema.sequence.control.channelOrderAndTiming[i].workingTimeInSec = reqData["control"]["channelOrderAndTiming"][i]["working"];
     }
     schema.sequence.control.channelOrderAndTimingSize = reqData["control"]["channelOrderAndTiming"].size();
 
@@ -168,7 +168,7 @@ public:
     for (int i = 0; i < sequence.control.channelOrderAndTimingSize; i++) {
       JsonObject jo = channelOrderAndTiming.createNestedObject();
       jo["channel"] = sequence.control.channelOrderAndTiming[i].channel;
-      jo["workingTimeInSec"] = sequence.control.channelOrderAndTiming[i].workingTimeInSec;
+      jo["working"] = sequence.control.channelOrderAndTiming[i].workingTimeInSec;
     }
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");

@@ -20,7 +20,6 @@ void SensorEndpoint::unleash(String message) {
 
 int SensorEndpoint::embrace(byte *bytes) {
   while (!entryPoint->available()) {
-    delay(5);
     return -1;
   }
 
