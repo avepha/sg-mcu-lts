@@ -26,7 +26,7 @@ public:
     for (int i = 0; i < sequence.control.channelOrderAndTimingSize; i++) {
       JsonObject jo = channelOrders.createNestedObject();
       jo["channel"] = sequence.control.channelOrderAndTiming[i].channel;
-      jo["workingTimeInSec"] = sequence.control.channelOrderAndTiming[i].workingTimeInSec;
+      jo["working"] = sequence.control.channelOrderAndTiming[i].workingTimeInSec;
     }
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");
