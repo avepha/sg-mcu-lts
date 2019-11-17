@@ -50,6 +50,15 @@ void setup() {
   Serial.begin(345600);
   entryPort.begin(345600, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   sensorPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
+  
+  Serial.println();
+  Serial.println("VERSION: " + String(VERSION));
+  Serial.println("PROJECT: " + String(PROJECT));
+  Serial.println("UPLOAD_DATE: " + String(UPLOADDATE));
+  Serial.println("SG_MODEL: " + String(SG_MODEL));
+#ifdef SG_TEST
+  Serial.println("SG_MODE: TEST");
+#endif
 
   controlScheduler.setHighPriorityScheduler(&gpioScheduler);
 

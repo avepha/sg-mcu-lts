@@ -21,7 +21,7 @@ const int CHANNEL_GPIO_MAP[8] = {
 #ifdef SG_MCU_V2
 const int SG_MPU_RX = 19;
 const int SG_MPU_TX = 18;
-const String SG_MODEL = "v2"
+const String SG_MODEL = "v2";
 #endif
 
 #ifdef SG_MCU_V1
