@@ -1,0 +1,41 @@
+{
+  "topic": "sequence_order_save",
+  "method": "mutation",
+  "reqId": "req-1",
+  "data": {
+    "channelOrderAndTiming": [
+      {
+        "channel": 0,
+        "working": 5
+      },
+      {
+        "channel": 1,
+        "working": 5
+      },
+      {
+        "channel": 2,
+        "working": 5
+      },
+      {
+        "channel": 3,
+        "working": 5
+      },
+      {
+        "channel": 4,
+        "working": 5
+      },
+      {
+        "channel": 5,
+        "working": 5
+      },
+      {
+        "channel": 6,
+        "working": 5
+      },
+      {
+        "channel": 7,
+        "working": 5
+      }
+    ]
+  }
+}

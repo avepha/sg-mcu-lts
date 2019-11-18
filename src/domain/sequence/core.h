@@ -30,10 +30,10 @@ public:
     }
 
     gpioChain = new SequenceGpioChain();
-    for (int i = 0; i < sequence.control.channelOrderAndTimingSize; i++) {
+    for (int i = 0; i < sequence.channelOrderAndTimingSize; i++) {
       gpioChain->add(
-          sequence.control.channelOrderAndTiming[i].channel,
-          sequence.control.channelOrderAndTiming[i].workingTimeInSec
+          sequence.channelOrderAndTiming[i].channel,
+          sequence.channelOrderAndTiming[i].workingTimeInSec
       );
     }
 

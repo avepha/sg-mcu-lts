@@ -22,12 +22,6 @@ public:
     data["isActive"] = sequence.isActive;
     JsonObject control = data.createNestedObject("control");
     control["type"] = SequenceControlEnumToString(sequence.control.type);
-    JsonArray channelOrders = control.createNestedArray("channelOrderAndTiming");
-    for (int i = 0; i < sequence.control.channelOrderAndTimingSize; i++) {
-      JsonObject jo = channelOrders.createNestedObject();
-      jo["channel"] = sequence.control.channelOrderAndTiming[i].channel;
-      jo["working"] = sequence.control.channelOrderAndTiming[i].workingTimeInSec;
-    }
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");
     for (int i = 0; i < sizeof(sequence.preconditions) / sizeof(sequence.preconditions[0]); i++) {
@@ -133,11 +127,6 @@ public:
     SequenceSchema schema = context->sequence->model->get();
 
     schema.sequence.control.type = SequenceControlStringToEnum(reqData["control"]["type"]);
-    for (int i = 0; i < reqData["control"]["channelOrderAndTiming"].size(); i++) {
-      schema.sequence.control.channelOrderAndTiming[i].channel = reqData["control"]["channelOrderAndTiming"][i]["channel"];
-      schema.sequence.control.channelOrderAndTiming[i].workingTimeInSec = reqData["control"]["channelOrderAndTiming"][i]["working"];
-    }
-    schema.sequence.control.channelOrderAndTimingSize = reqData["control"]["channelOrderAndTiming"].size();
 
     // set precondition by providing args
     for (int i = 0; i < reqData["preconditions"].size(); i++) {
@@ -164,12 +153,6 @@ public:
     data["writeOps"] = writeOps;
     JsonObject control = data.createNestedObject("control");
     control["type"] = SequenceControlEnumToString(sequence.control.type);
-    JsonArray channelOrderAndTiming = control.createNestedArray("channelOrderAndTiming");
-    for (int i = 0; i < sequence.control.channelOrderAndTimingSize; i++) {
-      JsonObject jo = channelOrderAndTiming.createNestedObject();
-      jo["channel"] = sequence.control.channelOrderAndTiming[i].channel;
-      jo["working"] = sequence.control.channelOrderAndTiming[i].workingTimeInSec;
-    }
 
     JsonArray jarrPreconditions = data.createNestedArray("preconditions");
     for (int i = 0; i < sizeof(sequence.preconditions) / sizeof(sequence.preconditions[0]); i++) {

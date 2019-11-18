@@ -35,33 +35,6 @@ public:
       throw err;
     }
 
-    if (reqData["control"]["channelOrderAndTiming"].isNull() || !reqData["control"]["channelOrderAndTiming"].is<JsonArray>()) {
-      InvalidInputError err("channelOrderAndTiming field must be an array");
-      throw err;
-    }
-
-    if (reqData["control"]["channelOrderAndTiming"].size() > 8 ) {
-      IndexOutOfBoundError err("channelOrderAndTiming index out of bound");
-      throw err;
-    }
-
-    if (reqData["control"]["channelOrderAndTiming"].size() == 0 ) {
-      InvalidInputError err("channelOrderAndTiming field must not be empty array");
-      throw err;
-    }
-
-    JsonArray channelOrderAndTiming = reqData["control"]["channelOrderAndTiming"];
-    for (int i = 0 ; i < channelOrderAndTiming.size(); i++) {
-      if (channelOrderAndTiming[i]["channel"].isNull() || !channelOrderAndTiming[i]["channel"].is<int>()) {
-        InvalidInputError err("channel field must be an integer.");
-        throw err;
-      }
-      if (channelOrderAndTiming[i]["working"].isNull() || !channelOrderAndTiming[i]["working"].is<int>()) {
-        InvalidInputError err("working field must be an integer.");
-        throw err;
-      }
-    }
-
     if (reqData["preconditions"].isNull() || !reqData["preconditions"].is<JsonArray>()) {
       InvalidInputError err("preconditions field must be an array.");
       throw err;
@@ -86,6 +59,40 @@ public:
 
       if (PreconditionStringToEnum(jo["type"]) == PREC_UNKNOWN) {
         InvalidInputError err("Unknown Precondition");
+        throw err;
+      }
+    }
+  }
+};
+
+class permission_sequence_order_save : public Permission {
+public:
+  explicit permission_sequence_order_save() : Permission() {};
+
+  void resolve(JsonObject reqData, CombineContext *context) override {
+    if (reqData["channelOrderAndTiming"].isNull() || !reqData["channelOrderAndTiming"].is<JsonArray>()) {
+      InvalidInputError err("channelOrderAndTiming field must be an array");
+      throw err;
+    }
+
+    if (reqData["channelOrderAndTiming"].size() > 8 ) {
+      IndexOutOfBoundError err("channelOrderAndTiming index out of bound");
+      throw err;
+    }
+
+    if (reqData["channelOrderAndTiming"].size() == 0 ) {
+      InvalidInputError err("channelOrderAndTiming field must not be empty array");
+      throw err;
+    }
+
+    JsonArray channelOrderAndTiming = reqData["channelOrderAndTiming"];
+    for (int i = 0 ; i < channelOrderAndTiming.size(); i++) {
+      if (channelOrderAndTiming[i]["channel"].isNull() || !channelOrderAndTiming[i]["channel"].is<int>()) {
+        InvalidInputError err("channel field must be an integer.");
+        throw err;
+      }
+      if (channelOrderAndTiming[i]["working"].isNull() || !channelOrderAndTiming[i]["working"].is<int>()) {
+        InvalidInputError err("working field must be an integer.");
         throw err;
       }
     }

@@ -4,41 +4,7 @@
   "reqId": "req-1",
   "data": {
     "control": {
-      "type": "sequence_criteria",
-      "channelOrderAndTiming": [
-        {
-          "channel": 0,
-          "working": 5
-        },
-        {
-          "channel": 1,
-          "working": 5
-        },
-        {
-          "channel": 2,
-          "working": 5
-        },
-        {
-          "channel": 3,
-          "working": 5
-        },
-        {
-          "channel": 4,
-          "working": 5
-        },
-        {
-          "channel": 5,
-          "working": 5
-        },
-        {
-          "channel": 6,
-          "working": 5
-        },
-        {
-          "channel": 7,
-          "working": 5
-        }
-      ]
+      "type": "sequence_criteria"
     },
     "preconditions": [
       {

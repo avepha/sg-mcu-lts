@@ -8,23 +8,23 @@
 struct SequenceSchema {
   struct Sequence {
     bool isActive = false;
+    uint8_t channelOrderAndTimingSize = 3;
+    struct channelOrderAndTiming {
+      uint8_t channel;
+      uint32_t workingTimeInSec;
+    } channelOrderAndTiming[8] = {
+        {0, 5},
+        {1, 5},
+        {2, 5},
+        {3, 5},
+        {4, 5},
+        {5, 5},
+        {6, 5},
+        {7, 5}
+    };
 
     struct Control {
       SEQUENCE_CONTROL_TYPE_ENUM type = SEQ_CTRL_CRITERIA;
-      uint8_t channelOrderAndTimingSize = 3;
-      struct channelOrderAndTiming {
-        uint8_t channel;
-        uint32_t workingTimeInSec;
-      } channelOrderAndTiming[8] = {
-          {0, 5},
-          {1, 5},
-          {2, 5},
-          {3, 5},
-          {4, 5},
-          {5, 5},
-          {6, 5},
-          {7, 5}
-      };
     } control;
 
     struct Precondition {
