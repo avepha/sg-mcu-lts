@@ -1,6 +1,7 @@
 {
   "topic": "sequence_activate",
   "method": "mutation",
+  "reqId": "req-1",
   "data": {
     "isActive": true
   }

@@ -1,12 +1,13 @@
 {
   "topic": "sequence_timer_save",
   "method": "mutation",
+  "reqId": "req-1",
   "data": {
     "timers": [
-      [
-        1,
-        1440
-      ]
+      {
+        "start": 0,
+        "stop": 1440
+      }
     ]
   }
 }

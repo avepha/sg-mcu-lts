@@ -1,6 +1,7 @@
 {
   "topic": "date",
   "method": "query",
+  "reqId": "req-1",
   "data": {
     "local": true
   }

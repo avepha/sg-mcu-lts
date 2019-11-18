@@ -161,7 +161,6 @@ public:
     schema.sequence.isActive = false;
     context->sequence->core->deactivateControls();
     int writeOps = context->sequence->model->save(schema);
-    delay(10);
 
     SequenceSchema newSchema = context->sequence->model->get();
     SequenceSchema::Sequence sequence = newSchema.sequence;
@@ -213,6 +212,5 @@ public:
     return data;
   }
 };
-
 
 #endif //SG_MCU_SEQUENCE_RESOLVERS_H
