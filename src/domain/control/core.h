@@ -43,12 +43,12 @@ private:
 
     switch (_type) {
       case CTRL_CHANNEL: {
-        Serial.println("Init CTRL_CHANNEL");
+        Debug::Print("CTRL-CHANNEL started");
         channelCore->activateControls();
         return;
       }
       case CTRL_SEQUENCE: {
-        Serial.println("Init CTRL_SEQUENCE");
+        Serial.println("CTRL-SEQUENCE started");
         sequenceCore->activateControls();
         return;
       }

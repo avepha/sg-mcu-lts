@@ -56,14 +56,18 @@ public:
 
   void deactivateControls() {
     if (sequenceControl != nullptr) {
-      sequenceControl->disable();
-      delete sequenceControl;
+      Debug::Print("sequenceControl disable");
+      sequenceControl->setTimeout(10); //
+      Debug::Print("sequenceControl delete");
+//      delete sequenceControl;
       sequenceControl = nullptr;
     }
 
     if (gpioChain != nullptr) {
-      gpioChain->disable();
-      delete gpioChain;
+      Debug::Print("gpioChain disable");
+      gpioChain->setTimeout(10);
+      Debug::Print("gpioChain delete");
+//      delete gpioChain;
       gpioChain = nullptr;
     }
   }
@@ -78,7 +82,7 @@ private:
 
   static SequenceCore *s_instance;
   SequenceControl *sequenceControl = nullptr;
-  GpioCore *gpioCore;
+  GpioCore *gpioCore = nullptr;
   SequenceGpioChain *gpioChain = nullptr;
 };
 

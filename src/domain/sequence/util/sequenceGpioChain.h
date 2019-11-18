@@ -1,6 +1,7 @@
 #include <stack>
 #include <TaskScheduler.h>
 #include "domain/gpio/util/gpioTask.h"
+#include "util/debug.h"
 
 #ifndef SG_MCU_SEQUENCE_GPIO_CHAIN_H
 #define SG_MCU_SEQUENCE_GPIO_CHAIN_H
@@ -32,17 +33,17 @@ public:
   }
 
   bool Callback() override {
+    Debug::Print("gpio-chain" + String(currentChannelIndex));
     currentTimeInSecond = (millis() - timestamp) / 1000;
     if (currentTimeInSecond < channelAndTimeouts[currentChannelIndex].timeoutInSecond) {
+      return true;
+    }
+
+    if (currentChannelIndex + 1 >= channelAndTimeouts.size()) {
       return false;
     }
 
     currentChannelIndex++;
-
-    if (currentChannelIndex >= channelAndTimeouts.size()) {
-      disable();
-      return false;
-    }
 
     timestamp = millis();
     runGpioTask(channelAndTimeouts[currentChannelIndex]);
