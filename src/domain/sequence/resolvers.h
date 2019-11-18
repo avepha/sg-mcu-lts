@@ -37,6 +37,24 @@ public:
   }
 };
 
+class query_sequence_order : public Query {
+public:
+  explicit query_sequence_order() : Query("sequence_order") {};
+
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    SequenceSchema schema = context->sequence->model->get();
+    DynamicJsonDocument data(1024);
+    JsonArray channelOrderAndTiming = data.createNestedArray("channelOrderAndTiming");
+    for (int i = 0 ; i < schema.sequence.channelOrderAndTimingSize; i++) {
+      JsonObject jo = channelOrderAndTiming.createNestedObject();
+      jo["working"] = schema.sequence.channelOrderAndTiming[i].workingTimeInSec;
+      jo["channel"] = schema.sequence.channelOrderAndTiming[i].channel;
+    }
+
+    return data;
+  }
+};
+
 class query_sequence_state : public Query {
 public:
   explicit query_sequence_state() : Query("sequence_state", new permission_sequence_state()) {};
@@ -166,5 +184,35 @@ public:
     return data;
   }
 };
+
+class mutation_sequence_order_save : public Mutation {
+public:
+  explicit mutation_sequence_order_save() : Mutation("sequence_order_save", new permission_sequence_order_save()) {};
+
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    SequenceSchema schema = context->sequence->model->get();
+    schema.sequence.control.type = SequenceControlStringToEnum(reqData["control"]["type"]);
+    for (int i = 0; i < reqData["channelOrderAndTiming"].size(); i++) {
+      schema.sequence.channelOrderAndTiming[i].channel = reqData["channelOrderAndTiming"][i]["channel"];
+      schema.sequence.channelOrderAndTiming[i].workingTimeInSec = reqData["channelOrderAndTiming"][i]["working"];
+    }
+    schema.sequence.channelOrderAndTimingSize = reqData["channelOrderAndTiming"].size();
+
+    int writeOps = context->sequence->model->save(schema);
+
+    SequenceSchema newSchema = context->sequence->model->get();
+    DynamicJsonDocument data(1024);
+    data["writeOps"] = writeOps;
+    JsonArray channelOrderAndTiming = data.createNestedArray("channelOrderAndTiming");
+    for (int i = 0 ; i < newSchema.sequence.channelOrderAndTimingSize; i++) {
+      JsonObject jo = channelOrderAndTiming.createNestedObject();
+      jo["working"] = newSchema.sequence.channelOrderAndTiming[i].workingTimeInSec;
+      jo["channel"] = newSchema.sequence.channelOrderAndTiming[i].channel;
+    }
+
+    return data;
+  }
+};
+
 
 #endif //SG_MCU_SEQUENCE_RESOLVERS_H

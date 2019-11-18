@@ -181,6 +181,9 @@ void CombineResolvers::CombineQuery() {
   auto *par_sensor_index = new query_par_sensor_index;
   queryMap[par_sensor_index->getName()] = par_sensor_index;
 
+  auto *sequence_order = new query_sequence_order;
+  queryMap[sequence_order->getName()] = sequence_order;
+
 
 }
 
@@ -244,6 +247,9 @@ void CombineResolvers::CombineMutation() {
 
   auto *par_sensor_index_save = new mutation_par_sensor_index_save;
   mutationMap[par_sensor_index_save->getName()] = par_sensor_index_save;
+
+  auto *sequence_order_save = new mutation_sequence_order_save;
+  mutationMap[sequence_order_save->getName()] = sequence_order_save;
 
 
 }
