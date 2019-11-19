@@ -1,3 +1,4 @@
+#include "domain/configuration/context.h"
 #include "domain/rtc/context.h"
 #include "domain/sensor/context.h"
 #include "domain/nsensor/context.h"
@@ -25,6 +26,7 @@
 
 class CombineContext {
 public:
+  ConfigurationContext *config;
   RtcContext *rtc;
   SensorContext *sensor;
   NSensorContext *nsensors;
@@ -50,6 +52,7 @@ public:
 };
 
 CombineContext::CombineContext() {
+  config = new ConfigurationContext;
   rtc = new RtcContext;
   sensor = new SensorContext;
   nsensors = new NSensorContext;
@@ -70,7 +73,6 @@ CombineContext::CombineContext() {
   sequenceCriteria = new SequenceCriteriaContext;
   sequenceTimer = new SequenceTimerContext;
   sequenceRange = new SequenceRangeContext;
-
 }
 
 #endif //SG_MCU_COMBINECONTEXT_H

@@ -5,6 +5,8 @@
 #include "domain/sequence/util/sequenceGpioChain.h"
 #include "./model.h"
 
+#include "util/debug.h"
+
 #ifndef SG_MCU_SEQUENCE_CRITERIA_CORE_H
 #define SG_MCU_SEQUENCE_CRITERIA_CORE_H
 
@@ -55,7 +57,7 @@ public:
   }
 
   bool controlTask() override {
-//  CriteriaModel::ShowModel(criteria, channel);
+    Debug::Print("ctrl-sequence-criteria");
     NSensor averageSensor = nSensorCore->getAverageSensor();
     state.sensorValue = averageSensor.sensors[criteria.sensor];
     state.isTimingEnable = criteria.timing.enable;
@@ -64,7 +66,7 @@ public:
     state.isReachThreshold = (criteria.greater) ? (state.sensorValue >= criteria.criteria)
                                                 : (state.sensorValue <= criteria.criteria);
 
-//     if timing is enables
+    //if timing is enables
     if (state.isTimingEnable) {
       switch (state.criteriaState) {
         case SequenceCriteriaState::CRITERIA_STATE_WAITING: {

@@ -4,6 +4,7 @@
 #include "domain/mutation.h"
 #include "domain/query.h"
 
+#include "domain/configuration/resolvers.h"
 #include "domain/rtc/resolvers.h"
 #include "domain/nvmemory/resolvers.h"
 #include "domain/info/resolvers.h"
@@ -184,6 +185,9 @@ void CombineResolvers::CombineQuery() {
   auto *sequence_order = new query_sequence_order;
   queryMap[sequence_order->getName()] = sequence_order;
 
+  auto *configuration = new query_configuration;
+  queryMap[configuration->getName()] = configuration;
+
 
 }
 
@@ -250,6 +254,9 @@ void CombineResolvers::CombineMutation() {
 
   auto *sequence_order_save = new mutation_sequence_order_save;
   mutationMap[sequence_order_save->getName()] = sequence_order_save;
+
+  auto *debug_save = new mutation_debug_save;
+  mutationMap[debug_save->getName()] = debug_save;
 
 
 }

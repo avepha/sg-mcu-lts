@@ -1,4 +1,3 @@
-//#define SG_TEST
 #define _TASK_OO_CALLBACKS
 #define _TASK_PRIORITY
 #define _TASK_TIMEOUT
@@ -47,6 +46,7 @@ void setup() {
   pinMode(SG_DIR_PIN, OUTPUT);
   digitalWrite(SG_DIR_PIN, LOW);
 
+  Debug::update();
   Serial.begin(345600);
   entryPort.begin(345600, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   sensorPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
@@ -56,6 +56,7 @@ void setup() {
   Serial.println("PROJECT: " + String(PROJECT));
   Serial.println("UPLOAD_DATE: " + String(UPLOADDATE));
   Serial.println("SG_MODEL: " + String(SG_MODEL));
+  Serial.println("DEBUG: " + String(Debug::isDebuggingMode()));
 #ifdef SG_TEST
   Serial.println("SG_MODE: TEST");
 #endif
@@ -119,13 +120,16 @@ void loop1(void *pvParameters) {
       if (isEndpointDataComing) {
         serialEndpoint->unleash(responseString);
       }
-      // for memory profiling
-      /*DynamicJsonDocument memory(64);
-      memory["freeHeap"] = String(xPortGetFreeHeapSize());
-      String heapString;
-      serializeJson(memory, heapString);
-      Serial.println(heapString); */
+
+      if (Debug::isDebuggingMode()) {
+        DynamicJsonDocument memory(64);
+        memory["freeHeap"] = String(xPortGetFreeHeapSize());
+        String heapString;
+        serializeJson(memory, heapString);
+        Serial.println(heapString);
+      }
       continue;
+      // for memory profiling
     }
 
     byte bSensors[64];
