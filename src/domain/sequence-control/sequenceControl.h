@@ -29,6 +29,11 @@ public:
   };
 
   bool Callback() override {
+    if (deactivationFlag) {
+      delete this;
+      return false;
+    }
+
     for (int i = 0; i < precSize; i++) {
       if (!preconditions[i]->resolve()) {
         return false;
@@ -60,12 +65,20 @@ public:
     return preconditions[index];
   }
 
+  // to avoid race condition, between 2 processors
+  // so deactivation process must be execute by main core
+  // this is why setDeactivation method is in action
+  void setDeactivationFlag() {
+    deactivationFlag = true;
+  }
+
 protected:
   SequenceGpioChain *gpioChain = nullptr;
   GpioCore *gpioCore = nullptr;
   std::string taskName;
 
 private:
+  bool deactivationFlag = false;
   SEQUENCE_CONTROL_TYPE_ENUM type;
   uint8_t precSize = 0;
   Precondition *preconditions[3];

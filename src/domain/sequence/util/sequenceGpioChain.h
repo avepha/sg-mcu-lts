@@ -34,6 +34,11 @@ public:
 
   bool Callback() override {
     Debug::Print("gpio-chain" + String(currentChannelIndex));
+    if (deactivationFlag) {
+      delete this;
+      return false;
+    }
+
     currentTimeInSecond = (millis() - timestamp) / 1000;
     if (currentTimeInSecond < channelAndTimeouts[currentChannelIndex].timeoutInSecond) {
       return true;
@@ -54,7 +59,14 @@ public:
     return totalWorkingTimeInSecond;
   }
 
+  // to avoid race condition, between 2 processors
+  // so deactivation process must be execute by main core
+  // this is why setDeactivation method is in action
+  void setDeactivateFlag() {
+    deactivationFlag = true;
+  }
 private:
+  bool deactivationFlag = false;
   std::vector<ChannelAndTimeoutStruct> channelAndTimeouts{};
   GpioCore *gpioCore = nullptr;
   int currentChannelIndex = 0;

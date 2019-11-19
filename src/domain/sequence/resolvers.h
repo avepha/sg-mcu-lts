@@ -132,6 +132,8 @@ public:
     data["writeOps"] = writeOps;
     data["isActive"] = newSchema.sequence.isActive;
 
+    context->sequence->core->deactivateControlsByCommunicationCore();
+    delay(20);
     context->sequence->core->activateControls();
     return data;
   }
@@ -159,7 +161,9 @@ public:
     }
 
     schema.sequence.isActive = false;
-    context->sequence->core->deactivateControls();
+    context->sequence->core->deactivateControlsByCommunicationCore();
+    delay(20);
+    context->sequence->core->activateControls();
     int writeOps = context->sequence->model->save(schema);
 
     SequenceSchema newSchema = context->sequence->model->get();

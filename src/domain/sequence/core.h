@@ -19,8 +19,6 @@ public:
   }
 
   void activateControls() {
-    deactivateControls();
-
     SequenceModel model;
     SequenceSchema::Sequence sequence = model.get().sequence;
 
@@ -59,7 +57,7 @@ public:
       Debug::Print("sequenceControl disable");
       sequenceControl->setTimeout(10); //
       Debug::Print("sequenceControl delete");
-//      delete sequenceControl;
+      delete sequenceControl;
       sequenceControl = nullptr;
     }
 
@@ -67,9 +65,22 @@ public:
       Debug::Print("gpioChain disable");
       gpioChain->setTimeout(10);
       Debug::Print("gpioChain delete");
-//      delete gpioChain;
+      delete gpioChain;
       gpioChain = nullptr;
     }
+  }
+
+  void deactivateControlsByCommunicationCore() {
+    if (sequenceControl != nullptr) {
+      sequenceControl->setDeactivationFlag();
+    }
+
+    if (gpioChain != nullptr) {
+      gpioChain->setDeactivateFlag();
+    }
+
+    gpioChain = nullptr;
+    sequenceControl = nullptr;
   }
 
 private:

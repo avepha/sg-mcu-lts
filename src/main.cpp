@@ -120,13 +120,16 @@ void loop1(void *pvParameters) {
       if (isEndpointDataComing) {
         serialEndpoint->unleash(responseString);
       }
-      // for memory profiling
-      DynamicJsonDocument memory(64);
-      memory["freeHeap"] = String(xPortGetFreeHeapSize());
-      String heapString;
-      serializeJson(memory, heapString);
-      Serial.println(heapString);
+
+      if (Debug::isDebuggingMode()) {
+        DynamicJsonDocument memory(64);
+        memory["freeHeap"] = String(xPortGetFreeHeapSize());
+        String heapString;
+        serializeJson(memory, heapString);
+        Serial.println(heapString);
+      }
       continue;
+      // for memory profiling
     }
 
     byte bSensors[64];

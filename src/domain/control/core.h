@@ -48,7 +48,7 @@ private:
         return;
       }
       case CTRL_SEQUENCE: {
-        Serial.println("CTRL-SEQUENCE started");
+        Debug::Print("CTRL-SEQUENCE started");
         sequenceCore->activateControls();
         return;
       }
