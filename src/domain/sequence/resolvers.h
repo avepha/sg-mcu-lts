@@ -194,7 +194,6 @@ public:
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceSchema schema = context->sequence->model->get();
-    schema.sequence.control.type = SequenceControlStringToEnum(reqData["control"]["type"]);
     for (int i = 0; i < reqData["channelOrderAndTiming"].size(); i++) {
       schema.sequence.channelOrderAndTiming[i].channel = reqData["channelOrderAndTiming"][i]["channel"];
       schema.sequence.channelOrderAndTiming[i].workingTimeInSec = reqData["channelOrderAndTiming"][i]["working"];
