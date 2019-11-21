@@ -12,10 +12,10 @@ struct PrecTimerSchema {
     uint8_t size = 2;
     struct TimePair {
       uint16_t start;
-      uint16_t end;
-    } timePair[10] = {
-        {.start = 6 * HOUR_IN_MINUTE, .end = 12 * HOUR_IN_MINUTE},
-        {.start = 13 * HOUR_IN_MINUTE, .end = 18 * HOUR_IN_MINUTE}
+      uint16_t stop;
+    } timePair[20] = {
+        {.start = 6 * HOUR_IN_MINUTE, .stop = 12 * HOUR_IN_MINUTE},
+        {.start = 13 * HOUR_IN_MINUTE, .stop = 18 * HOUR_IN_MINUTE}
     };
   } timers[8];
 }; // total size: 300, 300-636

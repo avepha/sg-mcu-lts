@@ -20,7 +20,7 @@ public:
     schema.timers[index].size = reqData["timers"].size();
     for (int i = 0 ; i < schema.timers[index].size; i++) {
       schema.timers[index].timePair[i].start = reqData["timers"][i]["start"];
-      schema.timers[index].timePair[i].end = reqData["timers"][i]["end"];
+      schema.timers[index].timePair[i].stop = reqData["timers"][i]["stop"];
     }
 
     int writeOps = context->precTimer->model->save(schema);
@@ -34,7 +34,7 @@ public:
     for (int i = 0; i < newSchema.timers[index].size; i++) {
       JsonObject jo = timers.createNestedObject();
       jo["start"] = newSchema.timers[index].timePair[i].start;
-      jo["end"] = newSchema.timers[index].timePair[i].end;
+      jo["stop"] = newSchema.timers[index].timePair[i].stop;
     }
 
     return data;
@@ -55,7 +55,7 @@ public:
     for (int i = 0; i < newSchema.timers[index].size; i++) {
       JsonObject jo = timers.createNestedObject();
       jo["start"] = newSchema.timers[index].timePair[i].start;
-      jo["end"] = newSchema.timers[index].timePair[i].end;
+      jo["stop"] = newSchema.timers[index].timePair[i].stop;
     }
 
     return data;
