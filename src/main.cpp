@@ -84,13 +84,15 @@ void loop1(void *pvParameters) {
     bool isEndpointDataComing = serialEndpoint->embrace(&requestString);
 
     if (isEndpointDataComing || isDeviceDataComing) {
-      DynamicJsonDocument requestJson(1024);
+      DynamicJsonDocument requestJson(2048);
       DeserializationError error = deserializeJson(requestJson, requestString);
 
       DynamicJsonDocument responseJson(2048);
 
       if (error) {
+
         InvalidJsonFormatError err;
+        Debug::Print(error.c_str());
         responseJson = err.toJson();
       }
       else if (requestJson["topic"].isNull()) {
