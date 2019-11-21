@@ -13,7 +13,7 @@ public:
     uint32_t timeoutInSecond = 5;
   } ChannelAndTimeoutStruct;
 
-  SequenceGpioChain() : Task(1000, TASK_FOREVER, &controlScheduler, false) {
+  SequenceGpioChain() : Task(500, TASK_FOREVER, &controlScheduler, false) {
     gpioCore = GpioCore::instance();
   }
 
@@ -33,7 +33,6 @@ public:
   }
 
   bool Callback() override {
-    Debug::Print("gpio-chain" + String(currentChannelIndex));
     if (deactivationFlag) {
       delete this;
       return false;
@@ -45,6 +44,7 @@ public:
     }
 
     if (currentChannelIndex + 1 >= channelAndTimeouts.size()) {
+      disable();
       return false;
     }
 

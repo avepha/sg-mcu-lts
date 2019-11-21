@@ -4,21 +4,8 @@
   "reqId": "req-1",
   "data": {
     "control": {
-      "type": "sequence_criteria"
+      "type": "sequence_timer"
     },
-    "preconditions": [
-      {
-        "type": "timer",
-        "value": 0
-      },
-      {
-        "type": "criteria",
-        "value": 0
-      },
-      {
-        "type": "range",
-        "value": 0
-      }
-    ]
+    "preconditions": []
   }
 }
