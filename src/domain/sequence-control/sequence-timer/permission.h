@@ -24,6 +24,11 @@ public:
       throw err;
     }
 
+    if (reqData["timers"].size() > 20) {
+      InvalidInputError err("timers has exceeded");
+      throw err;
+    }
+
     JsonArray timers = reqData["timers"];
     for (int i = 0; i < timers.size(); i++) {
       if (timers[i]["start"].isNull()) {

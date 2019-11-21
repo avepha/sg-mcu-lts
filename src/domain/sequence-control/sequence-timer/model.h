@@ -9,7 +9,7 @@ struct SequenceTimerSchema {
     struct TimePair {
       uint16_t start;
       uint16_t stop;
-    } timePair[10] = {
+    } timePair[20] = {
         {.start = 6 * HOUR_IN_MINUTE, .stop = 12 * HOUR_IN_MINUTE},
         {.start = 13 * HOUR_IN_MINUTE, .stop = 18 * HOUR_IN_MINUTE}
     };
