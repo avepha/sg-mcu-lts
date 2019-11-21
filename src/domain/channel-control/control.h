@@ -31,6 +31,11 @@ public:
   };
 
   bool Callback() override {
+    if (deactivationFlag) {
+      delete this;
+      return false;
+    }
+
     for (int i = 0; i < precSize; i++) {
       if (!preconditions[i]->resolve()) {
         return false;
@@ -62,7 +67,12 @@ public:
     return preconditions[index];
   }
 
+  void deactivate() {
+    deactivationFlag = true;
+  }
+
 protected:
+  bool deactivationFlag = false;
   GpioCore *gpioCore = nullptr;
   std::string taskName;
 

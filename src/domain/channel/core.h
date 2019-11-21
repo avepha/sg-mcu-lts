@@ -31,8 +31,7 @@ public:
   void checkAndActivateControl(ChannelSchema::Channel channelData, int channel) {
     // check and remove control
     if (channelControl[channel] != nullptr) {
-      channelControl[channel]->disable();
-      delete channelControl[channel];
+      channelControl[channel]->deactivate();
       channelControl[channel] = nullptr;
     }
 
@@ -85,8 +84,7 @@ public:
   void deactivateControls() {
     for (int channel = 0 ; channel < channelControl.size(); channel++) {
       if (channelControl[channel] != nullptr) {
-        channelControl[channel]->disable();
-        delete channelControl[channel];
+        channelControl[channel]->deactivate();
         channelControl[channel] = nullptr;
       }
     }

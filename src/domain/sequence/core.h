@@ -54,29 +54,11 @@ public:
 
   void deactivateControls() {
     if (sequenceControl != nullptr) {
-      Debug::Print("sequenceControl disable");
-      sequenceControl->setTimeout(10); //
-      Debug::Print("sequenceControl delete");
-      delete sequenceControl;
-      sequenceControl = nullptr;
-    }
-
-    if (gpioChain != nullptr) {
-      Debug::Print("gpioChain disable");
-      gpioChain->setTimeout(10);
-      Debug::Print("gpioChain delete");
-      delete gpioChain;
-      gpioChain = nullptr;
-    }
-  }
-
-  void deactivateControlsByCommunicationCore() {
-    if (sequenceControl != nullptr) {
       sequenceControl->setDeactivationFlag();
     }
 
     if (gpioChain != nullptr) {
-      gpioChain->setDeactivateFlag();
+      gpioChain->deactivate();
     }
 
     gpioChain = nullptr;

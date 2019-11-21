@@ -62,7 +62,7 @@ public:
   // to avoid race condition, between 2 processors
   // so deactivation process must be execute by main core
   // this is why setDeactivation method is in action
-  void setDeactivateFlag() {
+  void deactivate() {
     deactivationFlag = true;
   }
 private:

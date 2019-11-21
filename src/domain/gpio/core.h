@@ -87,7 +87,6 @@ GpioTask* GpioCore::createGpioTaskTimeout(const std::string& name, uint8_t chann
 }
 
 GpioTask* GpioCore::createGpioTaskForever(const std::string &name, uint8_t channel) {
-  Serial.println("Create Task: " + String(name.c_str()));
   if (gpioTaskMap.find(name) != gpioTaskMap.end()) {
     return nullptr;
   }
@@ -99,7 +98,6 @@ GpioTask* GpioCore::createGpioTaskForever(const std::string &name, uint8_t chann
 }
 
 bool GpioCore::removeGpioTaskByName(const std::string& name) {
-  Serial.println("Remove Task: " + String(name.c_str()));
   if (gpioTaskMap.find(name) == gpioTaskMap.end()) {
     return false;
   }
@@ -109,7 +107,6 @@ bool GpioCore::removeGpioTaskByName(const std::string& name) {
 }
 
 bool GpioCore::removeGpioTaskByChannel(uint8_t channel) {
-  Serial.println("Remove Channel: " + String(channel));
   if (gpioTaskMap.size() <= 0) {
     return false;
   }

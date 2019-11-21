@@ -132,7 +132,7 @@ public:
     data["writeOps"] = writeOps;
     data["isActive"] = newSchema.sequence.isActive;
 
-    context->sequence->core->deactivateControlsByCommunicationCore();
+    context->sequence->core->deactivateControls();
     delay(20);
     context->sequence->core->activateControls();
     return data;
@@ -161,7 +161,7 @@ public:
     }
 
     schema.sequence.isActive = false;
-    context->sequence->core->deactivateControlsByCommunicationCore();
+    context->sequence->core->deactivateControls();
     delay(20);
     context->sequence->core->activateControls();
     int writeOps = context->sequence->model->save(schema);
@@ -200,6 +200,8 @@ public:
     }
     schema.sequence.channelOrderAndTimingSize = reqData["channelOrderAndTiming"].size();
 
+    schema.sequence.isActive = false;
+    context->sequence->core->deactivateControls();
     int writeOps = context->sequence->model->save(schema);
 
     SequenceSchema newSchema = context->sequence->model->get();
