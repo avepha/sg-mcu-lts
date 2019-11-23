@@ -47,7 +47,7 @@ public:
           gpioCore->createGpioTaskForever(manualTaskName, channel);
           break;
         default:
-          gpioCore->removeGpioTaskByName(manualTaskName);
+          gpioCore->removeGpioTaskByUid(manualTaskName);
           break;
       }
 

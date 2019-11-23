@@ -7,11 +7,11 @@ class GpioCore {
 public:
   static GpioCore *instance();
 
-  GpioTask* createGpioTaskForever(const std::string& name, uint8_t channel);
+  GpioTask* createGpioTaskForever(const std::string& uid, uint8_t channel);
 
-  GpioTask* createGpioTaskTimeout(const std::string& name, uint8_t channel, uint16_t timeoutInMs);
+  GpioTask* createGpioTaskTimeout(const std::string& uid, uint8_t channel, uint16_t timeoutInMs);
 
-  bool removeGpioTaskByName(const std::string& name);
+  bool removeGpioTaskByUid(const std::string& uid);
   bool removeGpioTaskByChannel(uint8_t channel);
   bool removeGpioTaskAll();
 
@@ -53,9 +53,9 @@ void GpioCore::dWrite(int channel, int value) {
 }
 
 void GpioCore::selfDestructGpioTask(GpioTask *gpioTask) {
-  std::string taskName = gpioTask->getTaskName();
-  if (gpioTaskMap.find(taskName) != gpioTaskMap.end()) {
-    gpioTaskMap.erase(taskName);
+  std::string uid = gpioTask->getUid();
+  if (gpioTaskMap.find(uid) != gpioTaskMap.end()) {
+    gpioTaskMap.erase(uid);
   }
 
   if (gpioTask) {
@@ -75,34 +75,34 @@ GpioCore::GpioCore() {
   }
 }
 
-GpioTask* GpioCore::createGpioTaskTimeout(const std::string& name, uint8_t channel, uint16_t timeoutInMs) {
-  if (gpioTaskMap.find(name) != gpioTaskMap.end()) {
+GpioTask* GpioCore::createGpioTaskTimeout(const std::string& uid, uint8_t channel, uint16_t timeoutInMs) {
+  if (gpioTaskMap.find(uid) != gpioTaskMap.end()) {
     return nullptr;
   }
 
-  auto *gpioTask = new GpioTask(name, channel, timeoutInMs, &dWrite, &selfDestructGpioTask);
-  gpioTaskMap[name] = gpioTask;
+  auto *gpioTask = new GpioTask(uid, channel, timeoutInMs, &dWrite, &selfDestructGpioTask);
+  gpioTaskMap[uid] = gpioTask;
   gpioTask->enableDelayed();
   return gpioTask;
 }
 
-GpioTask* GpioCore::createGpioTaskForever(const std::string &name, uint8_t channel) {
-  if (gpioTaskMap.find(name) != gpioTaskMap.end()) {
+GpioTask* GpioCore::createGpioTaskForever(const std::string &uid, uint8_t channel) {
+  if (gpioTaskMap.find(uid) != gpioTaskMap.end()) {
     return nullptr;
   }
 
-  auto *gpioTask = new GpioTask(name, channel, &dWrite, &selfDestructGpioTask);
-  gpioTaskMap[name] = gpioTask;
+  auto *gpioTask = new GpioTask(uid, channel, &dWrite, &selfDestructGpioTask);
+  gpioTaskMap[uid] = gpioTask;
   gpioTask->enable();
   return gpioTask;
 }
 
-bool GpioCore::removeGpioTaskByName(const std::string& name) {
-  if (gpioTaskMap.find(name) == gpioTaskMap.end()) {
+bool GpioCore::removeGpioTaskByUid(const std::string& uid) {
+  if (gpioTaskMap.find(uid) == gpioTaskMap.end()) {
     return false;
   }
 
-  selfDestructGpioTask(gpioTaskMap[name]);
+  selfDestructGpioTask(gpioTaskMap[uid]);
   return true;
 }
 

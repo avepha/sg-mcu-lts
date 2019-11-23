@@ -10,20 +10,20 @@ enum GpioTaskEnum {
 
 class GpioTask : public Task {
 public:
-  GpioTask(std::string name, uint8_t channel, void (*dWrite)(int channel, int value),
+  GpioTask(std::string uid, uint8_t channel, void (*dWrite)(int channel, int value),
            void (*finishCallback)(GpioTask *gpioTask))
       : Task(TASK_MINUTE, TASK_FOREVER, &gpioScheduler, false),
-        name(std::move(name)),
+        uid(std::move(uid)),
         channel(channel),
         gpioTaskType(GPIO_TASK_NO_EXPIRED),
         dWrite(dWrite),
         finishCallback(finishCallback)
         {}
 
-  GpioTask(std::string name, uint8_t channel, uint16_t timeout, void (*dWrite)(int channel, int value),
+  GpioTask(std::string uid, uint8_t channel, uint16_t timeout, void (*dWrite)(int channel, int value),
            void (*finishCallback)(GpioTask *gpioTask))
       : Task(timeout, TASK_ONCE, &gpioScheduler, false),
-        name(std::move(name)),
+        uid(std::move(uid)),
         channel(channel),
         gpioTaskType(GPIO_TASK_EXPIRED),
         dWrite(dWrite),
@@ -36,8 +36,8 @@ public:
     dWrite(channel, LOW);
   }
 
-  std::string getTaskName() {
-    return name;
+  std::string getUid() {
+    return uid;
   }
 
   uint8_t getChannel() {
@@ -63,7 +63,7 @@ public:
   void OnDisable() override {} // TODO: please find the cause. when call .disable(), system will be crashed.
 
 private:
-  std::string name;
+  std::string uid;
   uint8_t channel;
   GpioTaskEnum gpioTaskType;
   void (*dWrite)(int channel, int value);

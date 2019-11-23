@@ -18,7 +18,7 @@ public:
     for (std::pair<std::string, GpioTask*> task: gpioTaskMap) {
       JsonObject jo = gpioTasks.createNestedObject();
       jo["channel"] = task.second->getChannel();
-      jo["name"] = String(task.second->getTaskName().c_str());
+      jo["uid"] = String(task.second->getUid().c_str());
       jo["type"] = task.second->getType() == GPIO_TASK_EXPIRED ? "expired" : "no_expired";
       if (task.second->getType() == GPIO_TASK_EXPIRED) {
         jo["timeout"] = task.second->getTimeout();
