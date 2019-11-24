@@ -124,10 +124,12 @@ void loop1(void *pvParameters) {
       }
 
       if (Debug::isDebuggingMode()) {
-        DynamicJsonDocument memory(64);
-        memory["freeHeap"] = String(xPortGetFreeHeapSize());
+        DynamicJsonDocument responseMemory(128);
+        responseMemory["topic"] = "memory";
+        responseMemory["method"] = "event";
+        responseMemory["data"]["freeHeap"] = String(xPortGetFreeHeapSize());
         String heapString;
-        serializeJson(memory, heapString);
+        serializeJson(responseMemory, heapString);
         Serial.println(heapString);
       }
       continue;

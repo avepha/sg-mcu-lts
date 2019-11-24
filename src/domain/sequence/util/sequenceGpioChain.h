@@ -75,7 +75,7 @@ private:
   uint32_t timestamp = 0, currentTimeInSecond = 0, totalWorkingTimeInSecond = 0;
 
   void runGpioTask(ChannelAndTimeoutStruct channelAndTimeout) {
-    gpioCore->createGpioTaskTimeout(taskName, channelAndTimeout.channel, channelAndTimeout.timeoutInSecond * 1000);
+    gpioCore->createGpioTaskTimeout(taskName + String(channelAndTimeout.channel + 1).c_str(), channelAndTimeout.channel, channelAndTimeout.timeoutInSecond * 1000);
   }
 };
 

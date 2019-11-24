@@ -32,6 +32,8 @@ RtcCore::RtcCore() {
   hwRtc.begin();
   swRtc.adjust(DateTime(2019, 01, 01));
   rtcModel = new RtcModel;
+
+  Debug::Print("RTC status: " + String(hwRtc.isrunning()));
 }
 
 DateTime RtcCore::getDate() {
