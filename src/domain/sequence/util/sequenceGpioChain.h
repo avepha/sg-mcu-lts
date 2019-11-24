@@ -1,4 +1,5 @@
 #include <stack>
+#include <utility>
 #include <TaskScheduler.h>
 #include "domain/gpio/util/gpioTask.h"
 #include "util/debug.h"
@@ -13,7 +14,7 @@ public:
     uint32_t timeoutInSecond = 5;
   } ChannelAndTimeoutStruct;
 
-  SequenceGpioChain() : Task(500, TASK_FOREVER, &controlScheduler, false) {
+  explicit SequenceGpioChain(std::string  name) : Task(500, TASK_FOREVER, &controlScheduler, false), taskName(std::move(name)) {
     gpioCore = GpioCore::instance();
   }
 
@@ -68,12 +69,12 @@ public:
 private:
   bool deactivationFlag = false;
   std::vector<ChannelAndTimeoutStruct> channelAndTimeouts{};
+  std::string taskName;
   GpioCore *gpioCore = nullptr;
   int currentChannelIndex = 0;
   uint32_t timestamp = 0, currentTimeInSecond = 0, totalWorkingTimeInSecond = 0;
 
   void runGpioTask(ChannelAndTimeoutStruct channelAndTimeout) {
-    std::string taskName = ("sequence-channel-" + String(channelAndTimeout.channel)).c_str();
     gpioCore->createGpioTaskTimeout(taskName, channelAndTimeout.channel, channelAndTimeout.timeoutInSecond * 1000);
   }
 };

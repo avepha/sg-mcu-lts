@@ -16,7 +16,7 @@ public:
       channel(channel),
       type(type)
       {
-        taskName = (ChannelControlEnumToString(type) + "-" + String(channel)).c_str();
+        taskName = (ChannelControlEnumToShortString(type) + String(channel)).c_str();
         gpioCore = GpioCore::instance();
       }
 

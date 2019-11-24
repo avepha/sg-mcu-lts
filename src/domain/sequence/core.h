@@ -27,13 +27,15 @@ public:
       return;
     }
 
-    gpioChain = new SequenceGpioChain();
+    std::string taskName = SequenceControlEnumToShortString(sequence.control.type).c_str();
+    gpioChain = new SequenceGpioChain(taskName);
     for (int i = 0; i < sequence.channelOrderAndTimingSize; i++) {
       gpioChain->add(
           sequence.channelOrderAndTiming[i].channel,
           sequence.channelOrderAndTiming[i].workingTimeInSec
       );
     }
+
 
     SequenceControl *control = SequenceControlFactory::getControl(sequence.control.type, gpioChain);
     if (control != nullptr) {

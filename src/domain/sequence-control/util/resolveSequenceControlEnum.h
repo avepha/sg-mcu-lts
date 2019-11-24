@@ -16,6 +16,19 @@ String SequenceControlEnumToString(SEQUENCE_CONTROL_TYPE_ENUM ctrlEnum) {
   }
 }
 
+String SequenceControlEnumToShortString(SEQUENCE_CONTROL_TYPE_ENUM ctrlEnum) {
+  switch (ctrlEnum) {
+    case SEQ_CTRL_TIMER:
+      return "SEGTMR";
+    case SEQ_CTRL_CRITERIA:
+      return "SEGCRT";
+    case SEQ_CTRL_RANGE:
+      return "SEGRNG";
+    default:
+      return "NONE";
+  }
+}
+
 SEQUENCE_CONTROL_TYPE_ENUM SequenceControlStringToEnum(const String& ctrlString) {
   if (ctrlString == "sequence_timer") {
     return SEQ_CTRL_TIMER;

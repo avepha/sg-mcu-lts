@@ -21,6 +21,23 @@ String ChannelControlEnumToString(CONTROL_TYPE_ENUM ctrlEnum) {
   }
 }
 
+String ChannelControlEnumToShortString(CONTROL_TYPE_ENUM ctrlEnum) {
+  switch (ctrlEnum) {
+    case CH_CTRL_MANUAL:
+      return "CHMNL";
+    case CH_CTRL_TIMER:
+      return "CHTMR";
+    case CH_CTRL_CRITERIA:
+      return "CMCRT";
+    case CH_CTRL_RANGE:
+      return "CHRNG";
+    case CH_CTRL_PAR:
+      return "CHPAR";
+    default:
+      return "NONE";
+  }
+}
+
 CONTROL_TYPE_ENUM ChannelControlStringToEnum(const String& ctrlString) {
   if (ctrlString == "manual") {
     return CH_CTRL_MANUAL;
