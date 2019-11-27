@@ -12,4 +12,4 @@ public:
   ConfigurationModel() : RomModel("ConfigurationModel") {};
 };
 
-#endif //SG_MCU_MODEL_H
+#endif //SG_MCU_CONFIGURATION_MODEL_H

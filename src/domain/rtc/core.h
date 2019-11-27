@@ -16,11 +16,8 @@ public:
   }
 
   RtcCore();
-
   DateTime getDate();
-
   DateTime getUtcDate();
-
   DateTime setDate(DateTime dt);
 
   bool isRtcRunning();

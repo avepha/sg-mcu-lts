@@ -27,4 +27,4 @@ public:
 };
 
 
-#endif //SG_MCU_MODEL_H
+#endif //SG_MCU_CHANNEL_MODEL_H
