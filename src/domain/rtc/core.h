@@ -16,26 +16,30 @@ public:
   }
 
   RtcCore();
+
   DateTime getDate();
+
   DateTime getUtcDate();
+
   DateTime setDate(DateTime dt);
 
-  bool isRtcRunning();
 
 private:
   static RtcCore *s_instance;
   RtcModel *rtcModel;
   RTC_DS1307 hwRtc;
   RTC_Millis swRtc;
+  bool isRunning;
 };
 
 RtcCore *RtcCore::s_instance = nullptr;
 
 RtcCore::RtcCore() {
+  isRunning = true;
   hwRtc.begin();
   swRtc.adjust(DateTime(2019, 01, 01));
   rtcModel = new RtcModel;
-  if (isRtcRunning()) {
+  if (isRunning) {
     Debug::Print("RTC status: running");
   }
   else {
@@ -45,19 +49,15 @@ RtcCore::RtcCore() {
 
 DateTime RtcCore::getDate() {
   RtcSchema rtcSchema = rtcModel->get();
-  DateTime utcDt = isRtcRunning() ? hwRtc.now() : swRtc.now();
+  DateTime utcDt = isRunning ? hwRtc.now() : swRtc.now();
   TimeSpan tzTimeSpan(rtcSchema.tzOffsetHour * 3600 + rtcSchema.tzOffsetMin * 30);
   return utcDt + tzTimeSpan;
 }
 
 DateTime RtcCore::getUtcDate() {
-  return isRtcRunning() ? hwRtc.now() : swRtc.now();
+  return isRunning ? hwRtc.now() : swRtc.now();
 }
 
-bool RtcCore::isRtcRunning() {
-  Wire.beginTransmission(RTC_ADDR);
-  return (Wire.endTransmission() == 0);
-}
 
 DateTime RtcCore::setDate(DateTime dt) {
   hwRtc.adjust(dt);
