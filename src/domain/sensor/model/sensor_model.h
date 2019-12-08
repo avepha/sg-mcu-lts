@@ -5,7 +5,7 @@
 #define SG_MCU_SENSOR_MODEL_H
 
 struct SensorSchema {
-  int numberOfSensor = 7;
+  int numberOfSensor = 8;
   char names[12][20] = {
       "temperature",
       "humidity",
@@ -14,6 +14,7 @@ struct SensorSchema {
       "soil",
       "par",
       "par_accumulation",
+      "co2",
   };
 }; // total size: 240
 
