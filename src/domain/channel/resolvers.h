@@ -164,16 +164,18 @@ public:
     channelSchema.channels[index].control.value = reqData["control"]["value"];
 
     // set precondition to providing args
-    for (int i = 0; i < reqData["preconditions"].size(); i++) {
-      channelSchema.channels[index].preconditions[i].type = PreconditionStringToEnum(
-          reqData["preconditions"][i]["type"]);
-      channelSchema.channels[index].preconditions[i].value = reqData["preconditions"][i]["value"];
-    }
+    if (!reqData["preconditions"].isNull()) {
+      for (int i = 0; i < reqData["preconditions"].size(); i++) {
+        channelSchema.channels[index].preconditions[i].type = PreconditionStringToEnum(
+            reqData["preconditions"][i]["type"]);
+        channelSchema.channels[index].preconditions[i].value = reqData["preconditions"][i]["value"];
+      }
 
-    // set precondition to none if providing args size < 3
-    for (int i = reqData["preconditions"].size(); i < 3; i++) {
-      channelSchema.channels[index].preconditions[i].type = PREC_NONE;
-      channelSchema.channels[index].preconditions[i].value = 0;
+      // set precondition to none if providing args size < 3
+      for (int i = reqData["preconditions"].size(); i < 3; i++) {
+        channelSchema.channels[index].preconditions[i].type = PREC_NONE;
+        channelSchema.channels[index].preconditions[i].value = 0;
+      }
     }
 
     channelSchema.channels[index].isActive = false;

@@ -45,7 +45,7 @@ public:
     SequenceSchema schema = context->sequence->model->get();
     DynamicJsonDocument data(1024);
     JsonArray channelOrderAndTiming = data.createNestedArray("channelOrderAndTiming");
-    for (int i = 0 ; i < schema.sequence.channelOrderAndTimingSize; i++) {
+    for (int i = 0; i < schema.sequence.channelOrderAndTimingSize; i++) {
       JsonObject jo = channelOrderAndTiming.createNestedObject();
       jo["working"] = schema.sequence.channelOrderAndTiming[i].workingTimeInSec;
       jo["channel"] = schema.sequence.channelOrderAndTiming[i].channel;
@@ -118,7 +118,7 @@ public:
 
 class mutation_sequence_activate : public Mutation {
 public:
-  explicit mutation_sequence_activate() : Mutation("sequence_activate",new permission_sequence_activate) {};
+  explicit mutation_sequence_activate() : Mutation("sequence_activate", new permission_sequence_activate) {};
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceSchema schema = context->sequence->model->get();
@@ -149,15 +149,17 @@ public:
     schema.sequence.control.type = SequenceControlStringToEnum(reqData["control"]["type"]);
 
     // set precondition by providing args
-    for (int i = 0; i < reqData["preconditions"].size(); i++) {
-      schema.sequence.preconditions[i].type = PreconditionStringToEnum(reqData["preconditions"][i]["type"]);
-      schema.sequence.preconditions[i].value = reqData["preconditions"][i]["value"];
-    }
+    if (!reqData["preconditions"].isNull()) {
+      for (int i = 0; i < reqData["preconditions"].size(); i++) {
+        schema.sequence.preconditions[i].type = PreconditionStringToEnum(reqData["preconditions"][i]["type"]);
+        schema.sequence.preconditions[i].value = reqData["preconditions"][i]["value"];
+      }
 
-    // set precondition to none if providing args size < 3
-    for (int i = reqData["preconditions"].size(); i < 3; i++) {
-      schema.sequence.preconditions[i].type = PREC_NONE;
-      schema.sequence.preconditions[i].value = 0;
+      // set precondition to none if providing args size < 3
+      for (int i = reqData["preconditions"].size(); i < 3; i++) {
+        schema.sequence.preconditions[i].type = PREC_NONE;
+        schema.sequence.preconditions[i].value = 0;
+      }
     }
 
     schema.sequence.isActive = false;
@@ -208,7 +210,7 @@ public:
     DynamicJsonDocument data(1024);
     data["writeOps"] = writeOps;
     JsonArray channelOrderAndTiming = data.createNestedArray("channelOrderAndTiming");
-    for (int i = 0 ; i < newSchema.sequence.channelOrderAndTimingSize; i++) {
+    for (int i = 0; i < newSchema.sequence.channelOrderAndTimingSize; i++) {
       JsonObject jo = channelOrderAndTiming.createNestedObject();
       jo["working"] = newSchema.sequence.channelOrderAndTiming[i].workingTimeInSec;
       jo["channel"] = newSchema.sequence.channelOrderAndTiming[i].channel;

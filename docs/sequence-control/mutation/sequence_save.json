@@ -6,6 +6,19 @@
     "control": {
       "type": "sequence_timer"
     },
-    "preconditions": []
+    "preconditions": [
+      {
+        "type": "timer",
+        "value": 0
+      },
+      {
+        "type": "criteria",
+        "value": 0
+      },
+      {
+        "type": "range",
+        "value": 0
+      }
+    ]
   }
 }

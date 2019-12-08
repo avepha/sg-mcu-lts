@@ -35,31 +35,33 @@ public:
       throw err;
     }
 
-    if (reqData["preconditions"].isNull() || !reqData["preconditions"].is<JsonArray>()) {
-      InvalidInputError err("preconditions field must be an array.");
-      throw err;
-    }
-
-    if (type == SEQ_CTRL_TIMER && reqData["preconditions"].size() > 0) {
-      InvalidInputError err("preconditions field must be an empty array when applying sequence-timer");
-      throw err;
-    }
-
-    if (reqData["preconditions"].size() > 3) {
-      InvalidInputError err("preconditions field must have maximum length of 3");
-      throw err;
-    }
-
-    for (int i = 0; i < reqData["preconditions"].as<JsonArray>().size(); i++) {
-      JsonObject jo = reqData["preconditions"][i];
-      if (jo["type"].isNull() || jo["value"].isNull()) {
-        InvalidInputError err("precondition must have field type and value");
+    if (!reqData["preconditions"].isNull()) {
+      if (!reqData["preconditions"].is<JsonArray>()) {
+        InvalidInputError err("preconditions field must be an array.");
         throw err;
       }
 
-      if (PreconditionStringToEnum(jo["type"]) == PREC_UNKNOWN) {
-        InvalidInputError err("Unknown Precondition");
+      if (type == SEQ_CTRL_TIMER && reqData["preconditions"].size() > 0) {
+        InvalidInputError err("preconditions field must be an empty array when applying sequence-timer");
         throw err;
+      }
+
+      if (reqData["preconditions"].size() > 3) {
+        InvalidInputError err("preconditions field must have maximum length of 3");
+        throw err;
+      }
+
+      for (int i = 0; i < reqData["preconditions"].as<JsonArray>().size(); i++) {
+        JsonObject jo = reqData["preconditions"][i];
+        if (jo["type"].isNull() || jo["value"].isNull()) {
+          InvalidInputError err("precondition must have field type and value");
+          throw err;
+        }
+
+        if (PreconditionStringToEnum(jo["type"]) == PREC_UNKNOWN) {
+          InvalidInputError err("Unknown Precondition");
+          throw err;
+        }
       }
     }
   }
