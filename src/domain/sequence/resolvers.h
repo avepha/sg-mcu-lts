@@ -164,8 +164,6 @@ public:
 
     schema.sequence.isActive = false;
     context->sequence->core->deactivateControls();
-    delay(20);
-    context->sequence->core->activateControls();
     int writeOps = context->sequence->model->save(schema);
 
     SequenceSchema newSchema = context->sequence->model->get();
