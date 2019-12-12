@@ -28,6 +28,7 @@ public:
 
     DynamicJsonDocument data(64);
     data["date"] = DateTimeToIsoString(dateTime);
+    data["isHwRunning"] = context->rtc->core->isHwRunning();
 
     return data;
   };
@@ -80,7 +81,7 @@ public:
 
     DynamicJsonDocument data(64);
     data["date"] = DateTimeToIsoString(dateTime);
-
+    data["isHwRunning"] = context->rtc->core->isHwRunning();
     return data;
   };
 };
