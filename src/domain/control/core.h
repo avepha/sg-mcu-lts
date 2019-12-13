@@ -22,13 +22,10 @@ public:
     return type;
   }
 
-  bool checkAndActiveControl(CONTROL_ENUM _type) {
-    if (_type == type) {
-      return false;
-    }
-    activateControl(_type);
-
-    return true;
+  void setTypeAndDeactivateControls(CONTROL_ENUM _type) {
+    type = _type;
+    channelCore->deactivateControls();
+    sequenceCore->deactivateControls();
   }
 
 private:

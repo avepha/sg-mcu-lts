@@ -10,8 +10,7 @@
 
 class ChannelCore {
 public:
-  static ChannelCore* instance()
-  {
+  static ChannelCore *instance() {
     if (!s_instance)
       s_instance = new ChannelCore;
     return s_instance;
@@ -24,7 +23,7 @@ public:
     }
   }
 
-  Control* getControlByChannel(int channel) {
+  Control *getControlByChannel(int channel) {
     return channelControl[channel];
   }
 
@@ -65,7 +64,8 @@ public:
         }
       }
 
-      channelControl[channel]->enable();
+      Serial.println(ChannelControlEnumToString(channelControl[channel]->getType()));;
+      channelControl[channel]->enableDelayed();
     }
     else {
       gpioCore->removeGpioTaskByChannel(channel);
@@ -82,7 +82,7 @@ public:
   }
 
   void deactivateControls() {
-    for (int channel = 0 ; channel < channelControl.size(); channel++) {
+    for (int channel = 0; channel < channelControl.size(); channel++) {
       if (channelControl[channel] != nullptr) {
         channelControl[channel]->deactivate();
         channelControl[channel] = nullptr;
@@ -92,7 +92,7 @@ public:
 
 private:
   static ChannelCore *s_instance;
-  std::array<Control*, 8> channelControl{};
+  std::array<Control *, 8> channelControl{};
   GpioCore *gpioCore;
 };
 

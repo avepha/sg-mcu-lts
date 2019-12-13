@@ -6,7 +6,7 @@
 
 class RtcTask : public Task {
 public:
-  RtcTask(RTC_DS1307 *_hwRtc, RTC_Millis *_swRtc) : Task(TASK_SECOND, TASK_FOREVER, &gpioScheduler, true) {
+  RtcTask(RTC_DS1307 *_hwRtc, RTC_Millis *_swRtc) : Task(TASK_SECOND, TASK_FOREVER, &backgroundScheduler, true) {
     hwRtc = _hwRtc;
     swRtc = _swRtc;
   }

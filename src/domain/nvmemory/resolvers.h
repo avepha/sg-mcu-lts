@@ -19,6 +19,7 @@ public:
     }
     EEPROM.commit();
 
+    ESP.restart();
     DynamicJsonDocument data(64);
     data["status"] = "success";
     return data;

@@ -24,12 +24,21 @@ public:
   explicit mutation_control_type_save() : Mutation("control_type_save", new permission_control_type_save()) {};
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
-    ControlSchema schema = context->control->model->get();
-    schema.type = ControlStringToEnum(reqData["type"]);
+    ControlSchema controlSchema = context->control->model->get();
+    controlSchema.type = ControlStringToEnum(reqData["type"]);
+
+    ChannelSchema channelSchema = context->channel->model->get();
+    for (auto & channel : channelSchema.channels) {
+       channel.isActive = false;
+    }
+    context->channel->model->save(channelSchema);
+
+    SequenceSchema sequenceSchema = context->sequence->model->get();
+    sequenceSchema.sequence.isActive = false;
+    context->sequence->model->save(sequenceSchema);
 
     DynamicJsonDocument data(64);
-    bool isActive = context->control->core->checkAndActiveControl(schema.type);
-    if (!isActive) {
+    if (context->control->core->getType() == controlSchema.type) {
       // NO OP
       data["type"] = reqData["type"];
       data["op"] = "noop";
@@ -37,7 +46,8 @@ public:
       return data;
     }
 
-    int writeOps = context->control->model->save(schema);
+    context->control->core->setTypeAndDeactivateControls(controlSchema.type);
+    int writeOps = context->control->model->save(controlSchema);
 
     data["type"] = ControlEnumToString(context->control->core->getType());
     data["op"] = "updated";

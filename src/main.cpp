@@ -16,7 +16,7 @@
 #define MAINCORE 1
 #define EEPROM_SIZE 4096
 
-Scheduler controlScheduler, gpioScheduler;
+Scheduler controlScheduler, gpioScheduler, backgroundScheduler;
 
 #include "util/util.h"
 #include "combineContext.h"
@@ -36,6 +36,7 @@ CombineContext *context;
 
 // simulate node sensor
 #include "./util/simulateNodeSensors.h"
+
 Scheduler simulateScheduler;
 SimulateNodeSensorsTask *simulateNodeSensorsTask;
 
@@ -50,7 +51,7 @@ void setup() {
   Serial.begin(345600);
   entryPort.begin(345600, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   sensorPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
-  
+
   Serial.println();
   Serial.println("VERSION: " + String(VERSION));
   Serial.println("PROJECT: " + String(PROJECT));
@@ -143,13 +144,13 @@ void loop1(void *pvParameters) {
       context->nsensors->core->updateNSensor(bSensors, bSize);
       continue;
     }
-    else if(bSize == -2) { //checksum error
+    else if (bSize == -2) { //checksum error
       NSensorInvalidCheckSumError err;
       Serial.println(err.toJsonString());
       deviceEndpoint->unleash(err.toJsonString());
       continue;
     }
-    else if(bSize == -3) { //timeout
+    else if (bSize == -3) { //timeout
       NSensorTimeoutError err;
       Serial.println(err.toJsonString());
       deviceEndpoint->unleash(err.toJsonString());
@@ -165,6 +166,7 @@ void loop() {
   simulateScheduler.execute();
 #endif
   controlScheduler.execute();
+  backgroundScheduler.execute();
 }
 
 
