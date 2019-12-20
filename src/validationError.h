@@ -94,4 +94,8 @@ class NoControlStateError: public ValidationError {
 public: explicit NoControlStateError(String message = "Control has no state.") : ValidationError("no-control-state", message) {};
 };
 
+class StationNotFoundError: public ValidationError {
+public: explicit StationNotFoundError(String message = "Station is not found") : ValidationError("no-station", message) {};
+};
+
 #endif //SG_MCU_VALIDATIONERROR_H

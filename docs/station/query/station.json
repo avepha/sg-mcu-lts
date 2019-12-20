@@ -1,0 +1,8 @@
+{
+  "topic": "station",
+  "method": "query",
+  "reqId": "req-1",
+  "data": {
+    "address": 1
+  }
+}

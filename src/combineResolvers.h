@@ -31,6 +31,8 @@
 #include "domain/precondition/timer/resolvers.h"
 #include "domain/precondition/range/resolvers.h"
 
+#include "domain/station/resolvers.h"
+
 class CombineResolvers {
 public:
   explicit CombineResolvers(CombineContext *);
@@ -187,6 +189,12 @@ void CombineResolvers::CombineQuery() {
 
   auto *configuration = new query_configuration;
   queryMap[configuration->getName()] = configuration;
+
+  auto *stations = new query_stations;
+  queryMap[stations->getName()] = stations;
+
+  auto *station = new query_station;
+  queryMap[station->getName()] = station;
 
 
 }
