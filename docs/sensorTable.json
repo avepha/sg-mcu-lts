@@ -1,0 +1,14 @@
+{
+  "temperature": "0x01",
+  "humidity": "0x02",
+  "vpd": "0x03",
+  "soil_temperature": "0x04",
+  "soil_moisture": "0x05",
+  "water_potential": "0x06",
+  "co2": "0x07",
+  "par": "0x08",
+  "par_accumulation": "0x09",
+  "ec": "0x0A",
+  "ph": "0x0B",
+  "water_temperature": "0x0C"
+}
