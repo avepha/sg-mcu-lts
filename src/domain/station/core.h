@@ -3,7 +3,7 @@
 #include "./model.h"
 #include "./gsensor/GSensorStation.h"
 #include "./solution/SolutionStation.h"
-#include "./util/modbusTask.h"
+#include "./modbus/modbusTask.h"
 
 #ifndef SG_MCU_STATION_CORE_H
 #define SG_MCU_STATION_CORE_H

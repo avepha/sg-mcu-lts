@@ -1,4 +1,4 @@
-#include "./util/modbusPacket.h"
+#include "./modbus/modbusPacket.h"
 
 #ifndef SG_MCU_STATION_H
 #define SG_MCU_STATION_H

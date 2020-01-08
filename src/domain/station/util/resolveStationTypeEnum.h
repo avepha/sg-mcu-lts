@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "../station.h"
+#include "domain/station/station.h"
 #ifndef SG_MCU_RESOLVESTATIONTYPE_H
 #define SG_MCU_RESOLVESTATIONTYPE_H
 

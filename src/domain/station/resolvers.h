@@ -1,6 +1,6 @@
 #include "domain/query.h"
 #include "./permission.h"
-#include "./util/resolveStationTypeEnum.h"
+#include "domain/station/util/resolveStationTypeEnum.h"
 #ifndef SG_MCU_STATION_RESOLVERS_H
 #define SG_MCU_STATION_RESOLVERS_H
 

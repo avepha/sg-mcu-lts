@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "./modbusPacket.h"
-#include "./resolveStationTypeEnum.h"
+#include "domain/station/util/resolveStationTypeEnum.h"
 
 #ifndef SG_MCU_MODBUSTASK_H
 #define SG_MCU_MODBUSTASK_H
@@ -79,10 +79,12 @@ public:
       ModbusPacket *requestPacket = vStations[currentStationIndex]->getRequest();
       std::vector<byte> requestByte = requestPacket->getVectorPacket();
       stationPort.write(requestByte.data(), requestByte.size());
+
       Debug::Print(
           "req, sta 0x" + String(vStations[currentStationIndex]->getAddress(), HEX) +
           ", t: " + StationTypeEnumToString(vStations[currentStationIndex]->getType())
       );
+
       state = REQUESTING;
     }
 
