@@ -4,6 +4,7 @@
 
 #include "./modbusPacket.h"
 #include "domain/station/util/resolveStationTypeEnum.h"
+#include "./util/generateModbusResponse.h"
 
 #ifndef SG_MCU_MODBUSTASK_H
 #define SG_MCU_MODBUSTASK_H
@@ -22,7 +23,7 @@ public:
 
   bool Callback() override {
     if (state == REQUESTING) {
-      if (!stationPort.available()) {
+      if (!isDataComing()) { // always true for SG_TEST
         waitingCycle++;
         if (waitingCycle >= 5) { // request timeout
           Debug::Print("req-timeout, sta " + String(vStations[currentStationIndex]->getAddress()));
@@ -32,27 +33,38 @@ public:
         }
         return true;
       }
-      else { // serial port is available
-        std::vector<byte> vBytes;
-        while (stationPort.available()) {
-          vBytes.push_back(stationPort.read());
-        }
-
+      else { // serial port is available or SG_TEST
+        bool isPacketFailed = false;
+#ifdef SG_TEST
+        std::vector<byte> vBytes = getPacketTestMode(vStations[currentStationIndex]->getAddress());
+#else
+        std::vector<byte> vBytes = getPacket();
+#endif
         byte requestAddress = vStations[currentStationIndex]->getAddress();
+
+        if (vBytes.size() <= 2) {
+          Debug::Print("addr: " + String(requestAddress, HEX) + " packet-size 2");
+          isPacketFailed = true;
+        }
 
         // step1. check crc
         if (!ModbusPacket::verifyPacket(vBytes)) {
-          Debug::Print("addr: " + String(requestAddress, HEX) + " Packet verification failed, Crc is invalid");
-          state = WAITING;
-          currentStationIndex++;
-          return true;
+          Debug::Print("res, sta " + String(requestAddress, HEX) + " invalid-crc");
+          isPacketFailed = true;
         }
 
         byte responseAddress = vBytes[0];
         byte responseFuncCode = vBytes[1];
 
-        if (responseFuncCode != 0x08) { // Error handling
-          Debug::Print("addr: " + String(requestAddress, HEX) + "Response packet is failed, func-code: 0x08");
+        if (responseFuncCode == 0x08) { // Error handling
+          Debug::Print("res, sta " + String(requestAddress, HEX) + " func-code: 0x08");
+          isPacketFailed = true;
+        }
+
+        if (isPacketFailed) {
+          state = WAITING;
+          currentStationIndex++;
+          return true;
         }
 
         // send to requested station [address(1)][func(1)][data(n * byte)][crc(2)]
@@ -75,7 +87,7 @@ public:
         currentStationIndex = 0;
         return true;
       }
-
+      
       ModbusPacket *requestPacket = vStations[currentStationIndex]->getRequest();
       std::vector<byte> requestByte = requestPacket->getVectorPacket();
       stationPort.write(requestByte.data(), requestByte.size());
@@ -92,6 +104,34 @@ public:
   }
 
 private:
+  static bool isDataComing() {
+#ifdef SG_TEST
+    return true;
+#else
+    return stationPort.available() != 0;
+#endif
+  }
+
+  static std::vector<byte> getPacket() {
+    std::vector<byte> packets;
+    while (stationPort.available()) {
+      packets.push_back(stationPort.read());
+    }
+    return packets;
+  }
+
+  static std::vector<byte> getPacketTestMode(byte address) {
+    std::vector<byte> packets;
+    if (address < 0x10) {
+      packets = GenerateModbusResponse::genGSensorPacket(address);
+    }
+    else if (address >= 0x01 && address < 0x20) {
+      packets = GenerateModbusResponse::getSolutionPacket(address);
+    }
+
+    return packets;
+  }
+
   static ModbusTask *s_instance;
 
   ModbusTask() : Task(0, TASK_FOREVER, &gpioScheduler, false) {
@@ -107,6 +147,7 @@ private:
   } state = WAITING;
   ModbusPacket *packet = nullptr;
   std::vector<Station *> vStations{};
+
 };
 
 ModbusTask *ModbusTask::s_instance = nullptr;

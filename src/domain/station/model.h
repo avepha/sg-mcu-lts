@@ -10,11 +10,13 @@ struct StationSchema {
   uint8_t gsensorSize = 1;
   struct GSensorStation {
     uint8_t address;
+    uint8_t size;
     uint8_t sensorIds[12];
   } gsensorStations[4] = {
       {
-          0x01,
-          {
+          .address = 0x01,
+          .size = 8,
+          .sensorIds = {
               Sensor::SENSORMAP["gs_temperature"],
               Sensor::SENSORMAP["gs_humidity"],
               Sensor::SENSORMAP["gs_vpd"],
@@ -22,7 +24,7 @@ struct StationSchema {
               Sensor::SENSORMAP["gs_soilMoisture"],
               Sensor::SENSORMAP["gs_co2"],
               Sensor::SENSORMAP["gs_par"],
-              Sensor::SENSORMAP["gs_parAccumulation"],
+              Sensor::SENSORMAP["gs_parAccumulation"]
           }
       }
   };
@@ -30,14 +32,16 @@ struct StationSchema {
   uint8_t solutionSize = 1;
   struct SolutionStation {
     uint8_t address;
+    uint8_t size;
     uint8_t sensorIds[4];
   } solutionStations[4] = {
       {
-          0x10,
-          {
+          .address = 0x10,
+          .size = 3,
+          .sensorIds = {
               Sensor::SENSORMAP["sol_ec"],
               Sensor::SENSORMAP["sol_ph"],
-              Sensor::SENSORMAP["sol_waterTemperature"],
+              Sensor::SENSORMAP["sol_waterTemperature"]
           }
       }
   };

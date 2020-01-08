@@ -1,7 +1,6 @@
 #include <Arduino.h>
-#include <vector>
-#include <map>
 #include "./sensor.h"
+
 #ifndef SG_MCU_SENSOR_SENSORPOOL_H
 #define SG_MCU_SENSOR_SENSORPOOL_H
 
