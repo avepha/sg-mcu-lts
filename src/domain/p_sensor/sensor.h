@@ -10,7 +10,7 @@ public:
 
   Sensor(uint8_t addr, uint8_t sensorId) : stationAddr(addr), sensorId(sensorId), value(-1), valid(false) {}
 
-  void setValue(uint32_t val) {
+  void setValue(float val) {
     value = val;
   }
 
@@ -26,7 +26,7 @@ public:
     return sensorId;
   }
 
-  uint32_t getValue() {
+  float getValue() {
     return value;
   }
 
@@ -37,7 +37,7 @@ public:
 private:
   uint8_t stationAddr;
   uint8_t sensorId;
-  uint32_t value;
+  float value;
   bool valid;
 };
 

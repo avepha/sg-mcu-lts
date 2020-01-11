@@ -43,7 +43,7 @@ public:
           JsonObject sensor = sensors.createNestedObject();
           sensor["id"] = sensorId;
           sensor["isValid"] = station->getSensorMap()[sensorId]->isValid();
-          sensor["value"] = station->getSensorMap()[sensorId]->getValue();
+          sensor["value"] = (float)station->getSensorMap()[sensorId]->getValue();
         }
         break;
       }
