@@ -16,8 +16,45 @@ public:
     sensorsMap[sensor->getSensorId()].push_back(sensor);
   }
 
+  std::map<std::uint8_t, std::vector<Sensor *>> getSensorMap() {
+    return sensorsMap;
+  }
+
+  uint16_t getAvailableStationBySensorId(uint8_t sensorId) {
+    uint16_t available = 0;
+    for (const auto &sensor : sensorsMap[sensorId]) {
+      if (sensor->isValid()) {
+        available++;
+      }
+    }
+
+    return available;
+  }
+
+  uint16_t getTotalStationBySensorId(uint8_t sensorId) {
+    return sensorsMap[sensorId].size();
+  }
+
+  float getAverageStationBySensorId(uint8_t sensorId) {
+    float sum = 0;
+    float available = 0;
+    for (const auto &sensor : sensorsMap[sensorId]) {
+      if (sensor->isValid()) {
+        available++;
+        sum += sensor->getValue();
+      }
+    }
+
+    if (!available) {
+      return (float)0xFFFFFFFF;
+    }
+
+    return sum / available;
+  }
+
 private:
   static SensorPool *s_instance;
+
   SensorPool() = default;
 
   std::map<std::uint8_t, std::vector<Sensor *>> sensorsMap{}; // <sensorId, sensors[]>

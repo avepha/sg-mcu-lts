@@ -32,6 +32,7 @@
 #include "domain/precondition/range/resolvers.h"
 
 #include "domain/station/resolvers.h"
+#include "domain/p_sensor/resolvers.h"
 
 class CombineResolvers {
 public:
@@ -195,6 +196,9 @@ void CombineResolvers::CombineQuery() {
 
   auto *station = new query_station;
   queryMap[station->getName()] = station;
+
+  auto *p_sensor = new query_p_sensor;
+  queryMap[p_sensor->getName()] = p_sensor;
 
 
 }

@@ -98,4 +98,8 @@ class StationNotFoundError: public ValidationError {
 public: explicit StationNotFoundError(String message = "Station is not found") : ValidationError("no-station", message) {};
 };
 
+class SensorNotFoundError: public ValidationError {
+public: explicit SensorNotFoundError(String message = "No sensor") : ValidationError("no-sensor", message) {};
+};
+
 #endif //SG_MCU_VALIDATIONERROR_H
