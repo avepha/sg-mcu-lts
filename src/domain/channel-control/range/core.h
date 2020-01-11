@@ -1,5 +1,5 @@
 #include "TaskScheduler.h"
-#include "domain/nsensor/core.h"
+#include "domain/p_sensor/sensorPool.h"
 #include "domain/channel-control/state.h"
 #include "domain/channel-control/control.h"
 #include "./model.h"
@@ -42,7 +42,7 @@ public:
     RangeSchema rangeSchema = model.get();
     range = rangeSchema.ranges[channel];
 
-    nSensorCore = NSensorCore::instance();
+    sensorPool = SensorPool::instance();
     timeStamp = millis();
   }
 
@@ -53,8 +53,12 @@ public:
   }
 
   bool controlTask() override {
-    NSensor sensor = nSensorCore->getAverageSensor();
-    state.sensorValue = sensor.sensors[range.sensor];
+    if (sensorPool->getAvailableStationBySensorId(range.sensor) <= 0) {
+      state.sensorValue = -1;
+      return true;
+    }
+
+    state.sensorValue = sensorPool->getAverageStationBySensorId(range.sensor);
 
     state.isReachThreshold = (range.greater) ? state.sensorValue >= range.lower && state.sensorValue >= range.upper
                                              : state.sensorValue <= range.lower && state.sensorValue <= range.upper;
@@ -108,7 +112,7 @@ public:
 private:
   RangeState state;
   unsigned long timeStamp = 0;
-  NSensorCore *nSensorCore;
+  SensorPool *sensorPool;
   RangeSchema::Range range;
 };
 

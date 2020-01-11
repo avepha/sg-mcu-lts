@@ -4,7 +4,6 @@
 #define SG_MCU_CONTROL_PAR_MODEL_H
 
 struct ParSchema {
-  byte parSensorIndex = 5;
   struct Par {
     float parSumInKJ = 1000;
     struct Timing {
