@@ -38,6 +38,13 @@ public:
         data["address"] = station->getAddress();
         data["lastSeen"] = station->getLastSeen();
         data["available"] = station->isAvailable();
+        JsonArray sensors = data.createNestedArray("sensors");
+        for (auto sensorId : station->getSensorIds()) {
+          JsonObject sensor = sensors.createNestedObject();
+          sensor["id"] = sensorId;
+          sensor["isValid"] = station->getSensorMap()[sensorId]->isValid();
+          sensor["value"] = station->getSensorMap()[sensorId]->getValue();
+        }
         break;
       }
     }

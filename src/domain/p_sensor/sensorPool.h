@@ -12,11 +12,17 @@ public:
     return s_instance;
   }
 
+  void addSensor(Sensor *sensor) {
+    sensorsMap[sensor->getSensorId()].push_back(sensor);
+  }
+
 private:
   static SensorPool *s_instance;
   SensorPool() = default;
 
-  std::map<std::uint8_t, std::vector<Sensor>> sensorsMap{}; // <sensorId, sensors[]>
+  std::map<std::uint8_t, std::vector<Sensor *>> sensorsMap{}; // <sensorId, sensors[]>
 };
+
+SensorPool *SensorPool::s_instance = nullptr;
 
 #endif //SG_MCU_SENSORPOOL_H

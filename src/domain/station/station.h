@@ -1,3 +1,4 @@
+#include "domain/p_sensor/sensor.h"
 #include "./modbus/modbusPacket.h"
 
 #ifndef SG_MCU_STATION_H
@@ -40,6 +41,18 @@ public:
   ModbusPacket *getRequest() {
     return requestPacket;
   }
+
+  std::vector<uint8_t > getSensorIds() {
+    return sensorIds;
+  }
+
+  std::map<uint8_t, Sensor*> getSensorMap() {
+    return sensorMap;
+  }
+
+protected:
+  std::map<uint8_t, Sensor*> sensorMap{};
+  std::vector<uint8_t> sensorIds{};
 
 private:
   STATION_ENUM type;

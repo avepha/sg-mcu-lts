@@ -14,14 +14,14 @@ public:
     StationModel model;
     StationSchema stationSchema = model.get();
     ModbusTask *modbusTask = ModbusTask::instance();
-    for (int i = 0; i < stationSchema.gsensorSize; i++) {
-      auto *gSensorStation = new GSensorStation(stationSchema.gsensorStations[i].address);
+    for (int i = 0; i < stationSchema.gSensorStation.GsensorSize; i++) {
+      auto *gSensorStation = new GSensorStation(stationSchema.gSensorStation.GSensorAddresses[i]);
       stations.push_back(gSensorStation);
       modbusTask->registerStation(gSensorStation);
     }
 
-    for (int i = 0 ; i < stationSchema.solutionSize; i++) {
-      auto *solutionStation = new SolutionStation(stationSchema.solutionStations[i].address);
+    for (int i = 0 ; i < stationSchema.solutionStation.SolutionSize; i++) {
+      auto *solutionStation = new SolutionStation(stationSchema.solutionStation.SolutionAddresses[i]);
       stations.push_back(solutionStation);
       modbusTask->registerStation(solutionStation);
     }

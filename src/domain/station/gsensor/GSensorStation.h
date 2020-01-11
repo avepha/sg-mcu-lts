@@ -1,6 +1,8 @@
 #include <Arduino.h>
+#include "domain/p_sensor/sensorPool.h"
 #include "../station.h"
 #include "../modbus/modbusPacket.h"
+#include "../model.h"
 
 #ifndef SG_MCU_GSENSOR_STATION_H
 #define SG_MCU_GSENSOR_STATION_H
@@ -8,17 +10,16 @@
 class GSensorStation : public Station {
 public:
   explicit GSensorStation(uint8_t addr) : Station(STATION_GSENSOR, addr) {
-
+    StationModel model;
+    StationSchema::GSensorStation gSensorStation = model.get().gSensorStation;
+    for (int i = 0; i < sizeof(gSensorStation.GSensorSensorIds) / sizeof(gSensorStation.GSensorSensorIds[0]); i++) {
+      sensorMap[gSensorStation.GSensorSensorIds[i]] = new Sensor(addr, gSensorStation.GSensorSensorIds[i]);
+      sensorIds.push_back(gSensorStation.GSensorSensorIds[i]);
+      SensorPool::instance()->addSensor(sensorMap[gSensorStation.GSensorSensorIds[i]]);
+    }
   }
 
   void onPacketReceived(const std::vector<byte> &vPacket) override {
-    Serial.print("gsensor onPacketReceived: ");
-    for (std::size_t i = 0; i < vPacket.size(); i++) {
-      Serial.print(" ");
-      Serial.print(vPacket[i], HEX);
-    }
-    Serial.println();
-
     byte address = vPacket[0];
     byte funcCode = vPacket[1];
     uint8_t dataSize = vPacket.size() - 4;
@@ -26,36 +27,26 @@ public:
     memcpy(data, vPacket.data() + 2, dataSize);
 
     if (funcCode == 0x04 && vPacket.size() >= 36) {
-      float sensors[dataSize / 4];
-      for (uint16_t dataIndex = 0, sensorIndex = 0; dataIndex < sizeof(data); dataIndex+=4, sensorIndex++) {
-        memcpy(&sensors[sensorIndex], &data[dataIndex], 4);
+      float sensorsValue[dataSize / 4];
+      for (uint16_t dataIndex = 0, sensorIndex = 0; dataIndex < sizeof(data); dataIndex += 4, sensorIndex++) {
+        memcpy(&sensorsValue[sensorIndex], &data[dataIndex], 4);
       }
 
-      Serial.print("func 0x04 got sensors: ");
-      for (uint16_t i = 0 ; i < 6; i++) {
-        Serial.print(" ");
-        Serial.print(sensors[i], HEX);
+      for (int i = 0; i < sizeof(sensorsValue) / sizeof(sensorsValue[0]); i++) {
+        if (sensorsValue[i] == 0xFFFFFFFF) {
+          // set invalid flag to sensor
+          sensorMap[sensorIds[i]]->setValid(false);
+        }
+        else {
+          sensorMap[sensorIds[i]]->setValue(sensorsValue[i]);
+          sensorMap[sensorIds[i]]->setValid(true);
+        }
       }
-      Serial.println();
     }
-    else {
-      ;;
-    }
-
-//    byte packets[50];
-//    uint16_t size = vPacket.size();
-//    memcpy(packets, vPacket.data(), size);
-//
-//    byte address = packets[0];
-//    byte funcCode = packets[1];
-//
-//    if (funcCode == 0x04) { // sensors
-//      byte *firstDataByte = &packets[2];
-//      for (uint16_t i = 0 ; i < size; i++) {
-//
-//      }
-//    }
   }
+
+private:
+
 };
 
 #endif

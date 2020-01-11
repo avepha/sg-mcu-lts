@@ -16,7 +16,6 @@ public:
     uint16_t calculatedCrc = crc16.ccitt(vPacket.data() + 2, vPacket.size() - 4); // tail 2 bytes, head 2 bytes
     uint16_t responseCrc;
     memcpy(&responseCrc, &vPacket[vPacket.size() - 2], sizeof(byte) * 2);
-    Serial.println("calCrc: " + String(calculatedCrc) + " resCrc: " + String(responseCrc));
     return calculatedCrc == responseCrc;
   }
 

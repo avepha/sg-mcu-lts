@@ -22,12 +22,12 @@ public:
     memcpy(data, sensors, sizeof(sensors));
     ModbusPacket packet(address, 0x04, data, sizeof(data));
 
-    Serial.print("Generated gsensor packet: ");
-    for (std::size_t i = 0 ; i < packet.getVectorPacket().size(); i++) {
-      Serial.print(" ");
-      Serial.print(packet.getVectorPacket()[i], HEX);
-    }
-    Serial.println();
+//    Serial.print("Generated gsensor packet: ");
+//    for (std::size_t i = 0 ; i < packet.getVectorPacket().size(); i++) {
+//      Serial.print(" ");
+//      Serial.print(packet.getVectorPacket()[i], HEX);
+//    }
+//    Serial.println();
 
     return packet.getVectorPacket();
   }
