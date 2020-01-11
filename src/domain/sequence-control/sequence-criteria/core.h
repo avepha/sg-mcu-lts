@@ -1,5 +1,5 @@
 #include "TaskScheduler.h"
-#include "domain/nsensor/core.h"
+#include "domain/p_sensor/sensorPool.h"
 #include "domain/sequence-control/sequenceState.h"
 #include "domain/sequence-control/sequenceControl.h"
 #include "domain/sequence/util/sequenceGpioChain.h"
@@ -46,7 +46,7 @@ public:
     SequenceCriteriaSchema criteriaSchema = model.get();
     criteria = criteriaSchema.criteria;
 
-    nSensorCore = NSensorCore::instance();
+    sensorPool = SensorPool::instance();
     timeStamp = millis();
   }
 
@@ -57,9 +57,12 @@ public:
   }
 
   bool controlTask() override {
-    Debug::Print("ctrl-sequence-criteria");
-    NSensor averageSensor = nSensorCore->getAverageSensor();
-    state.sensorValue = averageSensor.sensors[criteria.sensor];
+    if (sensorPool->getAvailableStationBySensorId(criteria.sensor) <= 0) {
+      state.sensorValue = -1;
+      return true;
+    }
+
+    state.sensorValue = sensorPool->getAverageStationBySensorId(criteria.sensor);
     state.isTimingEnable = criteria.timing.enable;
 
     // check direction
@@ -115,7 +118,7 @@ public:
 private:
   SequenceCriteriaState state;
   unsigned long timeStamp = 0;
-  NSensorCore *nSensorCore;
+  SensorPool *sensorPool;
   SequenceCriteriaSchema::Criteria criteria;
 };
 

@@ -1,5 +1,5 @@
 #include "TaskScheduler.h"
-#include "domain/nsensor/core.h"
+#include "domain/p_sensor/sensorPool.h"
 #include "domain/sequence-control/sequenceState.h"
 #include "domain/sequence-control/sequenceControl.h"
 #include "domain/sequence/util/sequenceGpioChain.h"
@@ -43,7 +43,7 @@ public:
     SequenceRangeSchema rangeSchema = model.get();
     range = rangeSchema.range;
 
-    nSensorCore = NSensorCore::instance();
+    sensorPool = SensorPool::instance();
     timeStamp = millis();
   }
 
@@ -54,8 +54,12 @@ public:
   }
 
   bool controlTask() override {
-    NSensor sensor = nSensorCore->getAverageSensor();
-    state.sensorValue = sensor.sensors[range.sensor];
+    if (sensorPool->getAvailableStationBySensorId(range.sensor) <= 0) {
+      state.sensorValue = -1;
+      return true;
+    }
+
+    state.sensorValue = sensorPool->getAverageStationBySensorId(range.sensor);
     state.isTimingEnable = range.timing.enable;
     state.isReachThreshold = (range.greater) ? state.sensorValue >= range.lower && state.sensorValue >= range.upper
                                              : state.sensorValue <= range.lower && state.sensorValue <= range.upper;
@@ -110,7 +114,7 @@ public:
 private:
   SequenceRangeState state;
   unsigned long timeStamp = 0;
-  NSensorCore *nSensorCore;
+  SensorPool *sensorPool;
   SequenceRangeSchema::Range range;
 };
 
