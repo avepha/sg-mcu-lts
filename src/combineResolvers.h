@@ -197,6 +197,9 @@ void CombineResolvers::CombineQuery() {
   auto *p_sensor = new query_p_sensor;
   queryMap[p_sensor->getName()] = p_sensor;
 
+  auto *p_sensors = new query_p_sensors;
+  queryMap[p_sensors->getName()] = p_sensors;
+
 
 }
 

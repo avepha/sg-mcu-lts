@@ -32,4 +32,22 @@ public:
   };
 };
 
+class query_p_sensors : public Query {
+public:
+  explicit query_p_sensors() : Query("p_sensors") {};
+
+  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    SensorPool *sensorPool = SensorPool::instance();
+    DynamicJsonDocument data(1024);
+    for (const auto& sensor: sensorPool->getSensorMap()) {
+      JsonObject obj = data.createNestedObject();
+      obj["id"] = sensor.first;
+      obj["available"] = sensorPool->getAvailableStationBySensorId(sensor.first);
+      obj["total"] = sensorPool->getTotalStationBySensorId(sensor.first);
+    }
+    return data;
+  };
+};
+
+
 #endif //SG_MCU_STATION_RESOLVERS_H

@@ -14,7 +14,7 @@ public:
   Station(STATION_ENUM _type, uint8_t _address) {
     type = _type;
     address = _address;
-    lastSeen = 0;
+    updatedAtMs = 0;
 
     byte data[4] = {0x00, 0x0, 0x0, 0x0};
     requestPacket = new ModbusPacket(address, 0x04, data, sizeof(data));
@@ -29,11 +29,11 @@ public:
   }
 
   uint32_t getLastSeen() {
-    return lastSeen;
+    return millis() - updatedAtMs;
   }
 
   bool isAvailable() {
-    return lastSeen != 0 && millis() - lastSeen < 1000 * 10; // never updated or 10 seconds
+    return updatedAtMs != 0 && millis() - updatedAtMs < 1000 * 10; // never updated or 10 seconds
   }
 
   virtual void onPacketReceived(const std::vector<byte> &vPacket) = 0;
@@ -42,23 +42,23 @@ public:
     return requestPacket;
   }
 
-  std::vector<uint8_t > getSensorIds() {
+  std::vector<uint8_t> getSensorIds() {
     return sensorIds;
   }
 
-  std::map<uint8_t, Sensor*> getSensorMap() {
+  std::map<uint8_t, Sensor *> getSensorMap() {
     return sensorMap;
   }
 
 protected:
-  std::map<uint8_t, Sensor*> sensorMap{};
+  std::map<uint8_t, Sensor *> sensorMap{};
   std::vector<uint8_t> sensorIds{};
+  uint32_t updatedAtMs;
 
 private:
   STATION_ENUM type;
   uint8_t address;
   ModbusPacket *requestPacket;
-  uint32_t lastSeen;
 };
 
 #endif //SG_MCU_STATION_H

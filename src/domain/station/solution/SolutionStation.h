@@ -41,6 +41,9 @@ public:
         }
       }
     }
+
+    // update last seen
+    updatedAtMs = millis();
   };
 };
 

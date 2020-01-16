@@ -87,7 +87,7 @@ public:
         currentStationIndex = 0;
         return true;
       }
-      
+
       ModbusPacket *requestPacket = vStations[currentStationIndex]->getRequest();
       std::vector<byte> requestByte = requestPacket->getVectorPacket();
       stationPort.write(requestByte.data(), requestByte.size());
@@ -123,10 +123,20 @@ private:
   static std::vector<byte> getPacketTestMode(byte address) {
     std::vector<byte> packets;
     if (address < 0x10) {
-      packets = GenerateModbusResponse::genGSensorPacket(address);
+      if (address == 0x03) { // air module is failed
+        packets = GenerateModbusResponse::genGsensorPacketWithFailedAirModule(address);
+      }
+      else {
+        packets = GenerateModbusResponse::genGSensorPacket(address);
+      }
     }
     else if (address >= 0x01 && address < 0x20) {
-      packets = GenerateModbusResponse::getSolutionPacket(address);
+      if (address == 0x13) { // all sensor failed
+        packets = GenerateModbusResponse::getSolutionPacketWithFailedModule(address);
+      }
+      else {
+        packets = GenerateModbusResponse::getSolutionPacket(address);
+      }
     }
 
     return packets;
