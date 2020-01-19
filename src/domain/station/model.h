@@ -19,8 +19,8 @@ struct StationSchema {
         Sensor::SENSORMAP["gs_parAccumulation"]
     };
 
-    uint8_t GsensorSize = 3;
-    uint8_t GSensorAddresses[8] = {0x01, 0x03, 0x02};
+    uint8_t GsensorSize = 2;
+    uint8_t GSensorAddresses[8] = {0x01, 0x03};
   } gSensorStation;
 
   struct SolutionStation {
@@ -30,8 +30,8 @@ struct StationSchema {
         Sensor::SENSORMAP["sol_waterTemperature"]
     };
 
-    uint8_t SolutionSize = 3;
-    uint8_t SolutionAddresses[8] = {0x10, 0x12, 0x13};
+    uint8_t SolutionSize = 2;
+    uint8_t SolutionAddresses[8] = {0x10, 0x13};
   } solutionStation;
 };
 

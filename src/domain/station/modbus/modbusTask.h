@@ -90,7 +90,10 @@ public:
 
       ModbusPacket *requestPacket = vStations[currentStationIndex]->getRequest();
       std::vector<byte> requestByte = requestPacket->getVectorPacket();
+
+      digitalWrite(SG_DIR_PIN, SG_SEND_DIR);
       stationPort.write(requestByte.data(), requestByte.size());
+      digitalWrite(SG_DIR_PIN, SG_RECV_DIR);
 
       Debug::Print(
           "req, sta 0x" + String(vStations[currentStationIndex]->getAddress(), HEX) +

@@ -44,7 +44,7 @@ void loop1(void *pvParameters);
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
   pinMode(SG_DIR_PIN, OUTPUT);
-  digitalWrite(SG_DIR_PIN, LOW);
+  digitalWrite(SG_DIR_PIN, SG_RECV_DIR);
 
   Debug::update();
   Serial.begin(345600);

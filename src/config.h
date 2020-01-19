@@ -34,6 +34,8 @@ const String SG_MODEL = "v1";
 const int SG_SENSOR_RX = 16;
 const int SG_SENSOR_TX = 17;
 const int SG_DIR_PIN = 4;
+const int SG_SEND_DIR = HIGH;
+const int SG_RECV_DIR = LOW;
 
 const unsigned long EXPECTED_ACTIVE_DIFF_TIME = 10 * 1000; // 10 seconds
 
