@@ -111,6 +111,9 @@ private:
 #ifdef SG_TEST
     return true;
 #else
+    if (stationPort.available() > 0) {
+     Debug::Print("Got packet: " + String(stationPort.available()));
+    }
     return stationPort.available() != 0;
 #endif
   }

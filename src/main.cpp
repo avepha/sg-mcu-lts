@@ -65,7 +65,7 @@ void setup() {
 
   serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
   rpiEndpoint = new DeviceEndpoint(&entryPort);
-  sensorEndpoint = new SensorEndpoint(&stationPort);
+//  sensorEndpoint = new SensorEndpoint(&stationPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
 
@@ -135,26 +135,6 @@ void loop1(void *pvParameters) {
       }
       continue;
       // for memory profiling
-    }
-
-    byte bSensors[64];
-    int bSize = sensorEndpoint->embrace(bSensors);
-
-    if (bSize > 0) {
-      context->nsensors->core->updateNSensor(bSensors, bSize);
-      continue;
-    }
-    else if (bSize == -2) { //checksum error
-      NSensorInvalidCheckSumError err;
-      Serial.println(err.toJsonString());
-      rpiEndpoint->unleash(err.toJsonString());
-      continue;
-    }
-    else if (bSize == -3) { //timeout
-      NSensorTimeoutError err;
-      Serial.println(err.toJsonString());
-      rpiEndpoint->unleash(err.toJsonString());
-      continue;
     }
 
     delay(1);

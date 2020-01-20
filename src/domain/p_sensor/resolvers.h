@@ -25,6 +25,9 @@ public:
         staSensor["value"] = sensor->getValue();
         staSensor["available"] = sensor->isValid();
         staSensor["station"] = sensor->getStationAddress();
+        staSensor["lastSeen"] = millis() - sensor->getUpdatedTime();
+        staSensor["isOutdated"] = sensor->isOutdated();
+        staSensor["valid"] = sensor->getValid();
       }
     }
 

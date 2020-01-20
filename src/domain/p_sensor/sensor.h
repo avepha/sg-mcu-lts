@@ -8,13 +8,15 @@ class Sensor {
 public:
   static std::map<std::string, uint8_t> SENSORMAP;
 
-  Sensor(uint8_t addr, uint8_t sensorId) : stationAddr(addr), sensorId(sensorId), value(-1), valid(false) {}
+  Sensor(uint8_t addr, uint8_t sensorId) : stationAddr(addr), sensorId(sensorId), value(-1), valid(false), updatedTime(0) {}
 
   void setValue(float val) {
+    updatedTime = millis();
     value = val;
   }
 
   void setValid(uint32_t val) {
+    updatedTime = millis();
     valid = val;
   }
 
@@ -31,6 +33,18 @@ public:
   }
 
   bool isValid() {
+    return valid && !isOutdated();
+  }
+
+  bool isOutdated() {
+    return millis() - updatedTime > 10000;
+  }
+
+  uint32_t getUpdatedTime() {
+    return updatedTime;
+  }
+
+  bool getValid() {
     return valid;
   }
 
@@ -39,6 +53,7 @@ private:
   uint8_t sensorId;
   float value;
   bool valid;
+  uint32_t updatedTime;
 };
 
 std::map<std::string, uint8_t> Sensor::SENSORMAP{
