@@ -52,19 +52,6 @@ public:
   }
 };
 
-class permission_par_sensor_index_save : public Permission {
-public:
-  explicit permission_par_sensor_index_save() : Permission() {};
-
-  void resolve(JsonObject reqData, CombineContext *context) override {
-    SensorSchema sensorSchema = context->sensor->model->get();
-    if (reqData["parSensorIndex"] < 0 || reqData["parSensorIndex"] > sensorSchema.numberOfSensor) {
-      InvalidInputError err("parSensor index out of bound");
-      throw err;
-    }
-  }
-};
-
 class permission_par : public Permission {
 public:
   explicit permission_par() : Permission() {};

@@ -1,0 +1,8 @@
+{
+  "topic": "p_sensor",
+  "method": "query",
+  "reqId": "req-1",
+  "data": {
+    "id": 1
+  }
+}

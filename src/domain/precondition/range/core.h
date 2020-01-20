@@ -1,5 +1,5 @@
 #include "domain/channel-control/state.h"
-#include "domain/nsensor/core.h"
+#include "domain/p_sensor/sensorPool.h"
 #include "../precondition.h"
 #include "./model.h"
 
@@ -23,15 +23,20 @@ public:
 class PrecRangeCore : public Precondition {
 public:
   explicit PrecRangeCore(int channel) : Precondition(PREC_RANGE) {
-    nSensorCore = NSensorCore::instance();
+    sensorPool = SensorPool::instance();
     PrecRangeModel model;
     PrecRangeSchema precCriteriaSchema = model.get();
     range = precCriteriaSchema.ranges[channel];
   }
 
   bool resolve() override {
-    NSensor averageSensor = nSensorCore->getAverageSensor();
-    state.sensorValue = averageSensor.sensors[range.sensor];
+    if (sensorPool->getAvailableStationBySensorId(range.sensor)) {
+      state.sensorValue = -1;
+      return false;
+    }
+
+    state.sensorValue = sensorPool->getAverageStationBySensorId(range.sensor);
+
     state.isReachThreshold = (state.sensorValue >= range.lower && state.sensorValue <= range.upper);
 
     return state.isReachThreshold;
@@ -43,7 +48,7 @@ public:
 
 private:
   PrecRangeState state;
-  NSensorCore *nSensorCore;
+  SensorPool *sensorPool;
   PrecRangeSchema::Range range;
 };
 

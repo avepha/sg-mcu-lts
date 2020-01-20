@@ -35,39 +35,6 @@ public:
   };
 };
 
-class mutation_par_sensor_index_save : public Mutation {
-public:
-  explicit mutation_par_sensor_index_save() : Mutation("par_sensor_index_save", new permission_par_sensor_index_save()) {};
-
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
-    ParSchema schema = context->par->model->get();
-    schema.parSensorIndex = reqData["parSensorIndex"];
-
-    int writeOps = context->par->model->save(schema);
-
-    ParSchema newSchema = context->par->model->get();
-    DynamicJsonDocument data(128);
-    data["writeOps"] = writeOps;
-    data["parSensorIndex"] = newSchema.parSensorIndex;
-
-    return data;
-  };
-};
-
-// @query
-class query_par_sensor_index : public Query {
-public:
-  explicit query_par_sensor_index() : Query("par_sensor_index") {};
-
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
-    ParSchema schema = context->par->model->get();
-    DynamicJsonDocument data(128);
-    data["parSensorIndex"] = schema.parSensorIndex;
-
-    return data;
-  };
-};
-
 class query_par : public Query {
 public:
   explicit query_par() : Query("par", new permission_par()) {};

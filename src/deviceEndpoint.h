@@ -24,7 +24,8 @@ bool DeviceEndpoint::embrace(String *message) {
   int readIndex = 0;
   while (entryPoint->available())
   {
-    if (entryPoint->read() == '{') {
+    char firstChar = (char)entryPoint->read();
+    if (firstChar == '{') {
       raw[readIndex++] = '{';
       int loop = 0;
       while(true) {
@@ -43,9 +44,15 @@ bool DeviceEndpoint::embrace(String *message) {
           // ensure this process can not hold resource more than 50ms
           loop++;
           delay(1);
-          if (loop >= 50) return false; // timeout
+          if (loop >= 50) {
+            Debug::Print("Request timeout, request format is not invalid");
+            return false; // timeout
+          }
         }
       }
+    }
+    else {
+      Debug::Print("got unknown byte " + String(firstChar, HEX));
     }
   }
 

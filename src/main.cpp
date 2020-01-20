@@ -17,6 +17,8 @@
 #define EEPROM_SIZE 4096
 
 Scheduler controlScheduler, gpioScheduler, backgroundScheduler;
+HardwareSerial &entryPort = Serial1;
+HardwareSerial &stationPort = Serial2;
 
 #include "util/util.h"
 #include "combineContext.h"
@@ -26,10 +28,7 @@ Scheduler controlScheduler, gpioScheduler, backgroundScheduler;
 #include "deviceEndpoint.h"
 #include "sensorEndpoint.h"
 
-HardwareSerial &entryPort = Serial1;
-HardwareSerial &sensorPort = Serial2;
-
-DeviceEndpoint *deviceEndpoint, *serialEndpoint;
+DeviceEndpoint *rpiEndpoint, *serialEndpoint;
 SensorEndpoint *sensorEndpoint;
 CombineResolvers *resolvers;
 CombineContext *context;
@@ -45,12 +44,12 @@ void loop1(void *pvParameters);
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
   pinMode(SG_DIR_PIN, OUTPUT);
-  digitalWrite(SG_DIR_PIN, LOW);
+  digitalWrite(SG_DIR_PIN, SG_RECV_DIR);
 
   Debug::update();
   Serial.begin(345600);
   entryPort.begin(345600, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
-  sensorPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
+  stationPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
 
   Serial.println();
   Serial.println("VERSION: " + String(VERSION));
@@ -65,8 +64,8 @@ void setup() {
   controlScheduler.setHighPriorityScheduler(&gpioScheduler);
 
   serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
-  deviceEndpoint = new DeviceEndpoint(&entryPort);
-  sensorEndpoint = new SensorEndpoint(&sensorPort);
+  rpiEndpoint = new DeviceEndpoint(&entryPort);
+//  sensorEndpoint = new SensorEndpoint(&stationPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
 
@@ -79,9 +78,10 @@ void setup() {
 }
 
 void loop1(void *pvParameters) {
+  delay(1000);
   while (true) {
     String requestString;;
-    bool isDeviceDataComing = deviceEndpoint->embrace(&requestString);
+    bool isDeviceDataComing = rpiEndpoint->embrace(&requestString);
     bool isEndpointDataComing = serialEndpoint->embrace(&requestString);
 
     if (isEndpointDataComing || isDeviceDataComing) {
@@ -118,7 +118,7 @@ void loop1(void *pvParameters) {
       serializeJson(responseJson, responseString);
 
       if (isDeviceDataComing) {
-        deviceEndpoint->unleash(responseString);
+        rpiEndpoint->unleash(responseString);
       }
       if (isEndpointDataComing) {
         serialEndpoint->unleash(responseString);
@@ -135,26 +135,6 @@ void loop1(void *pvParameters) {
       }
       continue;
       // for memory profiling
-    }
-
-    byte bSensors[64];
-    int bSize = sensorEndpoint->embrace(bSensors);
-
-    if (bSize > 0) {
-      context->nsensors->core->updateNSensor(bSensors, bSize);
-      continue;
-    }
-    else if (bSize == -2) { //checksum error
-      NSensorInvalidCheckSumError err;
-      Serial.println(err.toJsonString());
-      deviceEndpoint->unleash(err.toJsonString());
-      continue;
-    }
-    else if (bSize == -3) { //timeout
-      NSensorTimeoutError err;
-      Serial.println(err.toJsonString());
-      deviceEndpoint->unleash(err.toJsonString());
-      continue;
     }
 
     delay(1);

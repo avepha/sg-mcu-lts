@@ -31,6 +31,9 @@
 #include "domain/precondition/timer/resolvers.h"
 #include "domain/precondition/range/resolvers.h"
 
+#include "domain/station/resolvers.h"
+#include "domain/p_sensor/resolvers.h"
+
 class CombineResolvers {
 public:
   explicit CombineResolvers(CombineContext *);
@@ -179,14 +182,23 @@ void CombineResolvers::CombineQuery() {
   auto *par = new query_par;
   queryMap[par->getName()] = par;
 
-  auto *par_sensor_index = new query_par_sensor_index;
-  queryMap[par_sensor_index->getName()] = par_sensor_index;
-
   auto *sequence_order = new query_sequence_order;
   queryMap[sequence_order->getName()] = sequence_order;
 
   auto *configuration = new query_configuration;
   queryMap[configuration->getName()] = configuration;
+
+  auto *stations = new query_stations;
+  queryMap[stations->getName()] = stations;
+
+  auto *station = new query_station;
+  queryMap[station->getName()] = station;
+
+  auto *p_sensor = new query_p_sensor;
+  queryMap[p_sensor->getName()] = p_sensor;
+
+  auto *p_sensors = new query_p_sensors;
+  queryMap[p_sensors->getName()] = p_sensors;
 
 
 }
@@ -248,9 +260,6 @@ void CombineResolvers::CombineMutation() {
 
   auto *par_save = new mutation_par_save;
   mutationMap[par_save->getName()] = par_save;
-
-  auto *par_sensor_index_save = new mutation_par_sensor_index_save;
-  mutationMap[par_sensor_index_save->getName()] = par_sensor_index_save;
 
   auto *sequence_order_save = new mutation_sequence_order_save;
   mutationMap[sequence_order_save->getName()] = sequence_order_save;

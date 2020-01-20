@@ -1,5 +1,6 @@
 #include "TaskScheduler.h"
-#include "domain/nsensor/core.h"
+#include "domain/p_sensor/sensorPool.h"
+#include "domain/p_sensor/sensor.h"
 #include "domain/channel-control/state.h"
 #include "domain/channel-control/control.h"
 #include "./model.h"
@@ -42,8 +43,7 @@ public:
     ParModel model;
     ParSchema parSchema = model.get();
     par = parSchema.pars[channel];
-    parSensorIndex = parSchema.parSensorIndex;
-    nSensorCore = NSensorCore::instance();
+    sensorPool = SensorPool::instance();
 
     state.parSumInKJ = par.parSumInKJ;
   }
@@ -55,8 +55,13 @@ public:
   }
 
   bool controlTask() override {
-    NSensor averageSensor = nSensorCore->getAverageSensor();
-    state.sensorValue = averageSensor.sensors[parSensorIndex];
+    if (sensorPool->getAvailableStationBySensorId(Sensor::SENSORMAP["gs_par"]) <= 0) {
+      state.sensorValue = -1;
+      return true;
+    }
+
+    state.sensorValue = sensorPool->getAverageStationBySensorId(Sensor::SENSORMAP["gs_par"]);
+
 
     switch (state.parState) {
       case ParState::PAR_STATE_ACCUMULATING: {
@@ -82,11 +87,10 @@ public:
   }
 
 private:
-  uint8_t parSensorIndex;
   uint32_t timestamp;
   ParState state;
   ParSchema::Par par;
-  NSensorCore *nSensorCore;
+  SensorPool *sensorPool;
   GpioTask *gpioTask = nullptr;
 };
 

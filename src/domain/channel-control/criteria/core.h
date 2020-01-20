@@ -1,5 +1,5 @@
 #include "TaskScheduler.h"
-#include "domain/nsensor/core.h"
+#include "domain/p_sensor/sensorPool.h"
 #include "domain/channel-control/state.h"
 #include "domain/channel-control/control.h"
 #include "./model.h"
@@ -43,7 +43,7 @@ public:
     CriteriaSchema criteriaSchema = model.get();
     criteria = criteriaSchema.criterias[channel];
 
-    nSensorCore = NSensorCore::instance();
+    sensorPool = SensorPool::instance();
     timeStamp = millis();
   }
 
@@ -54,9 +54,12 @@ public:
   }
 
   bool controlTask() override {
-//  CriteriaModel::ShowModel(criteria, channel);
-    NSensor averageSensor = nSensorCore->getAverageSensor();
-    state.sensorValue = averageSensor.sensors[criteria.sensor];
+    if (sensorPool->getAvailableStationBySensorId(criteria.sensor) <= 0) {
+      state.sensorValue = -1;
+      return true;
+    }
+
+    state.sensorValue = sensorPool->getAverageStationBySensorId(criteria.sensor);
 
     state.isTimingEnable = criteria.timing.enable;
 
@@ -110,8 +113,8 @@ public:
 
 private:
   CriteriaState state;
+  SensorPool *sensorPool;
   unsigned long timeStamp = 0;
-  NSensorCore *nSensorCore;
   CriteriaSchema::Criteria criteria;
 };
 
