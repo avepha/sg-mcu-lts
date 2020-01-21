@@ -9,6 +9,16 @@
 #ifndef SG_MCU_MODBUSTASK_H
 #define SG_MCU_MODBUSTASK_H
 
+
+// TODO: move this to appropriate location
+static void sendDataToStation(byte *data, int size) {
+  digitalWrite(RS485_DIR_PIN, RS485_SEND_MODE);
+  delay(10);
+  stationPort.write(data, size);
+  delay(10);
+  digitalWrite(RS485_DIR_PIN, RS485_RECV_MODE);
+}
+
 class ModbusTask : public Task {
 public:
   static ModbusTask *instance() {
@@ -25,7 +35,7 @@ public:
     if (state == REQUESTING) {
       if (!isDataComing()) { // always true for SG_TEST
         waitingCycle++;
-        if (waitingCycle >= 5) { // request timeout
+        if (waitingCycle >= 10) { // request timeout
           Debug::Print("req-timeout, sta " + String(vStations[currentStationIndex]->getAddress()));
           waitingCycle = 0;
           state = WAITING;
@@ -91,9 +101,7 @@ public:
       ModbusPacket *requestPacket = vStations[currentStationIndex]->getRequest();
       std::vector<byte> requestByte = requestPacket->getVectorPacket();
 
-      digitalWrite(SG_DIR_PIN, SG_SEND_DIR);
-      stationPort.write(requestByte.data(), requestByte.size());
-      digitalWrite(SG_DIR_PIN, SG_RECV_DIR);
+      sendDataToStation(requestByte.data(), requestByte.size());
 
       Debug::Print(
           "req, sta 0x" + String(vStations[currentStationIndex]->getAddress(), HEX) +
@@ -150,7 +158,7 @@ private:
 
   static ModbusTask *s_instance;
 
-  ModbusTask() : Task(0, TASK_FOREVER, &gpioScheduler, false) {
+  ModbusTask() : Task(0, TASK_FOREVER, &backgroundScheduler, false) {
     setInterval(intervalTime);
   }
 

@@ -31,11 +31,11 @@ const int SG_MPU_TX = 19;
 const String SG_MODEL = "v1";
 #endif
 
-const int SG_SENSOR_RX = 16;
-const int SG_SENSOR_TX = 17;
-const int SG_DIR_PIN = 4;
-const int SG_SEND_DIR = HIGH;
-const int SG_RECV_DIR = LOW;
+const int SG_STATION_RX = 16;
+const int SG_STATION_TX = 17;
+const int RS485_DIR_PIN = 4;
+const int RS485_SEND_MODE = HIGH;
+const int RS485_RECV_MODE = LOW;
 
 const unsigned long EXPECTED_ACTIVE_DIFF_TIME = 10 * 1000; // 10 seconds
 

@@ -26,30 +26,27 @@ HardwareSerial &stationPort = Serial2;
 
 #include "validationError.h"
 #include "deviceEndpoint.h"
-#include "sensorEndpoint.h"
 
 DeviceEndpoint *rpiEndpoint, *serialEndpoint;
-SensorEndpoint *sensorEndpoint;
 CombineResolvers *resolvers;
 CombineContext *context;
-
-// simulate node sensor
-#include "./util/simulateNodeSensors.h"
-
-Scheduler simulateScheduler;
-SimulateNodeSensorsTask *simulateNodeSensorsTask;
 
 void loop1(void *pvParameters);
 
 void setup() {
   EEPROM.begin(EEPROM_SIZE);
-  pinMode(SG_DIR_PIN, OUTPUT);
-  digitalWrite(SG_DIR_PIN, SG_RECV_DIR);
+  pinMode(RS485_DIR_PIN, OUTPUT);
+  digitalWrite(RS485_DIR_PIN, RS485_RECV_MODE);
+
+  pinMode(SG_STATION_TX, OUTPUT);
+  digitalWrite(SG_STATION_TX, HIGH);
+
+  pinMode(SG_STATION_RX, INPUT);
 
   Debug::update();
   Serial.begin(345600);
   entryPort.begin(345600, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
-  stationPort.begin(9600, SERIAL_8N1, SG_SENSOR_RX, SG_SENSOR_TX);
+  stationPort.begin(9600, SERIAL_8N1, SG_STATION_RX, SG_STATION_TX);
 
   Serial.println();
   Serial.println("VERSION: " + String(VERSION));
@@ -65,16 +62,10 @@ void setup() {
 
   serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
   rpiEndpoint = new DeviceEndpoint(&entryPort);
-//  sensorEndpoint = new SensorEndpoint(&stationPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
 
   xTaskCreatePinnedToCore(loop1, "loop1", 4096 * 8, NULL, 1, NULL, COMCORE);
-
-  // for test
-#ifdef SG_TEST
-  simulateNodeSensorsTask = new SimulateNodeSensorsTask(&simulateScheduler);
-#endif
 }
 
 void loop1(void *pvParameters) {
@@ -142,9 +133,6 @@ void loop1(void *pvParameters) {
 }
 
 void loop() {
-#ifdef SG_TEST
-  simulateScheduler.execute();
-#endif
   controlScheduler.execute();
   backgroundScheduler.execute();
 }
