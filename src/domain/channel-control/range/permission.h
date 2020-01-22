@@ -40,12 +40,6 @@ public:
       throw err;
     }
 
-    SensorSchema sensorSchema = context->sensor->model->get();
-    if (range["sensor"] < 0 || range["sensor"] > sensorSchema.numberOfSensor) {
-      InvalidInputError err("sensor index out of bound");
-      throw err;
-    }
-
     if (range["upper"].isNull()) {
       InvalidInputError err("upper is not specified");
       throw err;

@@ -31,12 +31,6 @@ public:
       throw err;
     }
 
-    SensorSchema sensorSchema = context->sensor->model->get();
-    if (criteria["sensor"] < 0 || criteria["sensor"] > sensorSchema.numberOfSensor) {
-      InvalidInputError err("sensor index out of bound");
-      throw err;
-    }
-
     if (criteria["criteria"].isNull()) {
       InvalidInputError err("criteria is not specified");
       throw err;
