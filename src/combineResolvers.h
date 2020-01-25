@@ -10,8 +10,6 @@
 #include "domain/info/resolvers.h"
 
 #include "domain/rtc/resolvers.h"
-#include "domain/sensor/resolvers.h"
-#include "domain/nsensor/resolvers.h"
 #include "domain/gpio/resolvers.h"
 
 #include "domain/control/resolvers.h"
@@ -143,12 +141,6 @@ void CombineResolvers::CombineQuery() {
   auto *gpio_task = new query_gpio_task;
   queryMap[gpio_task->getName()] = gpio_task;
 
-  auto *nsensor = new query_nsensor;
-  queryMap[nsensor->getName()] = nsensor;
-
-  auto *nsensors = new query_nsensors;
-  queryMap[nsensors->getName()] = nsensors;
-
   auto *precondition_criteria = new query_precondition_criteria;
   queryMap[precondition_criteria->getName()] = precondition_criteria;
 
@@ -163,12 +155,6 @@ void CombineResolvers::CombineQuery() {
 
   auto *timezone = new query_timezone;
   queryMap[timezone->getName()] = timezone;
-
-  auto *sensor = new query_sensor;
-  queryMap[sensor->getName()] = sensor;
-
-  auto *sensor_order = new query_sensor_order;
-  queryMap[sensor_order->getName()] = sensor_order;
 
   auto *sequence_state = new query_sequence_state;
   queryMap[sequence_state->getName()] = sequence_state;
@@ -245,9 +231,6 @@ void CombineResolvers::CombineMutation() {
 
   auto *timezone_save = new mutation_timezone_save;
   mutationMap[timezone_save->getName()] = timezone_save;
-
-  auto *sensor_order_save = new mutation_sensor_order_save;
-  mutationMap[sensor_order_save->getName()] = sensor_order_save;
 
   auto *sequence_activate = new mutation_sequence_activate;
   mutationMap[sequence_activate->getName()] = sequence_activate;

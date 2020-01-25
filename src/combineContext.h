@@ -1,7 +1,5 @@
 #include "domain/configuration/context.h"
 #include "domain/rtc/context.h"
-#include "domain/sensor/context.h"
-#include "domain/nsensor/context.h"
 #include "domain/gpio/context.h"
 
 #include "domain/channel-control/criteria/context.h"
@@ -31,8 +29,6 @@ class CombineContext {
 public:
   ConfigurationContext *config;
   RtcContext *rtc;
-  SensorContext *sensor;
-  NSensorContext *nsensors;
   GpioContext *gpio;
 
   ControlContext *control;
@@ -61,8 +57,6 @@ public:
 CombineContext::CombineContext() {
   config = new ConfigurationContext;
   rtc = new RtcContext;
-  sensor = new SensorContext;
-  nsensors = new NSensorContext;
   gpio = new GpioContext;
 
   precTimer = new PrecTimerContext;
