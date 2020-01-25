@@ -1,8 +1,8 @@
 #include "domain/permission.h"
 #include "validationError.h"
 
-#ifndef SG_MCU_P_SENSOR_PERMISSION_H
-#define SG_MCU_P_SENSOR_PERMISSION_H
+#ifndef SG_MCU_SENSOR_PERMISSION_H
+#define SG_MCU_SENSOR_PERMISSION_H
 
 class permission_sensor : public Permission {
 public:

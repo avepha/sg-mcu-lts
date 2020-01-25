@@ -1,4 +1,4 @@
-#include "domain/p_sensor/sensor.h"
+#include "domain/sensor/sensor.h"
 #include "./modbus/modbusPacket.h"
 
 #ifndef SG_MCU_STATION_H

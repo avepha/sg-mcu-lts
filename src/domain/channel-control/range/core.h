@@ -1,5 +1,5 @@
 #include "TaskScheduler.h"
-#include "domain/p_sensor/sensorPool.h"
+#include "domain/sensor/sensorPool.h"
 #include "domain/channel-control/state.h"
 #include "domain/channel-control/control.h"
 #include "./model.h"

@@ -9,6 +9,8 @@ String StationTypeEnumToString(STATION_ENUM type) {
       return "gsensor";
     case STATION_SOLUTION:
       return "solution";
+    default:
+      return "null";
   }
 }
 

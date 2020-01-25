@@ -19,7 +19,7 @@
 #include "domain/channel/context.h"
 #include "domain/sequence/context.h"
 
-#include "domain/p_sensor/context.h"
+#include "domain/sensor/context.h"
 #include "domain/station/context.h"
 
 #ifndef SG_MCU_COMBINE_CONTEXT_H
@@ -49,7 +49,7 @@ public:
   PrecRangeContext *precRange;
 
   StationContext *station;
-  PSensorContext *p_sensor;
+  SensorContext *sensor;
 
   CombineContext();
 };
@@ -75,7 +75,7 @@ CombineContext::CombineContext() {
   sequenceTimer = new SequenceTimerContext;
   sequenceRange = new SequenceRangeContext;
   station = new StationContext;
-  p_sensor = new PSensorContext;
+  sensor = new SensorContext;
 }
 
 #endif //SG_MCU_COMBINECONTEXT_H

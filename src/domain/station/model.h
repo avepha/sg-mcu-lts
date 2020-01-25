@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <vector>
 #include "domain/model.h"
-#include "domain/p_sensor/sensor.h"
+#include "domain/sensor/sensor.h"
 
 #ifndef SG_MCU_STATION_MODEL_H
 #define SG_MCU_STATION_MODEL_H

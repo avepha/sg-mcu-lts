@@ -1,5 +1,5 @@
 #include "domain/channel-control/state.h"
-#include "domain/p_sensor/sensorPool.h"
+#include "domain/sensor/sensorPool.h"
 #include "../precondition.h"
 #include "./model.h"
 

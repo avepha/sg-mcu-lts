@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "../station.h"
 #include "../model.h"
-#include "domain/p_sensor/sensorPool.h"
+#include "domain/sensor/sensorPool.h"
 #ifndef SG_MCU_SOLUTION_STATION_H
 #define SG_MCU_SOLUTION_STATION_H
 
@@ -18,7 +18,7 @@ public:
   }
 
   void onPacketReceived(const std::vector<byte> &vPacket) override {
-    byte address = vPacket[0];
+//    byte address = vPacket[0];
     byte funcCode = vPacket[1];
     uint8_t dataSize = vPacket.size() - 4;
     byte data[dataSize];

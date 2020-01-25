@@ -1,5 +1,5 @@
 #include "TaskScheduler.h"
-#include "domain/p_sensor/sensorPool.h"
+#include "domain/sensor/sensorPool.h"
 #include "domain/sequence-control/sequenceState.h"
 #include "domain/sequence-control/sequenceControl.h"
 #include "domain/sequence/util/sequenceGpioChain.h"

@@ -2,12 +2,12 @@
 #include "./permission.h"
 #include "./sensorPool.h"
 
-#ifndef SG_MCU_P_SENSOR_RESOLVERS_H
-#define SG_MCU_P_SENSOR_RESOLVERS_H
+#ifndef SG_MCU_SENSOR_RESOLVERS_H
+#define SG_MCU_SENSOR_RESOLVERS_H
 
-class query_p_sensor : public Query {
+class query_sensor : public Query {
 public:
-  explicit query_p_sensor() : Query("p_sensor", new permission_sensor) {};
+  explicit query_sensor() : Query("sensor", new permission_sensor) {};
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     uint8_t sensorId = reqData["id"];
@@ -35,9 +35,9 @@ public:
   };
 };
 
-class query_p_sensors : public Query {
+class query_sensors : public Query {
 public:
-  explicit query_p_sensors() : Query("p_sensors") {};
+  explicit query_sensors() : Query("sensors") {};
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SensorPool *sensorPool = SensorPool::instance();

@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "domain/p_sensor/sensorPool.h"
+#include "domain/sensor/sensorPool.h"
 #include "../station.h"
 #include "../modbus/modbusPacket.h"
 #include "../model.h"
@@ -20,7 +20,7 @@ public:
   }
 
   void onPacketReceived(const std::vector<byte> &vPacket) override {
-    byte address = vPacket[0];
+//    byte address = vPacket[0];
     byte funcCode = vPacket[1];
     uint8_t dataSize = vPacket.size() - 4;
     byte data[dataSize];
