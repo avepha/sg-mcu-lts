@@ -1,9 +1,0 @@
-{
-  "topic": "nsensors",
-  "method": "query",
-  "reqId": "req-1",
-  "data": {
-    "withSensor": false
-  }
-}
-

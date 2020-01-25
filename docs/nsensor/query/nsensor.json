@@ -1,7 +1,0 @@
-{
-  "topic": "nsensor",
-  "method": "query",
-  "data": {
-    "index": 1
-  }
-}
