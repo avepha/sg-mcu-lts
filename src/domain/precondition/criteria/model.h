@@ -5,7 +5,7 @@
 
 struct PrecCriteriaSchema {
   struct Criteria {
-    byte sensor = 0;
+    byte sensor = 1;
     float criteria = 0.0F;
     bool greater = false;
   } criterias[8];

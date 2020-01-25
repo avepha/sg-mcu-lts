@@ -5,7 +5,7 @@
 
 struct CriteriaSchema {
   struct Criteria {
-    byte sensor = 0;
+    byte sensor = 1;
     float criteria = 0.0F;
     bool greater = false;
     struct Timing {

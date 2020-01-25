@@ -5,7 +5,7 @@
 
 struct PrecRangeSchema {
   struct Range {
-    byte sensor = 0;
+    byte sensor = 1;
     float upper = 0.0F;
     float lower = 0.0F;
   } ranges[8];

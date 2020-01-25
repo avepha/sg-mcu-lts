@@ -5,7 +5,7 @@
 
 struct RangeSchema {
   struct Range {
-    byte sensor = 0;
+    byte sensor = 1;
     float upper = 0;
     float lower = 0;
     bool greater = false;

@@ -64,7 +64,6 @@ public:
         }
       }
 
-      Serial.println(ChannelControlEnumToString(channelControl[channel]->getType()));;
       channelControl[channel]->enableDelayed();
     }
     else {

@@ -1,7 +1,0 @@
-{
-  "topic": "par_sensor_index_save",
-  "method": "mutation",
-  "data": {
-    "parSensorIndex": 5
-  }
-}
