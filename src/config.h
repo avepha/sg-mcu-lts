@@ -31,6 +31,12 @@ const int SG_MPU_TX = 19;
 const String SG_MODEL = "v1";
 #endif
 
+#ifdef SG_UNO_DEBUG
+  const unsigned int serialBaudRate = 115200;
+#else
+  const unsigned int serialBaudRate = 345600;
+#endif
+
 const int SG_STATION_RX = 16;
 const int SG_STATION_TX = 17;
 const int RS485_DIR_PIN = 4;
@@ -40,3 +46,4 @@ const int RS485_RECV_MODE = LOW;
 const unsigned long EXPECTED_ACTIVE_DIFF_TIME = 10 * 1000; // 10 seconds
 
 #endif
+

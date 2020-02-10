@@ -44,7 +44,7 @@ void setup() {
   pinMode(SG_STATION_RX, INPUT);
 
   Debug::update();
-  Serial.begin(345600);
+  Serial.begin(serialBaudRate);
   entryPort.begin(345600, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   stationPort.begin(9600, SERIAL_8N1, SG_STATION_RX, SG_STATION_TX);
 
