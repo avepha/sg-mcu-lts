@@ -55,12 +55,14 @@ public:
   }
 
   void deactivateControls() {
-    if (sequenceControl != nullptr) {
-      sequenceControl->setDeactivationFlag();
-    }
+    gpioCore->removeGpioTaskAll();
 
     if (gpioChain != nullptr) {
       gpioChain->deactivate();
+    }
+
+    if (sequenceControl != nullptr) {
+      sequenceControl->setDeactivationFlag();
     }
 
     gpioChain = nullptr;

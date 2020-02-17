@@ -201,8 +201,11 @@ public:
     schema.sequence.channelOrderAndTimingSize = reqData["channelOrderAndTiming"].size();
 
     schema.sequence.isActive = false;
-    context->sequence->core->deactivateControls();
     int writeOps = context->sequence->model->save(schema);
+
+    context->sequence->core->deactivateControls();
+    delay(20);
+    context->sequence->core->activateControls();
 
     SequenceSchema newSchema = context->sequence->model->get();
     DynamicJsonDocument data(1024);
