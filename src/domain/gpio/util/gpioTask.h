@@ -49,9 +49,15 @@ public:
   }
 
   bool Callback() override {
+    Serial.println(getTimeout());
     if (gpioTaskType == GPIO_TASK_EXPIRED) {
       finishCallback(this);
     }
+
+    if (this->getTimeout() < 0) {
+      finishCallback(this);
+    }
+
     return true;
   }
 
