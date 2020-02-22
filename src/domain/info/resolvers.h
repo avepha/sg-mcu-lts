@@ -18,6 +18,8 @@ public:
     data["model"] = SG_MODEL;
 #ifdef SG_TEST
     data["device_env"] = "test";
+#else
+    data["device_env"] = "prod";
 #endif
     return data;
   };
