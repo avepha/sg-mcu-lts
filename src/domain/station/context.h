@@ -12,7 +12,7 @@ public:
 };
 
 StationContext::StationContext() {
-  core = new StationCore();
+  core = StationCore::instance();
   model = new StationModel();
 }
 

@@ -10,6 +10,20 @@
 
 class StationCore {
 public:
+  static StationCore *instance() {
+    if (!s_instance)
+      s_instance = new StationCore;
+    return s_instance;
+  }
+
+  std::vector<Station *> getStations() {
+    return stations;
+  }
+
+private:
+  static StationCore *s_instance;
+  std::vector<Station *> stations{};
+
   StationCore() {
     StationModel model;
     StationSchema stationSchema = model.get();
@@ -20,7 +34,7 @@ public:
       modbusTask->registerStation(gSensorStation);
     }
 
-    for (int i = 0 ; i < stationSchema.solutionStation.SolutionSize; i++) {
+    for (int i = 0; i < stationSchema.solutionStation.SolutionSize; i++) {
       auto *solutionStation = new SolutionStation(stationSchema.solutionStation.SolutionAddresses[i]);
       stations.push_back(solutionStation);
       modbusTask->registerStation(solutionStation);
@@ -28,13 +42,7 @@ public:
 
     modbusTask->enable();
   };
-
-  std::vector<Station *> getStations() {
-    return stations;
-  }
-
-private:
-  std::vector<Station *> stations{};
 };
 
+StationCore *StationCore::s_instance = nullptr;
 #endif
