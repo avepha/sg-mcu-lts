@@ -25,7 +25,13 @@ const int CHANNEL_GPIO_MAP[8] = {
 #ifdef SG_MCU_V2
 const int SG_MPU_RX = 19;
 const int SG_MPU_TX = 18;
+
+#ifdef SG_MCU_V2_LORA
+const String SG_MODEL = "v2_lora";
+#else
 const String SG_MODEL = "v2";
+#endif
+
 #endif
 
 #ifdef SG_MCU_V1
@@ -45,3 +51,4 @@ const unsigned long EXPECTED_ACTIVE_DIFF_TIME = 10 * 1000; // 10 seconds
 
 #endif
 
+//1 4 0 0 C8 41 0 0 48 42 32 F1 C5 44 0 0 CC 41 0 0 72 42 0 80 BB 44 0 0 D2 42 0 0 C8 42 89 33

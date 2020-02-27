@@ -108,6 +108,25 @@ public:
         data["control"] = ctrlCore->getControlState().report();
         break;
       }
+      case SEQ_CTRL_PAR: {
+        auto *ctrlCore = (SequenceParCore *) (sequenceControl);
+        for (int i = 0; i < ctrlCore->getPreconditionSize(); i++) {
+          if (ctrlCore->getPreconditionAt(i)->getType() == PREC_CRITERIA) {
+            auto *precCoreAtN = (PrecCriteriaCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_TIMER) {
+            auto *precCoreAtN = (PrecTimerCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+          else if (ctrlCore->getPreconditionAt(i)->getType() == PREC_RANGE) {
+            auto *precCoreAtN = (PrecRangeCore *) (ctrlCore->getPreconditionAt(i));
+            chainOfPreconditions.add(precCoreAtN->getPreconditionState().report());
+          }
+        }
+        data["control"] = ctrlCore->getControlState().report();
+        break;
+      }
       default: {
         break;
       }

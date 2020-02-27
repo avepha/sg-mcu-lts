@@ -40,7 +40,9 @@ private:
       modbusTask->registerStation(solutionStation);
     }
 
+#ifndef SG_MCU_V2_LORA // disable modbus when using lora
     modbusTask->enable();
+#endif
   };
 };
 

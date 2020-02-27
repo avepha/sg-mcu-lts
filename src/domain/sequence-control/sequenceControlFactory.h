@@ -5,6 +5,7 @@
 #include "domain/sequence-control/sequence-criteria/core.h"
 #include "domain/sequence-control/sequence-timer/core.h"
 #include "domain/sequence-control/sequence-range/core.h"
+#include "domain/sequence-control/sequence-par/core.h"
 
 #include "domain/sequence/util/sequenceGpioChain.h"
 
@@ -13,7 +14,7 @@
 
 class SequenceControlFactory {
 public:
-  static SequenceControl* getControl(SEQUENCE_CONTROL_TYPE_ENUM controlTypeEnum, SequenceGpioChain *gpioChain) {
+  static SequenceControl *getControl(SEQUENCE_CONTROL_TYPE_ENUM controlTypeEnum, SequenceGpioChain *gpioChain) {
     switch (controlTypeEnum) {
       case SEQ_CTRL_CRITERIA:
         return new SequenceCriteriaCore(gpioChain);
@@ -21,6 +22,8 @@ public:
         return new SequenceTimerCore(gpioChain);
       case SEQ_CTRL_RANGE:
         return new SequenceRangeCore(gpioChain);
+      case SEQ_CTRL_PAR:
+        return new SequenceParCore(gpioChain);
       default:
         return nullptr;
     }

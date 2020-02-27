@@ -26,8 +26,10 @@ HardwareSerial &stationPort = Serial2;
 
 #include "validationError.h"
 #include "deviceEndpoint.h"
+#include "loraEndpoint.h"
 
 DeviceEndpoint *rpiEndpoint, *serialEndpoint;
+LoraEndpoint *loraEndpoint;
 CombineResolvers *resolvers;
 CombineContext *context;
 
@@ -39,7 +41,11 @@ void setup() {
   digitalWrite(RS485_DIR_PIN, RS485_RECV_MODE);
 
   pinMode(SG_STATION_TX, OUTPUT);
+#ifdef SG_MCU_V2_LORA
+  digitalWrite(SG_STATION_TX, LOW);
+#else
   digitalWrite(SG_STATION_TX, HIGH);
+#endif
 
   pinMode(SG_STATION_RX, INPUT);
 
@@ -62,6 +68,7 @@ void setup() {
 
   serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
   rpiEndpoint = new DeviceEndpoint(&entryPort);
+  loraEndpoint = new LoraEndpoint(&stationPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
 
@@ -127,6 +134,11 @@ void loop1(void *pvParameters) {
       continue;
       // for memory profiling
     }
+
+#ifdef SG_MCU_V2_LORA
+    String loraString;
+    loraEndpoint->embrace(&loraString);
+#endif
 
     delay(1);
   }
