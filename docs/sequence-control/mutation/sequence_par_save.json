@@ -1,0 +1,13 @@
+{
+  "topic": "sequence_par_save",
+  "method": "mutation",
+  "reqId": "req-1",
+  "data": {
+    "par": {
+      "parSumInKJ": 1000,
+      "timing": {
+        "working": 10
+      }
+    }
+  }
+}

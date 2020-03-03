@@ -10,6 +10,7 @@
 #include "domain/sequence-control/sequence-criteria/context.h"
 #include "domain/sequence-control/sequence-timer/context.h"
 #include "domain/sequence-control/sequence-range/context.h"
+#include "domain/sequence-control/sequence-par/context.h"
 
 #include "domain/precondition/criteria/context.h"
 #include "domain/precondition/timer/context.h"
@@ -43,6 +44,7 @@ public:
   SequenceCriteriaContext *sequenceCriteria;
   SequenceTimerContext *sequenceTimer;
   SequenceRangeContext *sequenceRange;
+  SequenceParContext *sequencePar;
 
   PrecTimerContext *precTimer;
   PrecCriteriaContext *precCriteria;
@@ -74,6 +76,8 @@ CombineContext::CombineContext() {
   sequenceCriteria = new SequenceCriteriaContext;
   sequenceTimer = new SequenceTimerContext;
   sequenceRange = new SequenceRangeContext;
+  sequencePar = new SequenceParContext;
+
   station = new StationContext;
   sensor = new SensorContext;
 }

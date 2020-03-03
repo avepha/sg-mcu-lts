@@ -71,7 +71,7 @@ public:
         state.nextIntervalTimerInSeconds[1] = timer.timePair[i].stop * 60; // stop time
       }
 
-      if (!gpioChain->isEnabled())
+      if (gpioChain->isEnabled())
         gpioChain->disable();
     }
     return true;

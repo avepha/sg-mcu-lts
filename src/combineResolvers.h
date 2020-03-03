@@ -24,6 +24,7 @@
 #include "domain/sequence-control/sequence-criteria/resolvers.h"
 #include "domain/sequence-control/sequence-timer/resolvers.h"
 #include "domain/sequence-control/sequence-range/resolvers.h"
+#include "domain/sequence-control/sequence-par/resolvers.h"
 
 #include "domain/precondition/criteria/resolvers.h"
 #include "domain/precondition/timer/resolvers.h"
@@ -186,6 +187,9 @@ void CombineResolvers::CombineQuery() {
   auto *sensors = new query_sensors;
   queryMap[sensors->getName()] = sensors;
 
+  auto *sequence_par = new query_sequence_par;
+  queryMap[sequence_par->getName()] = sequence_par;
+
 
 }
 
@@ -249,6 +253,9 @@ void CombineResolvers::CombineMutation() {
 
   auto *debug_save = new mutation_debug_save;
   mutationMap[debug_save->getName()] = debug_save;
+
+  auto *sequence_par_save = new mutation_sequence_par_save;
+  mutationMap[sequence_par_save->getName()] = sequence_par_save;
 
 
 }
