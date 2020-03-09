@@ -32,106 +32,131 @@ public:
   }
 
   bool Callback() override {
-    if (state == REQUESTING) {
-      if (!isDataComing()) { // always true for SG_TEST
-        waitingCycle++;
-        if (waitingCycle >= 10) { // request timeout
-          Debug::Print("req-timeout, sta " + String(vStations[currentStationIndex]->getAddress()));
-          waitingCycle = 0;
-          state = WAITING;
-          currentStationIndex++;
-        }
-        return true;
-      }
-      else { // serial port is available or SG_TEST
-        bool isPacketFailed = false;
+    switch(state) {
+      case WAITING_RESPONSE: {
+        if (isDataComing()) {
+          bool isPacketFailed = false;
 #ifdef SG_TEST
-        std::vector<byte> vBytes = getPacketTestMode(vStations[currentStationIndex]->getAddress());
+          std::vector<byte> vBytes = getPacketTestMode(vStations[currentStationIndex]->getAddress());
 #else
-        std::vector<byte> vBytes = getPacket();
+          std::vector<byte> vBytes = getPacket();
 #endif
-        byte requestAddress = vStations[currentStationIndex]->getAddress();
 
-        if (vBytes.size() <= 2) {
-          Debug::Print("addr: " + String(requestAddress, HEX) + " packet-size 2");
-          isPacketFailed = true;
-        }
+          if (Debug::isDebuggingMode()) {
+            String strPacket = "";
+            for (int i = 0; i < vBytes.size(); i++) {
+              strPacket += String(vBytes[i], HEX) + " ";
+            }
+            Debug::Print("res, packet: " + strPacket);
+          }
 
-        // step1. check crc
-        if (!ModbusPacket::verifyPacket(vBytes)) {
-          Debug::Print("res, sta " + String(requestAddress, HEX) + " invalid-crc");
-          isPacketFailed = true;
-        }
+          byte requestAddress = vStations[currentStationIndex]->getAddress();
 
-        byte responseAddress = vBytes[0];
-        byte responseFuncCode = vBytes[1];
+          if (vBytes.size() <= 2) {
+            Debug::Print("res, sta 0x" + String(requestAddress, HEX) + " error-packet-size-2");
+            isPacketFailed = true;
+          }
 
-        if (responseFuncCode == 0x08) { // Error handling
-          Debug::Print("res, sta " + String(requestAddress, HEX) + " func-code: 0x08");
-          isPacketFailed = true;
-        }
+          // step1. check crc
+          if (!ModbusPacket::verifyPacket(vBytes)) {
+            Debug::Print("res, sta 0x" + String(requestAddress, HEX) + " error-invalid-crc");
+            isPacketFailed = true;
+          }
 
-        if (isPacketFailed) {
-          state = WAITING;
+          byte responseAddress = vBytes[0];
+          byte responseFuncCode = vBytes[1];
+
+          if (responseFuncCode == 0x08) { // Error handling
+            Debug::Print("res, sta 0x" + String(requestAddress, HEX) + " error-func-code: 0x08");
+            isPacketFailed = true;
+          }
+
+          if (isPacketFailed) {
+            state = REQUEST_NEXT;
+            currentStationIndex++;
+            return true;
+          }
+
+          // send to requested station [address(1)][func(1)][data(n * byte)][crc(2)]
+          for (auto const &station:vStations) {
+            if (station->getAddress() == responseAddress) {
+              station->onPacketReceived(vBytes);
+            }
+          }
           currentStationIndex++;
+          state = REQUEST_NEXT;
+        }
+        else {
+          waitingCycle++;
+          if (waitingCycle >= 10) { // request timeout
+            Debug::Print("req-timeout, sta " + String(vStations[currentStationIndex]->getAddress()));
+            waitingCycle = 0;
+            state = REQUEST_NEXT;
+            currentStationIndex++;
+          }
+          return true;
+        }
+        break;
+      }
+      case REQUEST_NEXT: {
+        waitingCycle = 0;
+        if (vStations.empty()) {
           return true;
         }
 
-        // send to requested station [address(1)][func(1)][data(n * byte)][crc(2)]
-        for (auto const &station:vStations) {
-          if (station->getAddress() == responseAddress) {
-            station->onPacketReceived(vBytes);
-          }
+        if (millis() - lastSendTs <= 1000) {
+          return true;
         }
-        currentStationIndex++;
-        state = WAITING;
+
+        if (currentStationIndex >= vStations.size()) {
+          currentStationIndex = 0;
+          return true;
+        }
+
+        ModbusPacket *requestPacket = vStations[currentStationIndex]->getRequest();
+        std::vector<byte> requestByte = requestPacket->getVectorPacket();
+
+        sendDataToStation(requestByte.data(), requestByte.size());
+        lastSendTs = millis();
+
+        Debug::Print(
+            "req, sta 0x" + String(vStations[currentStationIndex]->getAddress(), HEX) +
+            ", t: " + StationTypeEnumToString(vStations[currentStationIndex]->getType())
+        );
+
+        state = WAITING_RESPONSE;
+        break;
       }
     }
-    else if (state == WAITING) {
-      waitingCycle = 0;
-      if (vStations.empty()) {
-        return true;
-      }
-
-      if (currentStationIndex >= vStations.size()) {
-        currentStationIndex = 0;
-        return true;
-      }
-
-      ModbusPacket *requestPacket = vStations[currentStationIndex]->getRequest();
-      std::vector<byte> requestByte = requestPacket->getVectorPacket();
-
-      sendDataToStation(requestByte.data(), requestByte.size());
-
-      Debug::Print(
-          "req, sta 0x" + String(vStations[currentStationIndex]->getAddress(), HEX) +
-          ", t: " + StationTypeEnumToString(vStations[currentStationIndex]->getType())
-      );
-
-      state = REQUESTING;
-    }
-
     return true;
   }
 
 private:
+  uint32_t lastSendTs = 0;
+
   static bool isDataComing() {
 #ifdef SG_TEST
     return true;
 #else
-    if (stationPort.available() > 0) {
-     Debug::Print("Got packet: " + String(stationPort.available()));
-    }
     return stationPort.available() != 0;
 #endif
   }
 
   static std::vector<byte> getPacket() {
     std::vector<byte> packets;
-    while (stationPort.available()) {
-      packets.push_back(stationPort.read());
+
+    uint32_t ts = millis();
+    while (true) {
+      if (stationPort.available()) {
+        packets.push_back(stationPort.read());
+        ts = millis();
+      }
+      else {
+        if (millis() - ts >= 4) {
+          return packets;
+        }
+      }
     }
-    return packets;
   }
 
   static std::vector<byte> getPacketTestMode(byte address) {
@@ -166,9 +191,9 @@ private:
   uint16_t intervalTime = 100;
   uint16_t currentStationIndex = 0;
   enum State {
-    REQUESTING,
-    WAITING,
-  } state = WAITING;
+    WAITING_RESPONSE,
+    REQUEST_NEXT,
+  } state = REQUEST_NEXT;
   ModbusPacket *packet = nullptr;
   std::vector<Station *> vStations{};
 
