@@ -5,6 +5,7 @@
 #include "./modbusPacket.h"
 #include "domain/station/util/resolveStationTypeEnum.h"
 #include "./util/generateModbusResponse.h"
+#include "logger/log.h"
 
 #ifndef SG_MCU_MODBUSTASK_H
 #define SG_MCU_MODBUSTASK_H
@@ -42,24 +43,21 @@ public:
           std::vector<byte> vBytes = getPacket();
 #endif
 
-          if (Debug::isDebuggingMode()) {
-            String strPacket = "";
-            for (int i = 0; i < vBytes.size(); i++) {
-              strPacket += String(vBytes[i], HEX) + " ";
-            }
-            Debug::Print("res, packet: " + strPacket);
-          }
+          String strPacket = "";
+          for (int i = 0; i < vBytes.size(); i++)
+            strPacket += String(vBytes[i], HEX) + " ";
+          Log::trace("modbus", "res, packet: " + strPacket);
 
           byte requestAddress = vStations[currentStationIndex]->getAddress();
 
           if (vBytes.size() <= 2) {
-            Debug::Print("res, sta 0x" + String(requestAddress, HEX) + " error-packet-size-2");
+            Log::trace("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-packet-size-2");
             isPacketFailed = true;
           }
 
           // step1. check crc
           if (!ModbusPacket::verifyPacket(vBytes)) {
-            Debug::Print("res, sta 0x" + String(requestAddress, HEX) + " error-invalid-crc");
+            Log::trace("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-invalid-crc");
             isPacketFailed = true;
           }
 
@@ -67,7 +65,7 @@ public:
           byte responseFuncCode = vBytes[1];
 
           if (responseFuncCode == 0x08) { // Error handling
-            Debug::Print("res, sta 0x" + String(requestAddress, HEX) + " error-func-code: 0x08");
+            Log::trace("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-func-code: 0x08");
             isPacketFailed = true;
           }
 
@@ -89,7 +87,7 @@ public:
         else {
           waitingCycle++;
           if (waitingCycle >= 10) { // request timeout
-            Debug::Print("req-timeout, sta " + String(vStations[currentStationIndex]->getAddress()));
+            Log::trace("modbus", "req-timeout, sta " + String(vStations[currentStationIndex]->getAddress()));
             waitingCycle = 0;
             state = REQUEST_NEXT;
             currentStationIndex++;
@@ -119,7 +117,7 @@ public:
         sendDataToStation(requestByte.data(), requestByte.size());
         lastSendTs = millis();
 
-        Debug::Print(
+        Log::trace("modbus",
             "req, sta 0x" + String(vStations[currentStationIndex]->getAddress(), HEX) +
             ", t: " + StationTypeEnumToString(vStations[currentStationIndex]->getType())
         );

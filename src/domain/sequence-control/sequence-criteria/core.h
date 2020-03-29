@@ -5,8 +5,6 @@
 #include "domain/sequence/util/sequenceGpioChain.h"
 #include "./model.h"
 
-#include "util/debug.h"
-
 #ifndef SG_MCU_SEQUENCE_CRITERIA_CORE_H
 #define SG_MCU_SEQUENCE_CRITERIA_CORE_H
 

@@ -1,5 +1,4 @@
 #include "./model.h"
-#include "util/debug.h"
 
 #ifndef SG_MCU_CONFIGURATION_CONTEXT_H
 #define SG_MCU_CONFIGURATION_CONTEXT_H

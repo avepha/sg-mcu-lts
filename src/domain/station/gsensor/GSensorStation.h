@@ -3,6 +3,7 @@
 #include "../station.h"
 #include "../modbus/modbusPacket.h"
 #include "../model.h"
+#include "logger/log.h"
 
 #ifndef SG_MCU_GSENSOR_STATION_H
 #define SG_MCU_GSENSOR_STATION_H
@@ -37,6 +38,7 @@ public:
         if (sensorsValue[i] == 0xFFFFFFFF) {
           // set invalid flag to sensor
           sensorMap[sensorIds[i]]->setValid(false);
+          Log::warn("gsensor", "invalid sensor: " + String(i));
         }
         else {
           sensorMap[sensorIds[i]]->setValue(sensorsValue[i]);

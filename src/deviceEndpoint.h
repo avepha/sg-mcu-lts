@@ -1,3 +1,4 @@
+#include "logger/log.h"
 class DeviceEndpoint
 {
 public:
@@ -45,14 +46,14 @@ bool DeviceEndpoint::embrace(String *message) {
           loop++;
           delay(1);
           if (loop >= 50) {
-            Debug::Print("Request timeout, request format is not invalid");
+            Log::error("device-endpoint", "Request timeout, request format is not invalid");
             return false; // timeout
           }
         }
       }
     }
     else {
-      Debug::Print("got unknown byte " + String(firstChar, HEX));
+      Log::error("device-endpoint", "got unknown byte " + String(firstChar, HEX));
     }
   }
 

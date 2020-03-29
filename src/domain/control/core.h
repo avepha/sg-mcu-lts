@@ -40,12 +40,10 @@ private:
 
     switch (_type) {
       case CTRL_CHANNEL: {
-        Debug::Print("CTRL-CHANNEL started");
         channelCore->activateControls();
         return;
       }
       case CTRL_SEQUENCE: {
-        Debug::Print("CTRL-SEQUENCE started");
         sequenceCore->activateControls();
         return;
       }

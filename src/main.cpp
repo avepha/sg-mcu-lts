@@ -3,6 +3,9 @@
 #include <ArduinoJson.h>
 #include "./config.h"
 #include "./bootstrap.h"
+#include "logger/log.h"
+
+LoggerTray *tray;
 
 void loop1(void *pvParameters);
 
@@ -15,6 +18,9 @@ void setup() {
   loraEndpoint = new LoraEndpoint(&stationPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
+  tray = new LoggerTray;
+  Log::updateLogLevel();
+  Log::setLoggerTray(tray);
 
   xTaskCreatePinnedToCore(loop1, "loop1", 4096 * 8, NULL, 1, NULL, COMCORE);
 }
@@ -33,9 +39,8 @@ void loop1(void *pvParameters) {
       DynamicJsonDocument responseJson(2048);
 
       if (error) {
-
         InvalidJsonFormatError err;
-        Debug::Print(error.c_str());
+        Log::error("json", error.c_str());
         responseJson = err.toJson();
       }
       else if (requestJson["topic"].isNull()) {
@@ -66,17 +71,31 @@ void loop1(void *pvParameters) {
         serialEndpoint->unleash(responseString);
       }
 
-      if (Debug::isDebuggingMode()) {
-        DynamicJsonDocument responseMemory(128);
-        responseMemory["topic"] = "memory";
-        responseMemory["method"] = "event";
-        responseMemory["data"]["freeHeap"] = String(xPortGetFreeHeapSize());
-        String heapString;
-        serializeJson(responseMemory, heapString);
-        Serial.println(heapString);
-      }
+//      if (Debug::isDebuggingMode()) {
+//        DynamicJsonDocument responseMemory(128);
+//        responseMemory["topic"] = "memory";
+//        responseMemory["method"] = "event";
+//        responseMemory["data"]["freeHeap"] = String(xPortGetFreeHeapSize());
+//        String heapString;
+//        serializeJson(responseMemory, heapString);
+//        Serial.println(heapString);
+//      }
       continue;
       // for memory profiling
+    }
+
+    if (!Log::getLoggerTray()->isEmpty()) {
+      DynamicJsonDocument logJson(1024);
+      Logger log = Log::getLoggerTray()->pop();
+      logJson["method"] = "log";
+      logJson["data"]["topic"] = log.getTopic();
+      logJson["data"]["level"] = log.getLevelString();
+      logJson["data"]["message"] = log.getMessage();
+
+      String logString;
+      serializeJson(logJson, logString);
+      rpiEndpoint->unleash(logString);
+      serialEndpoint->unleash(logString);
     }
 
 #ifdef SG_MCU_V2_LORA

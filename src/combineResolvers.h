@@ -251,8 +251,8 @@ void CombineResolvers::CombineMutation() {
   auto *sequence_order_save = new mutation_sequence_order_save;
   mutationMap[sequence_order_save->getName()] = sequence_order_save;
 
-  auto *debug_save = new mutation_debug_save;
-  mutationMap[debug_save->getName()] = debug_save;
+  auto *log_level_save = new mutation_log_level_save;
+  mutationMap[log_level_save->getName()] = log_level_save;
 
   auto *sequence_par_save = new mutation_sequence_par_save;
   mutationMap[sequence_par_save->getName()] = sequence_par_save;

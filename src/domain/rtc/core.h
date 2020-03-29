@@ -2,6 +2,10 @@
 #include <RTClib.h>
 #include "./model.h"
 #include "./util/RtcTask.h"
+#include "./util/RtcUtil.h"
+#include "logger/log.h"
+
+
 #ifndef SG_MCU_RTC_CORE_H
 #define SG_MCU_RTC_CORE_H
 
@@ -38,21 +42,24 @@ RtcCore::RtcCore() {
 }
 
 DateTime RtcCore::getDate() {
-  Debug::Print("Rtc isRunning: " + String(hwRtc.isrunning()));
   RtcSchema rtcSchema =  rtcModel->get();
   DateTime utcDt = rtcTask->getNow();
   TimeSpan tzTimeSpan(rtcSchema.tzOffsetHour * 3600 + rtcSchema.tzOffsetMin * 30);
+
+  Log::trace("rtc", "call func getDate " + DateTimeToIsoString(utcDt + tzTimeSpan));
   return utcDt + tzTimeSpan;
 }
 
 DateTime RtcCore::getUtcDate() {
+  Log::trace("rtc", "call func getUtcDate " + DateTimeToIsoString(rtcTask->getNow()));
   return rtcTask->getNow();
 }
-
 
 DateTime RtcCore::setDate(DateTime dt) {
   hwRtc.adjust(dt);
   swRtc.adjust(dt);
+
+  Log::trace("rtc", "call func setDate " + DateTimeToIsoString(dt));
   return dt;
 }
 
