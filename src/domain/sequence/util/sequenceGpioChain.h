@@ -1,8 +1,6 @@
 #include <stack>
-#include <utility>
 #include <TaskScheduler.h>
 #include "domain/gpio/util/gpioTask.h"
-#include "util/debug.h"
 
 #ifndef SG_MCU_SEQUENCE_GPIO_CHAIN_H
 #define SG_MCU_SEQUENCE_GPIO_CHAIN_H

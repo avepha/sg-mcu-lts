@@ -6,7 +6,7 @@
 # The `CMakeListsUser.txt` will not be overwritten by PlatformIO.
 
 
-set(CMAKE_CONFIGURATION_TYPES "v1;v1_test;v2;v2_test;v2_lora;v2_uno;" CACHE STRING "" FORCE)
+set(CMAKE_CONFIGURATION_TYPES "v1;v1_test;v2;v2_lora;v2_test;v2_uno;" CACHE STRING "" FORCE)
 
 set(PLATFORMIO_CMD "/usr/local/bin/pio")
 

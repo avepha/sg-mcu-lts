@@ -1,8 +1,8 @@
 {
-  "topic": "debug_save",
+  "topic": "log_level_save",
   "method": "mutation",
   "reqId": "req-1",
   "data": {
-    "debug": true
+    "level": "fatal"
   }
 }

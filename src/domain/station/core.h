@@ -1,4 +1,3 @@
-#include <functional>
 #include "./station.h"
 #include "./model.h"
 #include "./gsensor/GSensorStation.h"
@@ -32,16 +31,21 @@ private:
       auto *gSensorStation = new GSensorStation(stationSchema.gSensorStation.GSensorAddresses[i]);
       stations.push_back(gSensorStation);
       modbusTask->registerStation(gSensorStation);
+      Log::trace("station", "add gsensor addr: " + String(gSensorStation->getAddress()));
     }
 
     for (int i = 0; i < stationSchema.solutionStation.SolutionSize; i++) {
       auto *solutionStation = new SolutionStation(stationSchema.solutionStation.SolutionAddresses[i]);
       stations.push_back(solutionStation);
       modbusTask->registerStation(solutionStation);
+      Log::trace("station", "add gsensor addr: " + String(solutionStation->getAddress()));
     }
 
-#ifndef SG_MCU_V2_LORA // disable modbus when using lora
+#ifdef SG_MCU_V2_LORA // disable modbus when using lora
+    Log::trace("station", "lora task started");
+#else
     modbusTask->enable();
+    Log::trace("station", "modbus task started!");
 #endif
   };
 };

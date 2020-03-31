@@ -4,6 +4,7 @@
 #include "domain/sequence-control/sequenceControl.h"
 #include "domain/sequence/util/sequenceGpioChain.h"
 #include "./model.h"
+#include "logger/log.h"
 
 #ifndef SG_MCU_SEQUENCE_RANGE_CORE_H
 #define SG_MCU_SEQUENCE_RANGE_CORE_H
@@ -55,6 +56,7 @@ public:
 
   bool controlTask() override {
     if (sensorPool->getAvailableStationBySensorId(range.sensor) <= 0) {
+      Log::warn("seq-range", "No station available.");
       state.sensorValue = -1;
       return true;
     }

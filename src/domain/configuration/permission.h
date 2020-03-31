@@ -1,23 +1,28 @@
 #include "domain/permission.h"
 #include "validationError.h"
-#include "domain/channel-control/util/resolveControlEnum.h"
-#include "domain/precondition/util/resolvePreconditionEnum.h"
+#include "logger/log.h"
 
 #ifndef SG_MCU_CONFIGURATION_PERMISSION_H
 #define SG_MCU_CONFIGURATION_PERMISSION_H
 
-class permission_debug_save : public Permission {
+class permission_log_level_save : public Permission {
 public:
-  explicit permission_debug_save() : Permission() {};
+  explicit permission_log_level_save() : Permission() {};
 
   void resolve(JsonObject reqData, CombineContext *context) override {
-    if (reqData["debug"].isNull()) {
-      InvalidInputError err("debug field must not be null");
+    if (reqData["level"].isNull()) {
+      InvalidInputError err("level field must not be null");
       throw err;
     }
 
-    if (!reqData["debug"].is<bool>()) {
-      InvalidInputError err("debug field must be boolean");
+    if (!reqData["level"].is<String>()) {
+      InvalidInputError err("level field must be String");
+      throw err;
+    }
+
+    const String level = reqData["level"];
+    if (StringToLoggerLevelEnum(level) == NONE) {
+      InvalidInputError err("Invalid level");
       throw err;
     }
   }

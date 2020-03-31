@@ -3,11 +3,12 @@
 #include "validationError.h"
 #include "combineContext.h"
 #include "util/util.h"
+#include "logger/log.h"
 
 #include "./permission.h"
 
-#ifndef SG_MCU_DEBUG_RESOLVERS_H
-#define SG_MCU_DEBUG_RESOLVERS_H
+#ifndef SG_MCU_CONFIG_RESOLVERS_H
+#define SG_MCU_CONFIG_RESOLVERS_H
 
 // @query
 class query_configuration : public Query {
@@ -16,27 +17,29 @@ public:
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(512);
-    data["debug"] = Debug::isDebuggingMode();
-
+    ConfigurationSchema schema = context->config->model->get();
+    data["logLevel"] = LoggerLevelEnumToString(schema.logLevel);
     return data;
   }
 };
 
-class mutation_debug_save : public Mutation {
+class mutation_log_level_save : public Mutation {
 public:
-  explicit mutation_debug_save() : Mutation("debug_save", new permission_debug_save) {};
+  explicit mutation_log_level_save() : Mutation("log_level_save", new permission_log_level_save) {};
 
   JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ConfigurationSchema schema = context->config->model->get();
-    schema.debug = reqData["debug"];
+    schema.logLevel = StringToLoggerLevelEnum(reqData["level"]);
 
     int writeOps = context->config->model->save(schema);
-    Debug::update();
+    delay(10);
+    Log::updateLogLevel();
 
+    ConfigurationSchema newSchema = context->config->model->get();
     DynamicJsonDocument data(512);
     data["writeOps"] = writeOps;
-    data["debug"] = Debug::isDebuggingMode();
+    data["logLevel"] = LoggerLevelEnumToString(newSchema.logLevel);
     return data;
   }
 };
-#endif //SG_MCU_DEBUG_RESOLVERS_H
+#endif //SG_MCU_CONFIG_RESOLVERS_H

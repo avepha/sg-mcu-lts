@@ -50,7 +50,6 @@ void bootstrap() {
 
   pinMode(SG_STATION_RX, INPUT);
 
-  Debug::update();
   Serial.begin(serialBaudRate);
   entryPort.begin(rpiBaudRate, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   stationPort.begin(9600, SERIAL_8N1, SG_STATION_RX, SG_STATION_TX);
@@ -60,7 +59,6 @@ void bootstrap() {
   Serial.println("PROJECT: " + String(PROJECT));
   Serial.println("UPLOAD_DATE: " + String(UPLOADDATE));
   Serial.println("SG_MODEL: " + String(SG_MODEL));
-  Serial.println("DEBUG: " + String(Debug::isDebuggingMode()));
 #ifdef SG_TEST
   Serial.println("SG_MODE: TEST");
 #endif

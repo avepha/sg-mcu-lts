@@ -1,10 +1,11 @@
 #include "domain/model.h"
+#include "logger/loggerUtil.h"
 
 #ifndef SG_MCU_CONFIGURATION_MODEL_H
 #define SG_MCU_CONFIGURATION_MODEL_H
 
 struct ConfigurationSchema {
-  bool debug = false;
+  LoggerLevelEnum logLevel = FATAL;
 }; // size 288
 
 class ConfigurationModel : public RomModel<ConfigurationSchema> {
