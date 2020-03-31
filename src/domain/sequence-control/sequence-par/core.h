@@ -4,6 +4,7 @@
 #include "domain/sequence-control/sequenceControl.h"
 #include "domain/sequence/util/sequenceGpioChain.h"
 #include "./model.h"
+#include "logger/log.h"
 
 #ifndef SG_MCU_SEQUENCE_PAR_CORE_H
 #define SG_MCU_SEQUENCE_PAR_CORE_H
@@ -56,6 +57,7 @@ public:
 
   bool controlTask() override {
     if (sensorPool->getAvailableStationBySensorId(Sensor::SENSORMAP["gs_par"]) <= 0) {
+      Log::warn("seq-par", "No station available.");
       state.sensorValue = -1;
       return true;
     }

@@ -51,13 +51,13 @@ public:
           byte requestAddress = vStations[currentStationIndex]->getAddress();
 
           if (vBytes.size() <= 2) {
-            Log::trace("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-packet-size-2");
+            Log::error("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-packet-size-2");
             isPacketFailed = true;
           }
 
           // step1. check crc
           if (!ModbusPacket::verifyPacket(vBytes)) {
-            Log::trace("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-invalid-crc");
+            Log::error("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-invalid-crc");
             isPacketFailed = true;
           }
 
@@ -65,7 +65,7 @@ public:
           byte responseFuncCode = vBytes[1];
 
           if (responseFuncCode == 0x08) { // Error handling
-            Log::trace("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-func-code: 0x08");
+            Log::error("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-func-code: 0x08");
             isPacketFailed = true;
           }
 
@@ -87,7 +87,7 @@ public:
         else {
           waitingCycle++;
           if (waitingCycle >= 10) { // request timeout
-            Log::trace("modbus", "req-timeout, sta " + String(vStations[currentStationIndex]->getAddress()));
+            Log::error("modbus", "req-timeout, sta " + String(vStations[currentStationIndex]->getAddress()));
             waitingCycle = 0;
             state = REQUEST_NEXT;
             currentStationIndex++;

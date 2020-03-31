@@ -4,6 +4,7 @@
 #include "domain/channel-control/state.h"
 #include "domain/channel-control/control.h"
 #include "./model.h"
+#include "logger/log.h"
 
 #ifndef SG_MCU_PAR_CORE_H
 #define SG_MCU_PAR_CORE_H
@@ -56,6 +57,7 @@ public:
 
   bool controlTask() override {
     if (sensorPool->getAvailableStationBySensorId(Sensor::SENSORMAP["gs_par"]) <= 0) {
+      Log::warn("ch-par", "No station available." + String(channel));
       state.sensorValue = -1;
       return true;
     }
