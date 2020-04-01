@@ -14,7 +14,7 @@ class mutation_range_save : public Mutation {
 public:
   explicit mutation_range_save() : Mutation("range_save", new permission_range_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     RangeSchema schema = context->range->model->get();
 
@@ -61,7 +61,7 @@ class query_range : public Query {
 public:
   explicit query_range() : Query("range", new permission_range()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     RangeSchema schema = context->range->model->get();
 

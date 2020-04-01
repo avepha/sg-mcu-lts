@@ -9,7 +9,7 @@ class query_sensor : public Query {
 public:
   explicit query_sensor() : Query("sensor", new permission_sensor) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     uint8_t sensorId = reqData["id"];
 
     SensorPool *sensorPool = SensorPool::instance();
@@ -39,7 +39,7 @@ class query_sensors : public Query {
 public:
   explicit query_sensors() : Query("sensors") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SensorPool *sensorPool = SensorPool::instance();
     DynamicJsonDocument data(1024);
     for (const auto& sensor: sensorPool->getSensorMap()) {

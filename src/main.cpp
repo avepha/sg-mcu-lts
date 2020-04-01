@@ -71,15 +71,17 @@ void loop1(void *pvParameters) {
         serialEndpoint->unleash(responseString);
       }
 
-//      if (Debug::isDebuggingMode()) {
-//        DynamicJsonDocument responseMemory(128);
-//        responseMemory["topic"] = "memory";
-//        responseMemory["method"] = "event";
-//        responseMemory["data"]["freeHeap"] = String(xPortGetFreeHeapSize());
-//        String heapString;
-//        serializeJson(responseMemory, heapString);
-//        Serial.println(heapString);
-//      }
+      if (Log::getLogLevel() >= DEBUG) {
+        DynamicJsonDocument logJson(1024);
+        logJson["method"] = "log";
+        logJson["data"]["topic"] = "heap";
+        logJson["data"]["level"] = "debug";
+        logJson["data"]["message"] = "heap size: " + String(xPortGetFreeHeapSize());
+        String logString;
+        serializeJson(logJson, logString);
+        rpiEndpoint->unleash(logString);
+        serialEndpoint->unleash(logString);
+      }
       continue;
       // for memory profiling
     }

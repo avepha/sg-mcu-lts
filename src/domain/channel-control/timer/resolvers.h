@@ -14,7 +14,7 @@ class mutation_timer_save : public Mutation {
 public:
   explicit mutation_timer_save() : Mutation("timer_save", new permission_timer_save) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     TimerSchema schema = context->timer->model->get();
     int size = reqData["timers"].size();
@@ -48,7 +48,7 @@ class query_timer : public Query {
 public:
   explicit query_timer() : Query("timer", new permission_timer) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     TimerSchema schema = context->timer->model->get();
     DynamicJsonDocument data(1024);

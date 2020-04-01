@@ -12,7 +12,7 @@ class query_info : public Query {
 public:
   explicit query_info() : Query("info") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(128);
     data["version"] = VERSION; //TODO: fix this
     data["model"] = SG_MODEL;

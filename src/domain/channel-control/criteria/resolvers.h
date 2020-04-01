@@ -14,7 +14,7 @@ class mutation_criteria_save : public Mutation {
 public:
   explicit mutation_criteria_save() : Mutation("criteria_save", new permission_criteria_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     CriteriaSchema schema = context->criteria->model->get();
 
@@ -59,7 +59,7 @@ class query_criteria : public Query {
 public:
   explicit query_criteria() : Query("criteria", new permission_criteria()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
 
     CriteriaSchema schema = context->criteria->model->get();

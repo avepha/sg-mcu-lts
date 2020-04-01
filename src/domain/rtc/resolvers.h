@@ -16,7 +16,7 @@ class mutation_date_save : public Mutation {
 public:
   explicit mutation_date_save() : Mutation("date_save") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     if (reqData["date"].isNull()) {
       InvalidInputError err;
       throw err;
@@ -38,7 +38,7 @@ class mutation_timezone_save : public Mutation {
 public:
   explicit mutation_timezone_save() : Mutation("timezone_save", new permission_timezone_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     String offset = reqData["offset"];
     String sign = offset.substring(0, 1);
     String hourOffset = offset.substring(1, 3);
@@ -69,7 +69,7 @@ class query_date : public Query {
 public:
   explicit query_date() : Query("date") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DateTime dateTime;
     if (reqData["local"].isNull()) {
       dateTime = context->rtc->core->getUtcDate();
@@ -90,7 +90,7 @@ class query_timezone : public Query {
 public:
   explicit query_timezone() : Query("timezone") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
 
     RtcSchema schema = context->rtc->model->get();
     DynamicJsonDocument data(64);

@@ -12,7 +12,7 @@ class query_control_type : public Query {
 public:
   explicit query_control_type() : Query("control_type") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(64);
     data["type"] = ControlEnumToString(context->control->core->getType());
     return data;
@@ -23,7 +23,7 @@ class mutation_control_type_save : public Mutation {
 public:
   explicit mutation_control_type_save() : Mutation("control_type_save", new permission_control_type_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ControlSchema controlSchema = context->control->model->get();
     controlSchema.type = ControlStringToEnum(reqData["type"]);
 

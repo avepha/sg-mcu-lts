@@ -12,12 +12,12 @@ public:
 
   std::string getName() { return name; }
 
-  virtual JsonDocument resolve(JsonObject reqData, CombineContext *context) {
+  virtual DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) {
     DynamicJsonDocument json(64);
     return json;
   }
 
-  JsonDocument exec(JsonObject reqData, CombineContext *context) {
+  DynamicJsonDocument exec(JsonObject reqData, CombineContext *context) {
     if (permission) {
       permission->resolve(reqData, context);
     }

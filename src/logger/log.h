@@ -75,6 +75,8 @@ class Log {
 public:
   static void updateLogLevel();
 
+  static LoggerLevelEnum getLogLevel();
+
   static void setLoggerTray(LoggerTray *);
 
   static LoggerTray *getLoggerTray();
@@ -150,6 +152,10 @@ void Log::setLoggerTray(LoggerTray *_tray) {
 void Log::updateLogLevel() {
   ConfigurationSchema schema = ConfigurationModel().get();
   level = schema.logLevel;
+}
+
+LoggerLevelEnum Log::getLogLevel() {
+  return level;
 }
 
 

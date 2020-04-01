@@ -8,7 +8,7 @@ class query_stations : public Query {
 public:
   explicit query_stations() : Query("stations") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     std::vector<Station*> stations = context->station->core->getStations();
 
     DynamicJsonDocument data(1024);
@@ -27,7 +27,7 @@ class query_station : public Query {
 public:
   explicit query_station() : Query("station", new permission_station) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     std::vector<Station*> stations = context->station->core->getStations();
     uint8_t address = reqData["address"];
 

@@ -15,7 +15,7 @@ class mutation_par_save : public Mutation {
 public:
   explicit mutation_par_save() : Mutation("par_save", new permission_par_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     uint8_t index = reqData["index"];
     JsonObject par = reqData["par"];
 
@@ -39,7 +39,7 @@ class query_par : public Query {
 public:
   explicit query_par() : Query("par", new permission_par()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     ParSchema schema = context->par->model->get();
     DynamicJsonDocument data(128);

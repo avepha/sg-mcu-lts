@@ -13,7 +13,7 @@ class mutation_clear_nvmemory : public Mutation {
 public:
   explicit mutation_clear_nvmemory() : Mutation("clear_nvmemory") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     for(int i = 0 ; i < EEPROM_SIZE; i++) {
       EEPROM.put(i, 255);
     }

@@ -13,7 +13,7 @@ class mutation_precondition_timer_save : public Mutation {
 public:
   explicit mutation_precondition_timer_save() : Mutation("precondition_timer_save", new permission_precondition_timer_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecTimerSchema schema = context->precTimer->model->get();
 
@@ -45,7 +45,7 @@ class query_precondition_timer : public Query {
 public:
   explicit query_precondition_timer() : Query("precondition_timer", new permission_precondition_timer()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecTimerSchema newSchema = context->precTimer->model->get();
 

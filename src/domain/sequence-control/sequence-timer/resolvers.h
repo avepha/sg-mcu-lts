@@ -15,7 +15,7 @@ class mutation_sequence_timer_save : public Mutation {
 public:
   explicit mutation_sequence_timer_save() : Mutation("sequence_timer_save", new permission_sequence_timer_save) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceTimerSchema schema = context->sequenceTimer->model->get();
     for (int i = 0 ; i < reqData["timers"].size(); i++) {
       schema.timer.timePair[i].start = reqData["timers"][i]["start"];
@@ -44,7 +44,7 @@ class query_sequence_timer : public Query {
 public:
   explicit query_sequence_timer() : Query("sequence_timer") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceTimerSchema schema = context->sequenceTimer->model->get();
 
     DynamicJsonDocument data(1024);

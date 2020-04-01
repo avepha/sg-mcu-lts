@@ -27,7 +27,7 @@ public:
     return jsonString;
   }
 
-  JsonDocument toJson() {
+  DynamicJsonDocument toJson() {
     DynamicJsonDocument json(200);
     json["topic"] = topic;
     json["code"] = code;

@@ -15,7 +15,7 @@ class mutation_sequence_range_save : public Mutation {
 public:
   explicit mutation_sequence_range_save() : Mutation("sequence_range_save", new permission_sequence_range_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     JsonObject range = reqData["range"];
     SequenceRangeSchema schema = context->sequenceRange->model->get();
     schema.range.sensor = range["sensor"];
@@ -51,7 +51,7 @@ class query_sequence_range : public Query {
 public:
   explicit query_sequence_range() : Query("sequence_range") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceRangeSchema schema = context->sequenceRange->model->get();
     DynamicJsonDocument data(1024);
     JsonObject newRange = data.createNestedObject("range");

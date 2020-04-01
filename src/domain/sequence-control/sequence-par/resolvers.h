@@ -15,7 +15,7 @@ class mutation_sequence_par_save : public Mutation {
 public:
   explicit mutation_sequence_par_save() : Mutation("sequence_par_save", new permission_sequence_par_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     JsonObject par = reqData["par"];
     SequenceParSchema schema = context->sequencePar->model->get();
     schema.par.parSumInKJ = par["parSumInKJ"];
@@ -37,7 +37,7 @@ class query_sequence_par : public Query {
 public:
   explicit query_sequence_par() : Query("sequence_par") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceParSchema schema = context->sequencePar->model->get();
     DynamicJsonDocument data(128);
     data["par"]["parSumInKJ"] = schema.par.parSumInKJ;

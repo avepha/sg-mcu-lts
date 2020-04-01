@@ -14,7 +14,7 @@ class mutation_precondition_range_save : public Mutation {
 public:
   explicit mutation_precondition_range_save() : Mutation("precondition_range_save", new permission_precondition_range_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecRangeSchema schema = context->precRange->model->get();
 
@@ -45,7 +45,7 @@ class query_precondition_range : public Query {
 public:
   explicit query_precondition_range() : Query("precondition_range", new permission_precondition_range()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     PrecRangeSchema schema = context->precRange->model->get();
 

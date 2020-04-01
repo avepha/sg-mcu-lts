@@ -14,7 +14,7 @@ class mutation_sequence_criteria_save : public Mutation {
 public:
   explicit mutation_sequence_criteria_save() : Mutation("sequence_criteria_save", new permission_sequence_criteria_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceCriteriaSchema schema = context->sequenceCriteria->model->get();
 
     JsonObject criteria = reqData["criteria"];
@@ -54,7 +54,7 @@ class query_sequence_criteria : public Query {
 public:
   explicit query_sequence_criteria() : Query("sequence_criteria") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceCriteriaSchema schema = context->sequenceCriteria->model->get();
 
     DynamicJsonDocument data(256);

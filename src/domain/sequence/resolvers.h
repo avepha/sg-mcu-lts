@@ -14,7 +14,7 @@ class query_sequence : public Query {
 public:
   explicit query_sequence() : Query("sequence") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceSchema schema = context->sequence->model->get();
     SequenceSchema::Sequence sequence = schema.sequence;
 
@@ -41,7 +41,7 @@ class query_sequence_order : public Query {
 public:
   explicit query_sequence_order() : Query("sequence_order") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceSchema schema = context->sequence->model->get();
     DynamicJsonDocument data(1024);
     JsonArray channelOrderAndTiming = data.createNestedArray("channelOrderAndTiming");
@@ -59,7 +59,7 @@ class query_sequence_state : public Query {
 public:
   explicit query_sequence_state() : Query("sequence_state", new permission_sequence_state()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceControl *sequenceControl = context->sequence->core->getControl();
     SEQUENCE_CONTROL_TYPE_ENUM type = sequenceControl->getType();
     DynamicJsonDocument data(1024);
@@ -139,7 +139,7 @@ class mutation_sequence_activate : public Mutation {
 public:
   explicit mutation_sequence_activate() : Mutation("sequence_activate", new permission_sequence_activate) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceSchema schema = context->sequence->model->get();
     schema.sequence.isActive = reqData["isActive"];
 
@@ -162,7 +162,7 @@ class mutation_sequence_save : public Mutation {
 public:
   explicit mutation_sequence_save() : Mutation("sequence_save", new permission_sequence_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceSchema schema = context->sequence->model->get();
 
     schema.sequence.control.type = SequenceControlStringToEnum(reqData["control"]["type"]);
@@ -211,7 +211,7 @@ class mutation_sequence_order_save : public Mutation {
 public:
   explicit mutation_sequence_order_save() : Mutation("sequence_order_save", new permission_sequence_order_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     SequenceSchema schema = context->sequence->model->get();
     for (int i = 0; i < reqData["channelOrderAndTiming"].size(); i++) {
       schema.sequence.channelOrderAndTiming[i].channel = reqData["channelOrderAndTiming"][i]["channel"];

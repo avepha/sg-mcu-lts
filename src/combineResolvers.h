@@ -37,7 +37,7 @@ class CombineResolvers {
 public:
   explicit CombineResolvers(CombineContext *);
 
-  JsonDocument execute(JsonDocument);
+  DynamicJsonDocument execute(DynamicJsonDocument);
 
 private:
   CombineContext *context = nullptr;
@@ -49,7 +49,7 @@ private:
   void CombineMutation(void);
 };
 
-JsonDocument CombineResolvers::execute(JsonDocument json) {
+DynamicJsonDocument CombineResolvers::execute(DynamicJsonDocument json) {
   DynamicJsonDocument response(2048);
   uint32_t incomingTime = millis();
   std::string topic = json["topic"].as<String>().c_str();
@@ -58,7 +58,7 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
   if (method == "query") {
     if (queryMap.find(topic) != queryMap.end()) {
       try {
-        JsonDocument data = queryMap[topic]->exec(json["data"], context);
+        DynamicJsonDocument data = queryMap[topic]->exec(json["data"], context);
         response["topic"] = json["topic"];
         response["method"] = json["method"];
         response["execTime"] = millis() - incomingTime;
@@ -67,7 +67,7 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
         return response;
       }
       catch (ValidationError err) {
-        JsonDocument errResponse = err.toJson();
+        DynamicJsonDocument errResponse = err.toJson();
         errResponse["execTime"] = millis() - incomingTime;
         return errResponse;
       }
@@ -80,7 +80,7 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
   else if (method == "mutation") {
     if (mutationMap.find(topic) != mutationMap.end()) {
       try {
-        JsonDocument data = mutationMap[topic]->exec(json["data"], context);
+        DynamicJsonDocument data = mutationMap[topic]->exec(json["data"], context);
         response["topic"] = json["topic"];
         response["method"] = json["method"];
         response["execTime"] = millis() - incomingTime;
@@ -89,7 +89,7 @@ JsonDocument CombineResolvers::execute(JsonDocument json) {
         return response;
       }
       catch (ValidationError err) {
-        JsonDocument errResponse = err.toJson();
+        DynamicJsonDocument errResponse = err.toJson();
         errResponse["execTime"] = millis() - incomingTime;
         return errResponse;
       }

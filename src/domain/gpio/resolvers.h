@@ -10,7 +10,7 @@ class query_gpio_task : public Query {
 public:
   explicit query_gpio_task() : Query("gpio_task") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     std::map<std::string, GpioTask*> gpioTaskMap = context->gpio->core->getGpioTaskMap();
 
     DynamicJsonDocument data(1024);
@@ -34,7 +34,7 @@ class query_gpio_state : public Query {
 public:
   explicit query_gpio_state() : Query("gpio_state") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     std::array<uint8_t , 8> channelState = context->gpio->core->getGpioState();
 
     DynamicJsonDocument data(1024);

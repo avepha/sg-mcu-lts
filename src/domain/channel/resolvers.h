@@ -14,7 +14,7 @@ class query_channel : public Query {
 public:
   explicit query_channel() : Query("channel", new permission_channel()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     ChannelSchema channelSchema = context->channel->model->get();
     ChannelSchema::Channel channel = channelSchema.channels[index];
@@ -44,7 +44,7 @@ class query_channel_state : public Query {
 public:
   explicit query_channel_state() : Query("channel_state", new permission_channel_state()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     Control *channelControl = context->channel->core->getControlByChannel(index);
     CONTROL_TYPE_ENUM type = channelControl->getType();
@@ -130,7 +130,7 @@ class mutation_channel_activate : public Mutation {
 public:
   explicit mutation_channel_activate() : Mutation("channel_activate", new permission_channel_activate()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     boolean isActive = reqData["isActive"];
     ChannelSchema channelSchema = context->channel->model->get();
@@ -156,7 +156,7 @@ class mutation_channel_save : public Mutation {
 public:
   explicit mutation_channel_save() : Mutation("channel_save", new permission_channel_save()) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ChannelSchema channelSchema = context->channel->model->get();
     int index = reqData["index"];
 
