@@ -21,7 +21,7 @@ public:
   unsigned long currentWaitingTimeInSecond = 0;
   unsigned long currentWorkingTimeInSecond = 0;
 
-  JsonDocument report() override {
+  DynamicJsonDocument report() override {
     DynamicJsonDocument data(128);
     data["type"] = "range";
     data["sensorValue"] = sensorValue;

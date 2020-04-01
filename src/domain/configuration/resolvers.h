@@ -15,7 +15,7 @@ class query_configuration : public Query {
 public:
   explicit query_configuration() : Query("configuration") {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(512);
     ConfigurationSchema schema = context->config->model->get();
     data["logLevel"] = LoggerLevelEnumToString(schema.logLevel);
@@ -27,7 +27,7 @@ class mutation_log_level_save : public Mutation {
 public:
   explicit mutation_log_level_save() : Mutation("log_level_save", new permission_log_level_save) {};
 
-  JsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     ConfigurationSchema schema = context->config->model->get();
     schema.logLevel = StringToLoggerLevelEnum(reqData["level"]);
 

@@ -23,7 +23,7 @@ public:
   PAR_STATE_ENUM parState = PAR_STATE_ACCUMULATING;
   uint32_t currentWorkingTimeInSecond = 0;
 
-  JsonDocument report() override {
+  DynamicJsonDocument report() override {
     DynamicJsonDocument data(128);
     data["type"] = "par";
     data["isReachThreshold"] = isReachThreshold;

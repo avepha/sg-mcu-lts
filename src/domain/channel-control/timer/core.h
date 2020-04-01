@@ -1,3 +1,4 @@
+
 #include "TaskScheduler.h"
 #include "domain/rtc/core.h"
 #include "domain/channel-control/state.h"
@@ -14,7 +15,7 @@ public:
   uint32_t nextIntervalTimerInSeconds[2] = {0};
   uint32_t currentIntervalTimerInSeconds[2] = {0};
 
-  JsonDocument report() override {
+  DynamicJsonDocument report() override {
     DynamicJsonDocument data(256);
     data["type"] = "timer";
     data["currentTimeInSecond"] = currentTimeInSecond;

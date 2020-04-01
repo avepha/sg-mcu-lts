@@ -5,7 +5,7 @@
 
 class SequenceState {
 public:
-  virtual JsonDocument report();
+  virtual DynamicJsonDocument report();
 };
 
 #endif //SG_MCU_ABSTRCT_STATE_H

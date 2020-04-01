@@ -15,7 +15,7 @@ public:
   uint32_t nextIntervalTimerInSeconds[2] = {0};
   uint32_t currentIntervalTimerInSeconds[2] = {0};
 
-  JsonDocument report() override {
+  DynamicJsonDocument report() override {
     DynamicJsonDocument data(256);
     data["type"] = "timer";
     data["currentTimeInSecond"] = currentTimeInSecond;

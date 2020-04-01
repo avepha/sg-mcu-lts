@@ -11,7 +11,7 @@ public:
   bool isReachThreshold = false;
   float sensorValue = 0;
 
-  JsonDocument report() override {
+  DynamicJsonDocument report() override {
     DynamicJsonDocument data(128);
     data["type"] = "precRange";
     data["isReachThreshold"] = isReachThreshold;
