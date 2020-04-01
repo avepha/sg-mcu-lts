@@ -58,9 +58,7 @@ void GpioCore::selfDestructGpioTask(GpioTask *gpioTask) {
     gpioTaskMap.erase(uid);
   }
 
-  if (gpioTask) {
-    delete gpioTask; // [-Wdelete-non-virtual-dtor] occur
-  }
+  delete gpioTask;
 }
 
 GpioCore *GpioCore::instance() {

@@ -18,17 +18,21 @@ public:
         gpioTaskType(GPIO_TASK_NO_EXPIRED),
         dWrite(dWrite),
         finishCallback(finishCallback)
-        {}
+        {
+          Log::debug("gpio", "create task forever");
+        }
 
   GpioTask(std::string uid, uint8_t channel, uint16_t timeout, void (*dWrite)(int channel, int value),
            void (*finishCallback)(GpioTask *gpioTask))
-      : Task(timeout, TASK_ONCE, &gpioScheduler, false),
+      : Task(timeout, TASK_FOREVER, &gpioScheduler, false),
         uid(std::move(uid)),
         channel(channel),
         gpioTaskType(GPIO_TASK_EXPIRED),
         dWrite(dWrite),
         finishCallback(finishCallback)
         {
+          Log::debug("gpio", "create task with timeout" + String(timeout));
+          setInterval(timeout);
           setTimeout(timeout);
         }
 
@@ -56,7 +60,6 @@ public:
     if (this->getTimeout() < 0) {
       finishCallback(this);
     }
-
     return true;
   }
 
@@ -65,7 +68,9 @@ public:
     return true;
   }
 
-  void OnDisable() override {} // TODO: please find the cause. when call .disable(), system will be crashed.
+  void OnDisable() override {
+
+  } // TODO: please find the cause. when call .disable(), system will be crashed.
 
 private:
   std::string uid;

@@ -31,12 +31,12 @@ public:
   bool Callback() override {
     if (deactivationFlag) {
       delete this;
-      return false;
+      return true;
     }
 
     for (int i = 0; i < precSize; i++) {
       if (!preconditions[i]->resolve()) {
-        return false;
+        return true;
       }
     }
 

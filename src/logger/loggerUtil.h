@@ -43,6 +43,8 @@ String LoggerLevelEnumToString(LoggerLevelEnum level) {
       return "debug";
     case TRACE:
       return "trace";
+    case NONE:
+      return "none";
   }
   return "none";
 }

@@ -44,7 +44,7 @@ public:
 
     if (currentChannelIndex + 1 >= channelAndTimeouts.size()) {
       disable();
-      return false;
+      return true;
     }
 
     currentChannelIndex++;
