@@ -101,8 +101,23 @@ void loop1(void *pvParameters) {
     }
 
 #ifdef SG_MCU_V2_LORA
-    String loraString;
-    loraEndpoint->embrace(&loraString);
+    std::vector<byte> vByte;
+    if (loraEndpoint->embrace(vByte)) {
+      std::vector<Station *> stations = context->station->core->getStations();
+      uint8_t st = vByte[0];
+      bool isValid = false;
+      for (int i = 0; i < stations.size(); i++) {
+        if (stations[i]->getAddress() == st) {
+          stations[i]->onPacketReceived(vByte);
+          Log::trace("lora", "got packet sta: " + String(st));
+          isValid = true;
+        }
+      }
+
+      if (!isValid) {
+        Log::error("lora", "no-station sta: " + String(st));
+      }
+    }
 #endif
 
     delay(1);
