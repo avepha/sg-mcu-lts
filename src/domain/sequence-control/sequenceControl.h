@@ -10,13 +10,15 @@
 
 class SequenceControl : public Task {
 public:
-  SequenceControl(SEQUENCE_CONTROL_TYPE_ENUM type, SequenceGpioChain *gpioChain,int interval = TASK_SECOND) : Task(interval, TASK_FOREVER, &controlScheduler, false),
-    gpioChain(gpioChain),
-    type(type)
-    {
-      taskName = (SequenceControlEnumToString(type)).c_str();
-      gpioCore = GpioCore::instance();
-    }
+  SequenceControl(SEQUENCE_CONTROL_TYPE_ENUM type, SequenceGpioChain *gpioChain, int interval = TASK_SECOND) : Task(
+      interval, TASK_FOREVER, &controlScheduler, false),
+                                                                                                               gpioChain(
+                                                                                                                   gpioChain),
+                                                                                                               type(
+                                                                                                                   type) {
+    taskName = (SequenceControlEnumToString(type)).c_str();
+    gpioCore = GpioCore::instance();
+  }
 
   virtual ~SequenceControl() {
     for (int i = 0; i < precSize; i++) {
@@ -28,19 +30,24 @@ public:
     return true;
   };
 
+  virtual bool controlTask(bool isPrecPass) {
+    return true;
+  };
+
   bool Callback() override {
     if (deactivationFlag) {
       delete this;
       return true;
     }
 
+    bool isPrecPass = true;
     for (int i = 0; i < precSize; i++) {
       if (!preconditions[i]->resolve()) {
-        return true;
+        isPrecPass = false;
       }
     }
 
-    return controlTask();
+    return controlTask(isPrecPass);
   };
 
   SEQUENCE_CONTROL_TYPE_ENUM getType() {

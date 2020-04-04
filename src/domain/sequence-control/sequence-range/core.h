@@ -54,7 +54,17 @@ public:
     return state;
   }
 
-  bool controlTask() override {
+  bool controlTask(bool isPrecPass) override {
+    if (!isPrecPass) {
+      // set state to zero
+      Log::debug("sq-range", "not-pass-prec");
+      state.isReachThreshold = false;
+      if (gpioChain->isEnabled()) {
+        gpioChain->disable();
+      }
+      return true; // stop if precondition is not pass
+    }
+
     if (sensorPool->getAvailableStationBySensorId(range.sensor) <= 0) {
       Log::warn("seq-range", "No station available.");
       state.sensorValue = -1;
