@@ -32,6 +32,8 @@ public:
         return "debug";
       case TRACE:
         return "trace";
+      case NONE:
+        return "none";
     }
 
     return "none";

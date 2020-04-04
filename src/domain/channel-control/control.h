@@ -30,19 +30,24 @@ public:
     return true;
   };
 
+  virtual bool controlTask(bool isPrecPass) {
+    return true;
+  }
+
   bool Callback() override {
     if (deactivationFlag) {
       delete this;
       return false;
     }
 
+    bool isPrecPass = true;
     for (int i = 0; i < precSize; i++) {
       if (!preconditions[i]->resolve()) {
-        return false;
+        isPrecPass = false;
       }
     }
 
-    return controlTask();
+    return controlTask(isPrecPass);
   };
 
   CONTROL_TYPE_ENUM getType() {
