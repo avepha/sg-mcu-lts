@@ -13,7 +13,7 @@ public:
     // packet table: [address(1)][func(1)][data(n * byte)][crc(2)]
     // get data by starting at index 2 to packet-size - 2
 
-    uint16_t calculatedCrc = crc16.ccitt(vPacket.data() + 2, vPacket.size() - 4); // tail 2 bytes, head 2 bytes
+    uint16_t calculatedCrc = crc16.modbus(vPacket.data(), vPacket.size() - 4); // tail 2 bytes, head 2 bytes
     uint16_t responseCrc;
     memcpy(&responseCrc, &vPacket[vPacket.size() - 2], sizeof(byte) * 2);
     return calculatedCrc == responseCrc;
@@ -21,7 +21,11 @@ public:
 
   ModbusPacket(byte _addr, byte _func, byte *_data, uint16_t _size) : address(_addr), func(_func), dataSize(_size) {
     memcpy(data, _data, _size);
-    crc = crc16.ccitt(data, _size);
+    byte packets[_size + 2];
+    packets[0] = _addr;
+    packets[1] = _func;
+    memcpy(&packets[2], data, _size);
+    crc = crc16.modbus(packets, sizeof(packets));
   }
 
   std::vector<byte> getVectorPacket() {
