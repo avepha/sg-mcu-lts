@@ -21,11 +21,11 @@ public:
   void onPacketReceived(const std::vector<byte> &vPacket) override {
 //    byte address = vPacket[0];
     byte funcCode = vPacket[1];
-    uint8_t packetBodySize = vPacket.size() - 4;
+    uint8_t packetBodySize = vPacket[2];
     byte packetBody[packetBodySize];
-    memcpy(packetBody, vPacket.data() + 2, packetBodySize);
+    memcpy(packetBody, vPacket.data() + 3, packetBodySize);
 
-    if (funcCode == 0x04 && vPacket.size() >= 16) {
+    if (funcCode == 0x04 && vPacket.size() >= 17) {
       uint16_t sensorSize = packetBodySize / 4;
       float sensorsValue[sensorSize];
       for (uint16_t dataIndex = 0, sensorIndex = 0; sensorIndex < sensorSize; dataIndex += 4, sensorIndex++) {

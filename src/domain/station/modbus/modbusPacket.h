@@ -10,10 +10,8 @@ FastCRC16 crc16;
 class ModbusPacket {
 public:
   static bool verifyPacket(const std::vector<byte>& vPacket) {
-    // packet table: [address(1)][func(1)][data(n * byte)][crc(2)]
-    // get data by starting at index 2 to packet-size - 2
-
-    uint16_t calculatedCrc = crc16.modbus(vPacket.data(), vPacket.size() - 4); // tail 2 bytes, head 2 bytes
+    // packet table: [address(1)][func(1)][numberOfData(1)][data(n * byte)][crc(2)]
+    uint16_t calculatedCrc = crc16.modbus(vPacket.data(), vPacket.size() - 2); // tail 2 bytes, head 2 bytes
     uint16_t responseCrc;
     memcpy(&responseCrc, &vPacket[vPacket.size() - 2], sizeof(byte) * 2);
     return calculatedCrc == responseCrc;
