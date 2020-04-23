@@ -44,5 +44,4 @@ private:
   uint16_t crc; // 16 bit crc
 };
 
-
 #endif //SG_MCU_MODBUSPACKET_H

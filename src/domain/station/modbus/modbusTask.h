@@ -55,6 +55,12 @@ public:
             isPacketFailed = true;
           }
 
+          if (vBytes[0] == 0 && vBytes[vBytes.size() - 1] == 0) {
+            Log::error("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-zero-ht");
+            vBytes.erase(vBytes.begin());
+            vBytes.pop_back();
+          }
+
           // step1. check crc
           if (!ModbusPacket::verifyPacket(vBytes)) {
             Log::error("modbus", "res, sta 0x" + String(requestAddress, HEX) + " error-invalid-crc");
