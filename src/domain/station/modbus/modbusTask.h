@@ -10,11 +10,9 @@
 #ifndef SG_MCU_MODBUSTASK_H
 #define SG_MCU_MODBUSTASK_H
 
-
 // TODO: move this to appropriate location
 static void sendDataToStation(byte *data, int size) {
   digitalWrite(RS485_DIR_PIN, RS485_SEND_MODE);
-  delay(10);
   stationPort.write(data, size);
   delay(10);
   digitalWrite(RS485_DIR_PIN, RS485_RECV_MODE);
@@ -33,7 +31,7 @@ public:
   }
 
   bool Callback() override {
-    switch(state) {
+    switch (state) {
       case WAITING_RESPONSE: {
         if (isDataComing()) {
           bool isPacketFailed = false;
@@ -123,9 +121,13 @@ public:
         sendDataToStation(requestByte.data(), requestByte.size());
         lastSendTs = millis();
 
+        String strPacket = "";
+        for (int i = 0; i < requestByte.size(); i++)
+          strPacket += String(requestByte[i], HEX) + " ";
         Log::trace("modbus",
-            "req, sta 0x" + String(vStations[currentStationIndex]->getAddress(), HEX) +
-            ", t: " + StationTypeEnumToString(vStations[currentStationIndex]->getType())
+                   "req, sta 0x" + String(vStations[currentStationIndex]->getAddress(), HEX) +
+                   ", t: " + StationTypeEnumToString(vStations[currentStationIndex]->getType()) +
+                   ", p: " + strPacket
         );
 
         state = WAITING_RESPONSE;

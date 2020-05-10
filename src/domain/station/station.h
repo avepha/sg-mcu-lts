@@ -16,7 +16,7 @@ public:
     address = _address;
     updatedAtMs = 0;
 
-    byte data[4] = {0x00, 0x0, 0x0, 0x0};
+    byte data[4] = {0x00, 0x00, 0x00, 0x00};
     requestPacket = new ModbusPacket(address, 0x04, data, sizeof(data));
   }
 

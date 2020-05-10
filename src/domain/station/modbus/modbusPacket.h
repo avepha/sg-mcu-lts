@@ -9,7 +9,7 @@ FastCRC16 crc16;
 
 class ModbusPacket {
 public:
-  static bool verifyPacket(const std::vector<byte>& vPacket) {
+  static bool verifyPacket(const std::vector<byte> &vPacket) {
     // packet table: [address(1)][func(1)][numberOfData(1)][data(n * byte)][crc(2)]
     uint16_t calculatedCrc = crc16.modbus(vPacket.data(), vPacket.size() - 2); // tail 2 bytes, head 2 bytes
     uint16_t responseCrc;
@@ -17,13 +17,16 @@ public:
     return calculatedCrc == responseCrc;
   }
 
-  ModbusPacket(byte _addr, byte _func, byte *_data, uint16_t _size) : address(_addr), func(_func), dataSize(_size) {
+  ModbusPacket(byte _addr, byte _func, byte *_data, uint16_t _size)
+      : address(_addr),
+        func(_func),
+        dataSize(_size) {
     memcpy(data, _data, _size);
     byte packets[_size + 3];
-    packets[0] = _addr;
-    packets[1] = _func;
-    packets[2] = _size;
-    memcpy(&packets[3], data, _size);
+    packets[0] = address;
+    packets[1] = func;
+    packets[2] = dataSize;
+    memcpy(&packets[3], data, dataSize);
     crc = crc16.modbus(packets, sizeof(packets));
   }
 
@@ -31,7 +34,7 @@ public:
     std::vector<byte> _packets(dataSize + sizeof(address) + sizeof(crc) + sizeof(func) + 1); // data len
     _packets[0] = address;
     _packets[1] = func;
-    _packets[2] = sizeof(data);
+    _packets[2] = dataSize;
     memcpy(&_packets[3], data, dataSize);
     _packets[dataSize + sizeof(address) + sizeof(func) + 1] = crc & 0xff;
     _packets[dataSize + sizeof(address) + sizeof(func) + 2] = crc >> 8;
