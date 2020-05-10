@@ -19,20 +19,23 @@ public:
 
   ModbusPacket(byte _addr, byte _func, byte *_data, uint16_t _size) : address(_addr), func(_func), dataSize(_size) {
     memcpy(data, _data, _size);
-    byte packets[_size + 2];
+    byte packets[_size + 3];
     packets[0] = _addr;
     packets[1] = _func;
-    memcpy(&packets[2], data, _size);
+    packets[2] = _size;
+    memcpy(&packets[3], data, _size);
     crc = crc16.modbus(packets, sizeof(packets));
   }
 
   std::vector<byte> getVectorPacket() {
-    std::vector<byte> _packets(dataSize + sizeof(address) + sizeof(crc) + sizeof(func));
+    std::vector<byte> _packets(dataSize + sizeof(address) + sizeof(crc) + sizeof(func) + 1); // data len
     _packets[0] = address;
     _packets[1] = func;
-    memcpy(&_packets[2], data, dataSize);
-    _packets[dataSize + sizeof(address) + sizeof(func)] = crc & 0xff;
-    _packets[dataSize + sizeof(address) + sizeof(func) + 1] = crc >> 8;
+    _packets[2] = sizeof(data);
+    memcpy(&_packets[3], data, dataSize);
+    _packets[dataSize + sizeof(address) + sizeof(func) + 1] = crc & 0xff;
+    _packets[dataSize + sizeof(address) + sizeof(func) + 2] = crc >> 8;
+
     return _packets;
   }
 

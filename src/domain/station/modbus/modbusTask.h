@@ -173,7 +173,7 @@ private:
         packets = GenerateModbusResponse::genGSensorPacket(address);
       }
     }
-    else if (address >= 0x01 && address < 0x20) {
+    else if (address >= 0x10 && address < 0x20) {
       if (address == 0x13) { // all sensor failed
         packets = GenerateModbusResponse::getSolutionPacketWithFailedModule(address);
       }
