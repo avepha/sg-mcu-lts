@@ -11,7 +11,7 @@
 #ifndef SG_MCU_BOOTSTRAP_H
 #define SG_MCU_BOOTSTRAP_H
 
-#define VERSION "1.7.4"
+#define VERSION "1.7.5"
 #define PROJECT "SMART-FARM"
 #define UPLOADDATE String(__DATE__) + " " + String(__TIME__)
 #define COMCORE 0
