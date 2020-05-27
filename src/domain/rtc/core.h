@@ -13,17 +13,21 @@ class RtcCore {
 public:
   static RTC_DS1307 hwRtc;
   static RTC_Millis swRtc;
-  static RtcCore* instance()
-  {
+
+  static RtcCore *instance() {
     if (!s_instance)
       s_instance = new RtcCore;
     return s_instance;
   }
 
   RtcCore();
+
   DateTime getDate();
+
   DateTime getUtcDate();
+
   DateTime setDate(DateTime dt);
+
   bool isHwRunning();
 
 private:
@@ -42,7 +46,7 @@ RtcCore::RtcCore() {
 }
 
 DateTime RtcCore::getDate() {
-  RtcSchema rtcSchema =  rtcModel->get();
+  RtcSchema rtcSchema = rtcModel->get();
   DateTime utcDt = rtcTask->getNow();
   TimeSpan tzTimeSpan(rtcSchema.tzOffsetHour * 3600 + rtcSchema.tzOffsetMin * 30);
 

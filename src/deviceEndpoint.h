@@ -46,7 +46,7 @@ bool DeviceEndpoint::embrace(String *message) {
           loop++;
           delay(1);
           if (loop >= 50) {
-            Log::error("device-endpoint", "Request timeout, request format is not invalid");
+            Log::error("device-endpoint", "Request timeout, request format is invalid");
             return false; // timeout
           }
         }

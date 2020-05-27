@@ -7,7 +7,7 @@
 
 
 
-set(CMAKE_CONFIGURATION_TYPES "v1;v1_test;v2;v2_lora;v2_test;v2_uno;" CACHE STRING "Build Types reflect PlatformIO Environments" FORCE)
+set(CMAKE_CONFIGURATION_TYPES "v1;v1_test;v2;v2_lora;v2_dev;v2_uno;" CACHE STRING "Build Types reflect PlatformIO Environments" FORCE)
 
 
 SET(CMAKE_C_COMPILER "$ENV{HOME}/.platformio/packages/toolchain-xtensa32/bin/xtensa-esp32-elf-gcc")
@@ -481,7 +481,7 @@ if (CMAKE_BUILD_TYPE MATCHES "v2_lora")
         ${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_lora/*.*
     )
 endif()
-if (CMAKE_BUILD_TYPE MATCHES "v2_test")
+if (CMAKE_BUILD_TYPE MATCHES "v2_dev")
     add_definitions(-D'PLATFORMIO=40303')
     add_definitions(-D'ARDUINO_Node32s')
     add_definitions(-D'SG_MCU_V2')
@@ -499,11 +499,11 @@ if (CMAKE_BUILD_TYPE MATCHES "v2_test")
     include_directories("${CMAKE_CURRENT_LIST_DIR}/include")
     include_directories("${CMAKE_CURRENT_LIST_DIR}/src")
     include_directories("$ENV{HOME}/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src")
-    include_directories("${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_test/FastCRC_ID6497")
-    include_directories("${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_test/RTClib_ID83")
+    include_directories("${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_dev/FastCRC_ID6497")
+    include_directories("${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_dev/RTClib_ID83")
     include_directories("$ENV{HOME}/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src")
-    include_directories("${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_test/ArduinoJson_ID64/src")
-    include_directories("${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_test/TaskScheduler_ID721/src")
+    include_directories("${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_dev/ArduinoJson_ID64/src")
+    include_directories("${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_dev/TaskScheduler_ID721/src")
     include_directories("$ENV{HOME}/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/config")
     include_directories("$ENV{HOME}/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/app_trace")
     include_directories("$ENV{HOME}/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/app_update")
@@ -594,7 +594,7 @@ if (CMAKE_BUILD_TYPE MATCHES "v2_test")
     include_directories("$ENV{HOME}/.platformio/packages/tool-unity")
 
     FILE(GLOB_RECURSE EXTRA_LIB_SOURCES
-        ${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_test/*.*
+        ${CMAKE_CURRENT_LIST_DIR}/.pio/libdeps/v2_dev/*.*
     )
 endif()
 if (CMAKE_BUILD_TYPE MATCHES "v2_uno")

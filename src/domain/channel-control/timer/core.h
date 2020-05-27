@@ -48,7 +48,7 @@ public:
     return state;
   }
 
-  bool controlTask() override {
+  bool controlTask(bool _isPrecPass) override {
     DateTime dt = rtcCore->getDate();
     state.currentTimeInSecond = dt.hour() * 3600 + dt.minute() * 60 + dt.second();
 

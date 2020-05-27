@@ -26,10 +26,6 @@ public:
     }
   };
 
-  virtual bool controlTask() {
-    return true;
-  };
-
   virtual bool controlTask(bool isPrecPass) {
     return true;
   };
