@@ -9,7 +9,7 @@ public:
 
   GpioTask* createGpioTaskForever(const std::string& uid, uint8_t channel);
 
-  GpioTask* createGpioTaskTimeout(const std::string& uid, uint8_t channel, uint16_t timeoutInMs);
+  GpioTask* createGpioTaskTimeout(const std::string& uid, uint8_t channel, uint32_t timeoutInMs);
 
   bool removeGpioTaskByUid(const std::string& uid);
   bool removeGpioTaskByChannel(uint8_t channel);
@@ -73,7 +73,7 @@ GpioCore::GpioCore() {
   }
 }
 
-GpioTask* GpioCore::createGpioTaskTimeout(const std::string& uid, uint8_t channel, uint16_t timeoutInMs) {
+GpioTask* GpioCore::createGpioTaskTimeout(const std::string& uid, uint8_t channel, uint32_t timeoutInMs) {
   if (gpioTaskMap.find(uid) != gpioTaskMap.end()) {
     return nullptr;
   }

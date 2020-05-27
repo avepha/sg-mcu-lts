@@ -22,7 +22,7 @@ public:
           Log::debug("gpio", "create task forever");
         }
 
-  GpioTask(std::string uid, uint8_t channel, uint16_t timeout, void (*dWrite)(int channel, int value),
+  GpioTask(std::string uid, uint8_t channel, uint32_t timeout, void (*dWrite)(int channel, int value),
            void (*finishCallback)(GpioTask *gpioTask))
       : Task(timeout, TASK_FOREVER, &gpioScheduler, false),
         uid(std::move(uid)),
