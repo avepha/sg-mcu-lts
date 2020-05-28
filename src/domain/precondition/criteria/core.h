@@ -30,7 +30,8 @@ public:
   }
 
   bool resolve() override {
-    if (sensorPool->getAvailableStationBySensorId(criteria.sensor)) {
+    if (sensorPool->getAvailableStationBySensorId(criteria.sensor) <= 0) {
+      Log::warn("prec-criteria", "No station available.");
       state.sensorValue = -1;
       return false;
     }

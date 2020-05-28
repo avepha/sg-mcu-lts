@@ -13,16 +13,16 @@ public:
   }
 
   void addSensor(Sensor *sensor) {
-    sensorsMap[sensor->getSensorId()].push_back(sensor);
+    mSensorIdToSensors[sensor->getSensorId()].push_back(sensor);
   }
 
   std::map<std::uint8_t, std::vector<Sensor *>> getSensorMap() {
-    return sensorsMap;
+    return mSensorIdToSensors;
   }
 
   uint16_t getAvailableStationBySensorId(uint8_t sensorId) {
     uint16_t available = 0;
-    for (const auto &sensor : sensorsMap[sensorId]) {
+    for (const auto &sensor : mSensorIdToSensors[sensorId]) {
       if (sensor->isValid()) {
         available++;
       }
@@ -32,13 +32,13 @@ public:
   }
 
   uint16_t getTotalStationBySensorId(uint8_t sensorId) {
-    return sensorsMap[sensorId].size();
+    return mSensorIdToSensors[sensorId].size();
   }
 
   float getAverageStationBySensorId(uint8_t sensorId) {
     float sum = 0;
     float available = 0;
-    for (const auto &sensor : sensorsMap[sensorId]) {
+    for (const auto &sensor : mSensorIdToSensors[sensorId]) {
       if (sensor->isValid()) {
         available++;
         sum += sensor->getValue();
@@ -57,7 +57,7 @@ private:
 
   SensorPool() = default;
 
-  std::map<std::uint8_t, std::vector<Sensor *>> sensorsMap{}; // <sensorId, sensors[]>
+  std::map<std::uint8_t, std::vector<Sensor *>> mSensorIdToSensors{}; // <sensorId, sensors[]>
 };
 
 SensorPool *SensorPool::s_instance = nullptr;
