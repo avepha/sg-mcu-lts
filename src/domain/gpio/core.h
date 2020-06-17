@@ -1,4 +1,5 @@
 #include "domain/gpio/util/gpioTask.h"
+#include "domain/notification/notificationManager.h"
 
 #ifndef SG_MCU_GPIO_CORE_H
 #define SG_MCU_GPIO_CORE_H
@@ -50,6 +51,7 @@ void GpioCore::dWrite(int channel, int value) {
 
   channelGpioState[channel] = value;
   digitalWrite(CHANNEL_GPIO_MAP[channel], value);
+  NotificationManager::addNotification(new GpioNotification(channel, value));
 }
 
 void GpioCore::selfDestructGpioTask(GpioTask *gpioTask) {

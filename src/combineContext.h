@@ -30,7 +30,7 @@ class CombineContext {
 public:
   ConfigurationContext *config;
   RtcContext *rtc;
-  GpioContext *gpio;
+  NotificationContext *gpio;
 
   ControlContext *control;
   ChannelContext *channel;
@@ -59,7 +59,7 @@ public:
 CombineContext::CombineContext() {
   config = new ConfigurationContext;
   rtc = new RtcContext;
-  gpio = new GpioContext;
+  gpio = new NotificationContext;
 
   precTimer = new PrecTimerContext;
   precCriteria = new PrecCriteriaContext;

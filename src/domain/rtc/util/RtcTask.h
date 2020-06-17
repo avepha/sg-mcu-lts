@@ -9,19 +9,11 @@ public:
   RtcTask(RTC_DS1307 *_hwRtc, RTC_Millis *_swRtc) : Task(TASK_SECOND, TASK_FOREVER, &backgroundScheduler, true) {
     hwRtc = _hwRtc;
     swRtc = _swRtc;
+    this->update();
   }
 
   bool Callback() override {
-    hwRtcStatus = hwRtc->isrunning();
-
-    if (hwRtcStatus) {
-      now = hwRtc->now();
-      swRtc->adjust(now);
-    }
-    else {
-      now = swRtc->now();
-    }
-
+    this->update();
     return true;
   }
 
@@ -38,6 +30,18 @@ private:
   RTC_Millis *swRtc;
   DateTime now;
   bool hwRtcStatus = false;
+
+  void update() {
+    hwRtcStatus = hwRtc->isrunning();
+
+    if (hwRtcStatus) {
+      now = hwRtc->now();
+      swRtc->adjust(now);
+    }
+    else {
+      now = swRtc->now();
+    }
+  }
 };
 
 

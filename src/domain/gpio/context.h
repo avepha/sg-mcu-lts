@@ -3,13 +3,13 @@
 #ifndef SG_MCU_GPIO_CONTEXT_H
 #define SG_MCU_GPIO_CONTEXT_H
 
-class GpioContext {
+class NotificationContext {
 public:
   GpioCore *core{};
-  GpioContext();
+  NotificationContext();
 };
 
-GpioContext::GpioContext() {
+NotificationContext::NotificationContext() {
   core = GpioCore::instance();
 }
 

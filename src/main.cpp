@@ -1,11 +1,16 @@
+using namespace std;
+
 #include <Arduino.h>
 #include <Wire.h>
 #include <ArduinoJson.h>
 #include "./config.h"
 #include "./bootstrap.h"
-#include "logger/log.h"
+#include "./logger/log.h"
 
-LoggerTray *tray;
+#include "./domain/notification/notificationManager.h"
+
+LoggerTray *loggerTray;
+NotificationTray *notificationTray;
 
 void loop1(void *pvParameters);
 
@@ -13,22 +18,29 @@ void setup() {
   bootstrap(); // init function
   controlScheduler.setHighPriorityScheduler(&gpioScheduler);
 
+  loggerTray = new LoggerTray;
+  Log::updateLogLevel();
+  Log::setLoggerTray(loggerTray);
+
+  notificationTray = new NotificationTray;
+  NotificationManager::setNotificationTray(notificationTray);
+
   serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
   rpiEndpoint = new DeviceEndpoint(&entryPort);
   loraEndpoint = new LoraEndpoint(&stationPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
-  tray = new LoggerTray;
-  Log::updateLogLevel();
-  Log::setLoggerTray(tray);
 
   xTaskCreatePinnedToCore(loop1, "loop1", 4096 * 8, NULL, 1, NULL, COMCORE);
 }
 
 void loop1(void *pvParameters) {
   delay(1000);
+  uint32_t notiTimestamp = 0;
+  uint16_t notificationFrame = 2;
+  uint16_t currentIndex = 0;
   while (true) {
-    String requestString;;
+    String requestString;
     bool isDeviceDataComing = rpiEndpoint->embrace(&requestString);
     bool isEndpointDataComing = serialEndpoint->embrace(&requestString);
 
@@ -98,6 +110,42 @@ void loop1(void *pvParameters) {
       serializeJson(logJson, logString);
       rpiEndpoint->unleash(logString);
       serialEndpoint->unleash(logString);
+    }
+
+    if (!NotificationManager::getNotificationTray()->isEmpty()) {
+      if (millis() - notiTimestamp <= 1000) {
+        continue;// do nothing
+      }
+      notiTimestamp = millis();
+
+      DynamicJsonDocument notiJson(1024);
+      notiJson["method"] = "notification";
+      JsonArray notiArray = notiJson.createNestedArray("data");
+      std::vector<Notification *> lNotifications = NotificationManager::getNotificationTray()->getList();
+      for (int i = 0; i < notificationFrame && currentIndex < lNotifications.size(); i++, currentIndex++) {
+        JsonObject notiObj = notiArray.createNestedObject();
+        notiObj["id"] = lNotifications[currentIndex]->getNotificationId();
+        notiObj["type"] = NotificationTypeToString(lNotifications[currentIndex]->getNotificationType());
+        NotificationType type = lNotifications[currentIndex]->getNotificationType();
+        switch (type) {
+          case NOTI_GPIO: {
+            auto *gpioNotification = (GpioNotification *) lNotifications[currentIndex];
+            notiObj["data"]["ts"] = gpioNotification->getDateTime().unixtime();
+            notiObj["data"]["ch"] = gpioNotification->getChannel();
+            notiObj["data"]["state"] = gpioNotification->getStatus() == HIGH;
+          }
+          default: {;}
+        }
+      }
+
+      if (currentIndex>= lNotifications.size()) {
+        currentIndex = 0;
+      }
+
+      String notiString;
+      serializeJson(notiJson, notiString);
+      rpiEndpoint->unleash(notiString);
+      serialEndpoint->unleash(notiString);
     }
 
 #ifdef SG_MCU_V2_LORA

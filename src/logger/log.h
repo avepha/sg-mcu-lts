@@ -77,9 +77,9 @@ class Log {
 public:
   static void updateLogLevel();
 
-  static LoggerLevelEnum getLogLevel();
-
   static void setLoggerTray(LoggerTray *);
+
+  static LoggerLevelEnum getLogLevel();
 
   static LoggerTray *getLoggerTray();
 

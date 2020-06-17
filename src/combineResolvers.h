@@ -33,6 +33,8 @@
 #include "domain/station/resolvers.h"
 #include "domain/sensor/resolvers.h"
 
+#include "domain/notification/resolvers.h"
+
 class CombineResolvers {
 public:
   explicit CombineResolvers(CombineContext *);
@@ -256,6 +258,9 @@ void CombineResolvers::CombineMutation() {
 
   auto *sequence_par_save = new mutation_sequence_par_save;
   mutationMap[sequence_par_save->getName()] = sequence_par_save;
+
+  auto *notification_ack = new mutation_notification_ack;
+  mutationMap[notification_ack->getName()] = notification_ack;
 
 
 }

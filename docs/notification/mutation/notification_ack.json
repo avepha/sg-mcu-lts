@@ -1,0 +1,8 @@
+{
+  "topic": "notification_ack",
+  "method": "mutation",
+  "data": {
+    "id": 1
+  },
+  "reqId": "req-1"
+}

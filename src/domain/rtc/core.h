@@ -39,9 +39,9 @@ private:
 RtcCore *RtcCore::s_instance = nullptr;
 
 RtcCore::RtcCore() {
-  rtcTask = new RtcTask(&hwRtc, &swRtc);
   hwRtc.begin();
   swRtc.adjust(DateTime(2019, 01, 01));
+  rtcTask = new RtcTask(&hwRtc, &swRtc);
   rtcModel = new RtcModel;
 }
 
