@@ -49,9 +49,11 @@ void GpioCore::dWrite(int channel, int value) {
   if (channelGpioState[channel] == value)
     return;
 
+  if (channelGpioState[channel] != value) {
+    NotificationManager::addNotification(new GpioNotification(channel, value));
+  }
   channelGpioState[channel] = value;
   digitalWrite(CHANNEL_GPIO_MAP[channel], value);
-  NotificationManager::addNotification(new GpioNotification(channel, value));
 }
 
 void GpioCore::selfDestructGpioTask(GpioTask *gpioTask) {
@@ -79,7 +81,6 @@ GpioTask* GpioCore::createGpioTaskTimeout(const std::string& uid, uint8_t channe
   if (gpioTaskMap.find(uid) != gpioTaskMap.end()) {
     return nullptr;
   }
-
   auto *gpioTask = new GpioTask(uid, channel, timeoutInMs, &dWrite, &selfDestructGpioTask);
   gpioTaskMap[uid] = gpioTask;
   gpioTask->enableDelayed();
@@ -90,7 +91,6 @@ GpioTask* GpioCore::createGpioTaskForever(const std::string &uid, uint8_t channe
   if (gpioTaskMap.find(uid) != gpioTaskMap.end()) {
     return nullptr;
   }
-
   auto *gpioTask = new GpioTask(uid, channel, &dWrite, &selfDestructGpioTask);
   gpioTaskMap[uid] = gpioTask;
   gpioTask->enable();

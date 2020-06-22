@@ -53,16 +53,14 @@ public:
     DateTime dt = rtcCore->getDate();
     state.currentTimeInSecond = dt.hour() * 3600 + dt.minute() * 60 + dt.second();
 
+    bool flag = false;
     for (int i = 0; i < timer.size; i++) {
-      state.isReachThreshold =
-          state.currentTimeInSecond >= timer.timePair[i].start * 60 && state.currentTimeInSecond <= timer.timePair[i].stop * 60;
+      state.isReachThreshold = state.currentTimeInSecond >= timer.timePair[i].start * 60 &&
+                               state.currentTimeInSecond <= timer.timePair[i].stop * 60;
       if (state.isReachThreshold) {
+        flag = true;
         state.currentIntervalTimerInSeconds[0] = timer.timePair[i].start * 60; // start time
         state.currentIntervalTimerInSeconds[1] = timer.timePair[i].stop * 60; // stop time
-
-        if (!gpioChain->isEnabled())
-          gpioChain->enable();
-        break;
       }
 
       // if isReachThreshold = false, store next coming timer in state.nextIntervalTimerInSeconds
@@ -70,7 +68,13 @@ public:
         state.nextIntervalTimerInSeconds[0] = timer.timePair[i].start * 60; // start time
         state.nextIntervalTimerInSeconds[1] = timer.timePair[i].stop * 60; // stop time
       }
+    }
 
+    if (flag) {
+      if (!gpioChain->isEnabled())
+        gpioChain->enable();
+    }
+    else {
       if (gpioChain->isEnabled())
         gpioChain->disable();
     }
