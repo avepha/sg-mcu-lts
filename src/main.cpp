@@ -30,6 +30,7 @@ void setup() {
   loraEndpoint = new LoraEndpoint(&stationPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
+  initModel(context); // init model for each mode
 
   xTaskCreatePinnedToCore(loop1, "loop1", 4096 * 8, NULL, 1, NULL, COMCORE);
 }

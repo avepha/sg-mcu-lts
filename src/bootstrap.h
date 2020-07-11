@@ -29,7 +29,7 @@ HardwareSerial &stationPort = Serial2;
 #include "validationError.h"
 #include "deviceEndpoint.h"
 #include "loraEndpoint.h"
-
+#include "initModel.h"
 DeviceEndpoint *rpiEndpoint, *serialEndpoint;
 LoraEndpoint *loraEndpoint;
 CombineResolvers *resolvers;
