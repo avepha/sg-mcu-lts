@@ -36,13 +36,13 @@ struct StationSchema {
 
   struct GSolutionStation {
     uint8_t sensorIds[7] = {
-        Sensor::SENSORMAP["gs_temperature"],
-        Sensor::SENSORMAP["gs_humidity"],
-        Sensor::SENSORMAP["gs_vpd"],
-        Sensor::SENSORMAP["gs_co2"],
-        Sensor::SENSORMAP["sol_ec"],
-        Sensor::SENSORMAP["sol_ph"],
-        Sensor::SENSORMAP["sol_waterTemperature"]
+        Sensor::SENSORMAP["gsol_temperature"],
+        Sensor::SENSORMAP["gsol_humidity"],
+        Sensor::SENSORMAP["gsol_vpd"],
+        Sensor::SENSORMAP["gsol_co2"],
+        Sensor::SENSORMAP["gsol_ec"],
+        Sensor::SENSORMAP["gsol_ph"],
+        Sensor::SENSORMAP["gsol_waterTemperature"]
     };
 
     uint8_t size = 1;

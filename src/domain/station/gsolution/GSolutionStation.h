@@ -12,11 +12,11 @@ class GSolutionStation : public Station {
 public:
   explicit GSolutionStation(uint8_t addr) : Station(STATION_GSOLUTION, addr) {
     StationModel model;
-    StationSchema::GSolutionStation GSolutionStation = model.get().gSolutionStation;
-    for (int i = 0; i < sizeof(GSolutionStation.sensorIds) / sizeof(GSolutionStation.sensorIds[0]); i++) {
-      sensorMap[GSolutionStation.sensorIds[i]] = new Sensor(addr, GSolutionStation.sensorIds[i]);
-      sensorIds.push_back(GSolutionStation.sensorIds[i]);
-      SensorPool::instance()->addSensor(sensorMap[GSolutionStation.sensorIds[i]]);
+    StationSchema::GSolutionStation gsolutionSchema = model.get().gSolutionStation;
+    for (int i = 0; i < sizeof(gsolutionSchema.sensorIds) / sizeof(gsolutionSchema.sensorIds[0]); i++) {
+      sensorMap[gsolutionSchema.sensorIds[i]] = new Sensor(addr, gsolutionSchema.sensorIds[i]);
+      sensorIds.push_back(gsolutionSchema.sensorIds[i]);
+      SensorPool::instance()->addSensor(sensorMap[gsolutionSchema.sensorIds[i]]);
     }
   }
 
