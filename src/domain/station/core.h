@@ -49,7 +49,7 @@ private:
       Log::trace("station", "add gsolution addr: " + String(gSolutionStation->getAddress()));
     }
 
-#ifdef SG_MCU_V2_LORA // disable modbus when using lora
+#ifdef SG_COMMUNICATION_SIMPLEX // disable modbus when using lora
     Log::trace("station", "lora task started");
 #else
     modbusTask->enable();

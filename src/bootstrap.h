@@ -42,7 +42,7 @@ void bootstrap() {
   digitalWrite(RS485_DIR_PIN, RS485_RECV_MODE);
 
   pinMode(SG_STATION_TX, OUTPUT);
-#ifdef SG_MCU_V2_LORA
+#ifdef SG_COMMUNICATION_SIMPLEX
   digitalWrite(SG_STATION_TX, LOW);
 #else
   digitalWrite(SG_STATION_TX, HIGH);
@@ -59,8 +59,8 @@ void bootstrap() {
   Serial.println("PROJECT: " + String(PROJECT));
   Serial.println("UPLOAD_DATE: " + String(UPLOADDATE));
   Serial.println("SG_MODEL: " + String(SG_MODEL));
-#ifdef SG_TEST
-  Serial.println("SG_MODE: TEST");
+#ifdef SG_MODE_DEVELOPMENT
+  Serial.println("SG_MODE: DEVELOPMENT");
 #endif
 
 }

@@ -148,7 +148,7 @@ void loop1(void *pvParameters) {
       serialEndpoint->unleash(notiString);
     }
 
-#ifdef SG_MCU_V2_LORA
+#ifdef SG_COMMUNICATION_SIMPLEX
     std::vector<byte> vByte;
     if (loraEndpoint->embrace(vByte)) {
       std::vector<Station *> stations = context->station->core->getStations();

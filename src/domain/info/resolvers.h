@@ -16,8 +16,8 @@ public:
     DynamicJsonDocument data(128);
     data["version"] = VERSION; //TODO: fix this
     data["model"] = SG_MODEL;
-#ifdef SG_TEST
-    data["device_env"] = "test";
+#ifdef SG_MODE_DEVELOPMENT
+    data["device_env"] = "development";
 #else
     data["device_env"] = "prod";
 #endif

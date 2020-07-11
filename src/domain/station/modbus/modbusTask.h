@@ -35,7 +35,7 @@ public:
       case WAITING_RESPONSE: {
         if (isDataComing()) {
           bool isPacketFailed = false;
-#ifdef SG_TEST
+#ifdef SG_MODE_DEVELOPMENT
           std::vector<byte> vBytes = getPacketTestMode(vStations[currentStationIndex]->getAddress());
 #else
           std::vector<byte> vBytes = getPacket();
@@ -141,7 +141,7 @@ private:
   uint32_t lastSendTs = 0;
 
   static bool isDataComing() {
-#ifdef SG_TEST
+#ifdef SG_MODE_DEVELOPMENT
     return true;
 #else
     return stationPort.available() != 0;

@@ -22,11 +22,11 @@ const int CHANNEL_GPIO_MAP[8] = {
 
 //const int SG_MPU_RX = 18;
 //const int SG_MPU_TX = 19;
-#ifdef SG_MCU_V2
+#ifdef SG_VERSION_V2
 const int SG_MPU_RX = 19;
 const int SG_MPU_TX = 18;
 
-#ifdef SG_MCU_V2_LORA
+#ifdef SG_COMMUNICATION_SIMPLEX
 const String SG_MODEL = "v2_lora";
 #else
 const String SG_MODEL = "v2";
@@ -34,7 +34,7 @@ const String SG_MODEL = "v2";
 
 #endif
 
-#ifdef SG_MCU_V1
+#ifdef SG_VERSION_V1
 const int SG_MPU_RX = 18;
 const int SG_MPU_TX = 19;
 const String SG_MODEL = "v1";
