@@ -5,18 +5,18 @@
 #include "../model.h"
 #include "logger/log.h"
 
-#ifndef SG_MCU_GSENSOR_STATION_H
-#define SG_MCU_GSENSOR_STATION_H
+#ifndef SG_MCU_GSOL_STATION_H
+#define SG_MCU_GSOL_STATION_H
 
-class GSensorStation : public Station {
+class GSolutionStation : public Station {
 public:
-  explicit GSensorStation(uint8_t addr) : Station(STATION_GSENSOR, addr) {
+  explicit GSolutionStation(uint8_t addr) : Station(STATION_GSOLUTION, addr) {
     StationModel model;
-    StationSchema::GSensorStation gSensorStation = model.get().gSensorStation;
-    for (int i = 0; i < sizeof(gSensorStation.sensorIds) / sizeof(gSensorStation.sensorIds[0]); i++) {
-      sensorMap[gSensorStation.sensorIds[i]] = new Sensor(addr, gSensorStation.sensorIds[i]);
-      sensorIds.push_back(gSensorStation.sensorIds[i]);
-      SensorPool::instance()->addSensor(sensorMap[gSensorStation.sensorIds[i]]);
+    StationSchema::GSolutionStation GSolutionStation = model.get().gSolutionStation;
+    for (int i = 0; i < sizeof(GSolutionStation.sensorIds) / sizeof(GSolutionStation.sensorIds[0]); i++) {
+      sensorMap[GSolutionStation.sensorIds[i]] = new Sensor(addr, GSolutionStation.sensorIds[i]);
+      sensorIds.push_back(GSolutionStation.sensorIds[i]);
+      SensorPool::instance()->addSensor(sensorMap[GSolutionStation.sensorIds[i]]);
     }
   }
 
@@ -27,7 +27,7 @@ public:
     byte packetBody[packetBodySize];
     memcpy(packetBody, vPacket.data() + 3, packetBodySize);
     
-    if (funcCode == 0x04 && vPacket.size() >= 37) {
+    if (funcCode == 0x04 && vPacket.size() >= 33) {
       uint16_t sensorSize = packetBodySize / 4;
       float sensorsValue[sensorSize];
       for (uint16_t dataIndex = 0, sensorIndex = 0; sensorIndex < sensorSize; dataIndex += 4, sensorIndex++) {

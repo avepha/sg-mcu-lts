@@ -8,7 +8,7 @@
 
 struct StationSchema {
   struct GSensorStation {
-    uint8_t GSensorSensorIds[8] = {
+    uint8_t sensorIds[8] = {
         Sensor::SENSORMAP["gs_temperature"],
         Sensor::SENSORMAP["gs_humidity"],
         Sensor::SENSORMAP["gs_vpd"],
@@ -19,20 +19,35 @@ struct StationSchema {
         Sensor::SENSORMAP["gs_parAccumulation"]
     };
 
-    uint8_t GsensorSize = 1;
-    uint8_t GSensorAddresses[8] = {0x01, 0x03};
+    uint8_t size = 1;
+    uint8_t addresses[8] = {0x01, 0x03};
   } gSensorStation;
 
   struct SolutionStation {
-    uint8_t SolutionIds[3] = {
+    uint8_t sensorIds[3] = {
         Sensor::SENSORMAP["sol_ec"],
         Sensor::SENSORMAP["sol_ph"],
         Sensor::SENSORMAP["sol_waterTemperature"]
     };
 
-    uint8_t SolutionSize = 1;
-    uint8_t SolutionAddresses[8] = {0x10, 0x13};
+    uint8_t size = 1;
+    uint8_t addresses[8] = {0x10, 0x13};
   } solutionStation;
+
+  struct GSolutionStation {
+    uint8_t sensorIds[7] = {
+        Sensor::SENSORMAP["gs_temperature"],
+        Sensor::SENSORMAP["gs_humidity"],
+        Sensor::SENSORMAP["gs_vpd"],
+        Sensor::SENSORMAP["gs_co2"],
+        Sensor::SENSORMAP["sol_ec"],
+        Sensor::SENSORMAP["sol_ph"],
+        Sensor::SENSORMAP["sol_waterTemperature"]
+    };
+
+    uint8_t size = 1;
+    uint8_t addresses[8] = {0x20, 0x23};
+  } gSolutionStation;
 };
 
 class StationModel : public RomModel<StationSchema> {

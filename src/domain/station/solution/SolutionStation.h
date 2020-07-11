@@ -11,10 +11,10 @@ public:
   explicit SolutionStation(uint8_t address) : Station(STATION_SOLUTION, address) {
     StationModel model;
     StationSchema::SolutionStation solutionStation = model.get().solutionStation;
-    for (int i = 0 ; i < sizeof(solutionStation.SolutionIds) / sizeof(solutionStation.SolutionIds[0]); i++) {
-      sensorMap[solutionStation.SolutionIds[i]] = new Sensor(address, solutionStation.SolutionIds[i]);
-      sensorIds.push_back(solutionStation.SolutionIds[i]);
-      SensorPool::instance()->addSensor(sensorMap[solutionStation.SolutionIds[i]]);
+    for (int i = 0 ; i < sizeof(solutionStation.sensorIds) / sizeof(solutionStation.sensorIds[0]); i++) {
+      sensorMap[solutionStation.sensorIds[i]] = new Sensor(address, solutionStation.sensorIds[i]);
+      sensorIds.push_back(solutionStation.sensorIds[i]);
+      SensorPool::instance()->addSensor(sensorMap[solutionStation.sensorIds[i]]);
     }
   }
 

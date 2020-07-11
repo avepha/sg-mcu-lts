@@ -169,7 +169,7 @@ private:
     std::vector<byte> packets;
     if (address < 0x10) {
       if (address == 0x03) { // air module is failed
-        packets = GenerateModbusResponse::genGsensorPacketWithFailedAirModule(address);
+        packets = GenerateModbusResponse::genGSensorPacketWithFailedAirModule(address);
       }
       else {
         packets = GenerateModbusResponse::genGSensorPacket(address);
@@ -182,6 +182,9 @@ private:
       else {
         packets = GenerateModbusResponse::getSolutionPacket(address);
       }
+    }
+    else if (address >= 0x20 && address < 0x30) {
+      packets = GenerateModbusResponse::getGSolutionPacket(address);
     }
 
     return packets;

@@ -24,8 +24,7 @@ public:
 
     return packet.getVectorPacket();
   }
-
-  static std::vector<byte> genGsensorPacketWithFailedAirModule(uint8_t address) {
+  static std::vector<byte> genGSensorPacketWithFailedAirModule(uint8_t address) {
     float sensors[8];
     sensors[0] = (float)0xFFFFFFFF; // temperature
     sensors[1] = (float)0xFFFFFFFF; // humidity
@@ -66,6 +65,21 @@ public:
     return packet.getVectorPacket();
   }
 
+  static std::vector<byte> getGSolutionPacket(uint8_t address) {
+    float sensors[7];
+    sensors[0] = (float)random(2500, 2550) / 100; // temperature
+    sensors[1] = (float)random(5000, 5050) / 100; // humidity
+    sensors[2] = getVpd(sensors[0], sensors[1]); // vpd
+    sensors[3] = (float)random(1500, 1510); // co2
+    sensors[4] = (float)random(150, 160) / 100; // ec
+    sensors[5] = (float)random(600, 650) / 100; // ph
+    sensors[6] = (float)random(2500, 2550) / 100; // water temperature
+
+    byte data[sizeof(sensors)];
+    memcpy(data, sensors, sizeof(sensors));
+    ModbusPacket packet(address, 0x04, data, sizeof(data));
+    return packet.getVectorPacket();
+  }
 private:
   static float getVpd(float _temperature, float _humidity) {
     float spv = 610.7 * pow(10, ((7.5 * _temperature) / (237.3 + _temperature)));
