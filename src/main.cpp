@@ -9,6 +9,8 @@ using namespace std;
 
 #include "./domain/notification/notificationManager.h"
 
+#include "./dev/devSimplexStationTask.h"
+
 LoggerTray *loggerTray;
 NotificationTray *notificationTray;
 
@@ -37,9 +39,14 @@ void setup() {
 
 void loop1(void *pvParameters) {
   delay(1000);
+  //  notification
   uint32_t notiTimestamp = 0;
   uint16_t notificationFrame = 2;
-  uint16_t currentIndex = 0;
+  uint16_t currentNotificationIndex = 0;
+
+  //simplex_dev
+  uint32_t simplexTimestamp = 0;
+
   while (true) {
     String requestString;
     bool isDeviceDataComing = rpiEndpoint->embrace(&requestString);
@@ -123,14 +130,14 @@ void loop1(void *pvParameters) {
       notiJson["method"] = "notification";
       JsonArray notiArray = notiJson.createNestedArray("data");
       std::vector<Notification *> lNotifications = NotificationManager::getNotificationTray()->getList();
-      for (int i = 0; i < notificationFrame && currentIndex < lNotifications.size(); i++, currentIndex++) {
+      for (int i = 0; i < notificationFrame && currentNotificationIndex < lNotifications.size(); i++, currentNotificationIndex++) {
         JsonObject notiObj = notiArray.createNestedObject();
-        notiObj["id"] = lNotifications[currentIndex]->getNotificationId();
-        notiObj["type"] = NotificationTypeToString(lNotifications[currentIndex]->getNotificationType());
-        NotificationType type = lNotifications[currentIndex]->getNotificationType();
+        notiObj["id"] = lNotifications[currentNotificationIndex]->getNotificationId();
+        notiObj["type"] = NotificationTypeToString(lNotifications[currentNotificationIndex]->getNotificationType());
+        NotificationType type = lNotifications[currentNotificationIndex]->getNotificationType();
         switch (type) {
           case NOTI_GPIO: {
-            auto *gpioNotification = (GpioNotification *) lNotifications[currentIndex];
+            auto *gpioNotification = (GpioNotification *) lNotifications[currentNotificationIndex];
             notiObj["data"]["ts"] = gpioNotification->getDateTime().unixtime();
             notiObj["data"]["ch"] = gpioNotification->getChannel();
             notiObj["data"]["state"] = gpioNotification->getStatus() == HIGH;
@@ -139,8 +146,8 @@ void loop1(void *pvParameters) {
         }
       }
 
-      if (currentIndex>= lNotifications.size()) {
-        currentIndex = 0;
+      if (currentNotificationIndex >= lNotifications.size()) {
+        currentNotificationIndex = 0;
       }
 
       String notiString;
@@ -167,8 +174,14 @@ void loop1(void *pvParameters) {
         Log::error("lora", "no-station sta: " + String(st));
       }
     }
+#ifdef SG_MODE_DEVELOPMENT
+    if (millis() - simplexTimestamp >= 2000) {
+      DevSimplexStationTask::instance()->runningTask(context);
+      simplexTimestamp = millis();
+    }
 #endif
 
+#endif
     delay(1);
   }
 }
