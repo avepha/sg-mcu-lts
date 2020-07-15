@@ -4,87 +4,8 @@
   "reqId": "req-1",
   "data": {
     "index": 1,
+    "mode": "interval",
     "timers": [
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
-      {
-        "start": 0,
-        "stop": 1440
-      },
       {
         "start": 0,
         "stop": 1440

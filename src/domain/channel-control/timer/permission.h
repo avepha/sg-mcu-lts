@@ -19,6 +19,27 @@ public:
       throw err;
     }
 
+    if (reqData["mode"].isNull()) {
+      Log::info("mutation", "if timer.mode field is not specified, set mode = 0");
+    }
+
+    bool isModeSpecified = false;
+    ChannelTimerModeEnum mode;
+    if (!reqData["mode"].isNull()) {
+      if (!reqData["mode"].is<String>()) {
+        InvalidInputError err("mode must be a string");
+        throw err;
+      }
+
+      mode = ChannelTimerModeStringToEnum(reqData["mode"]);
+      if (mode == CH_TIMER_NONE) {
+        InvalidInputError err("Invalid timer mode");
+        throw err;
+      }
+
+      isModeSpecified = true;
+    }
+
     if (reqData["timers"].isNull()) {
       InvalidInputError err("timers must not be null");
       throw err;
@@ -40,7 +61,7 @@ public:
     }
 
     JsonArray timers = reqData["timers"];
-    for (int i = 0 ; i < timers.size() ; i++) {
+    for (int i = 0; i < timers.size(); i++) {
       if (timers[i]["start"].isNull()) {
         InvalidInputError err("timers.start must not be null");
         throw err;
@@ -51,14 +72,35 @@ public:
         throw err;
       }
 
-      if (timers[i]["stop"].isNull()) {
-        InvalidInputError err("timers.stop must not be null");
-        throw err;
+      if (isModeSpecified) {
+        if (mode == CH_TIMER_INTERVAL) {
+          if (timers[i]["stop"].isNull()) {
+            InvalidInputError err("timers.stop must not be null");
+            throw err;
+          }
+          if (!timers[i]["stop"].is<int>()) {
+            InvalidInputError err("timers.stop must be an integer");
+          }
+        }
+        else if (mode == CH_TIMER_WORKING) {
+          if (timers[i]["working"].isNull()) {
+            InvalidInputError err("timers.working must not be null");
+            throw err;
+          }
+          if (!timers[i]["working"].is<int>()) {
+            InvalidInputError err("timers.working must be an integer");
+          }
+        }
       }
-
-      if (!timers[i]["stop"].is<int>()) {
-        InvalidInputError err("timers.stop must not be a number");
-        throw err;
+      else {
+        // mode default = CH_TIMER_INTERVAL
+        if (timers[i]["stop"].isNull()) {
+          InvalidInputError err("timers.stop or timers.working must not be null");
+          throw err;
+        }
+        if (!timers[i]["stop"].is<int>()) {
+          InvalidInputError err("timers.stop must be an integer");
+        }
       }
     }
   }

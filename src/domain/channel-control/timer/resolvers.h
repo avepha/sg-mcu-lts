@@ -19,9 +19,16 @@ public:
     TimerSchema schema = context->timer->model->get();
     int size = reqData["timers"].size();
 
+    if (reqData["mode"].isNull()) {
+      schema.timers[index].mode = CH_TIMER_INTERVAL;
+    }
+    else {
+      schema.timers[index].mode = ChannelTimerModeStringToEnum(reqData["mode"]);
+    }
+
     schema.timers[index].size = size;
     schema.timers[index].size = reqData["timers"].size();
-    for (int i = 0 ; i < schema.timers[index].size; i++) {
+    for (int i = 0; i < schema.timers[index].size; i++) {
       schema.timers[index].timePair[i].start = reqData["timers"][i]["start"];
       schema.timers[index].timePair[i].stop = reqData["timers"][i]["stop"];
     }
@@ -51,13 +58,20 @@ public:
   DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     int index = reqData["index"];
     TimerSchema schema = context->timer->model->get();
+    ChannelTimerModeEnum mode = schema.timers[index].mode;
     DynamicJsonDocument data(1024);
     data["index"] = index;
+    data["mode"] = ChannelTimerModeEnumToString(mode);
     JsonArray timers = data.createNestedArray("timers");
     for (int i = 0; i < schema.timers[index].size; i++) {
       JsonObject jo = timers.createNestedObject();
       jo["start"] = schema.timers[index].timePair[i].start;
-      jo["stop"] = schema.timers[index].timePair[i].stop;
+      if (mode == CH_TIMER_INTERVAL) {
+        jo["stop"] = schema.timers[index].timePair[i].stop;
+      }
+      if (mode == CH_TIMER_WORKING) {
+        jo["working"] = schema.timers[index].timePair[i].workingInSecond;
+      }
     }
 
     return data;

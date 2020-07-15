@@ -10,7 +10,7 @@ enum GpioTaskEnum {
 
 class GpioTask : public Task {
 public:
-  GpioTask(std::string uid, uint8_t channel, void (*dWrite)(int channel, int value),
+  GpioTask(const std::string &uid, uint8_t channel, void (*dWrite)(int channel, int value),
            void (*finishCallback)(GpioTask *gpioTask))
       : Task(TASK_MINUTE, TASK_FOREVER, &gpioScheduler, false),
         uid(std::move(uid)),
@@ -19,10 +19,10 @@ public:
         dWrite(dWrite),
         finishCallback(finishCallback)
         {
-          Log::debug("gpio", "create task forever");
+          Log::debug("gpio", "create task (" + String(uid.c_str()) + ") forever");
         }
 
-  GpioTask(std::string uid, uint8_t channel, uint32_t timeout, void (*dWrite)(int channel, int value),
+  GpioTask(const std::string &uid, uint8_t channel, uint32_t timeout, void (*dWrite)(int channel, int value),
            void (*finishCallback)(GpioTask *gpioTask))
       : Task(timeout, TASK_FOREVER, &gpioScheduler, false),
         uid(std::move(uid)),
@@ -31,7 +31,7 @@ public:
         dWrite(dWrite),
         finishCallback(finishCallback)
         {
-          Log::debug("gpio", "create task with timeout" + String(timeout));
+          Log::debug("gpio", "create task (" + String(uid.c_str()) + ") with timeout " + String(timeout));
           setInterval(timeout);
           setTimeout(timeout);
         }
