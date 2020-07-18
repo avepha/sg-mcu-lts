@@ -109,9 +109,6 @@ public:
           state.isReachThreshold = state.currentTimeInSecond >= startTimeInSeconds &&
                                    state.currentTimeInSecond <= startTimeInSeconds + timer.timePair[i].workingInSecond;
 
-          Serial.print(
-              String(state.currentTimeInSecond) + " " + String(startTimeInSeconds) + " " + String( startTimeInSeconds + timer.timePair[i].workingInSecond)
-              );
           if (state.isReachThreshold) {
             flag = true;
             state.currentWorkingTimerInSeconds[0] = timer.timePair[i].start * 60; // start time
