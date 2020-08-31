@@ -30,7 +30,12 @@ public:
     schema.timers[index].size = reqData["timers"].size();
     for (int i = 0; i < schema.timers[index].size; i++) {
       schema.timers[index].timePair[i].start = reqData["timers"][i]["start"];
-      schema.timers[index].timePair[i].stop = reqData["timers"][i]["stop"];
+      if (!reqData["timers"][i]["stop"].isNull()) {
+        schema.timers[index].timePair[i].stop = reqData["timers"][i]["stop"];
+      }
+      else if (!reqData["timers"][i]["working"].isNull()) {
+        schema.timers[index].timePair[i].workingInSecond = reqData["timers"][i]["working"];
+      }
     }
 
     int writeOps = context->timer->model->save(schema);
@@ -39,11 +44,17 @@ public:
     DynamicJsonDocument data(1024);
     data["index"] = index;
     data["writeOps"] = writeOps;
+    data["mode"] = ChannelTimerModeEnumToString(newSchema.timers[index].mode);
     JsonArray timers = data.createNestedArray("timers");
     for (int i = 0; i < newSchema.timers[index].size; i++) {
       JsonObject jo = timers.createNestedObject();
       jo["start"] = newSchema.timers[index].timePair[i].start;
-      jo["stop"] = newSchema.timers[index].timePair[i].stop;
+      if (newSchema.timers[index].mode == CH_TIMER_INTERVAL) {
+        jo["stop"] = newSchema.timers[index].timePair[i].stop;
+      }
+      if (newSchema.timers[index].mode == CH_TIMER_WORKING) {
+        jo["working"] = newSchema.timers[index].timePair[i].workingInSecond;
+      }
     }
 
     return data;

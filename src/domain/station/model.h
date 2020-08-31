@@ -33,21 +33,6 @@ struct StationSchema {
     uint8_t size = 1;
     uint8_t addresses[8] = {0x10, 0x13};
   } solutionStation;
-
-  struct GSolutionStation {
-    uint8_t sensorIds[7] = {
-        Sensor::SENSORMAP["gsol_temperature"],
-        Sensor::SENSORMAP["gsol_humidity"],
-        Sensor::SENSORMAP["gsol_vpd"],
-        Sensor::SENSORMAP["gsol_co2"],
-        Sensor::SENSORMAP["gsol_ec"],
-        Sensor::SENSORMAP["gsol_ph"],
-        Sensor::SENSORMAP["gsol_waterTemperature"]
-    };
-
-    uint8_t size = 1;
-    uint8_t addresses[8] = {0x20, 0x23};
-  } gSolutionStation;
 };
 
 class StationModel : public RomModel<StationSchema> {

@@ -1,7 +1,6 @@
 #include "./station.h"
 #include "./model.h"
 #include "./gsensor/GSensorStation.h"
-#include "./gsolution/GSolutionStation.h"
 #include "./solution/SolutionStation.h"
 #include "./modbus/modbusTask.h"
 
@@ -40,13 +39,6 @@ private:
       stations.push_back(solutionStation);
       modbusTask->registerStation(solutionStation);
       Log::trace("station", "add gsensor addr: " + String(solutionStation->getAddress()));
-    }
-
-    for (int i = 0; i < stationSchema.gSolutionStation.size; i++) {
-      auto *gSolutionStation = new GSolutionStation(stationSchema.gSolutionStation.addresses[i]);
-      stations.push_back(gSolutionStation);
-      modbusTask->registerStation(gSolutionStation);
-      Log::trace("station", "add gsolution addr: " + String(gSolutionStation->getAddress()));
     }
 
 #ifdef SG_COMMUNICATION_SIMPLEX // disable modbus when using lora
