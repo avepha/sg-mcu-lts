@@ -5,8 +5,8 @@
 #ifndef SG_MCU_CONFIG_H
 #define SG_MCU_CONFIG_H
 
-const unsigned int serialBaudRate = 115200;
-const unsigned int rpiBaudRate = 57600;
+const unsigned int serialBaudRate = 345600;
+const unsigned int rpiBaudRate = 345600;
 
 // TODO: pin 2 is reserved pin for activating uploading mode
 const int CHANNEL_GPIO_MAP[8] = {

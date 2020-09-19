@@ -53,6 +53,7 @@ void loop1(void *pvParameters) {
     bool isEndpointDataComing = serialEndpoint->embrace(&requestString);
 
     if (isEndpointDataComing || isDeviceDataComing) {
+      Log::trace("device-endpoint", "got request " + requestString);
       DynamicJsonDocument requestJson(2048);
       DeserializationError error = deserializeJson(requestJson, requestString);
 

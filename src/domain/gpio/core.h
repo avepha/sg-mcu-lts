@@ -49,9 +49,13 @@ void GpioCore::dWrite(int channel, int value) {
   if (channelGpioState[channel] == value)
     return;
 
+  //there still cause a bug
+  /*
   if (channelGpioState[channel] != value) {
     NotificationManager::addNotification(new GpioNotification(channel, value));
   }
+  */
+
   channelGpioState[channel] = value;
   digitalWrite(CHANNEL_GPIO_MAP[channel], value);
 }
