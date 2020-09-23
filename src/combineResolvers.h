@@ -114,6 +114,9 @@ void CombineResolvers::CombineQuery() {
   auto *info = new query_info;
   queryMap[info->getName()] = info;
 
+  auto *device_status = new query_device_status;
+  queryMap[device_status->getName()] = device_status;
+
   auto *channel = new query_channel;
   queryMap[channel->getName()] = channel;
 

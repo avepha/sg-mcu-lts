@@ -25,4 +25,16 @@ public:
   };
 };
 
+class query_device_status : public Query {
+public:
+  explicit query_device_status() : Query("device_status") {};
+
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    DynamicJsonDocument data(128);
+    data["heap"] = xPortGetFreeHeapSize();
+    data["bc"] = bootCount;
+    return data;
+  };
+};
+
 #endif //SG_MCU_RESOLVERS_H

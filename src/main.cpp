@@ -6,6 +6,7 @@ using namespace std;
 #include "./config.h"
 #include "./bootstrap.h"
 #include "./logger/log.h"
+#include "./logger/event.h"
 
 #include "./domain/notification/notificationManager.h"
 
@@ -19,6 +20,12 @@ void loop1(void *pvParameters);
 void setup() {
   bootstrap(); // init function
   controlScheduler.setHighPriorityScheduler(&gpioScheduler);
+
+  EventManager::init();
+  DynamicJsonDocument eventData(256);
+  eventData["bc"] = bootCount;
+  EventManager::create("init", eventData.as<JsonObject>());
+
 
   loggerTray = new LoggerTray;
   Log::updateLogLevel();
@@ -107,6 +114,20 @@ void loop1(void *pvParameters) {
       // for memory profiling
     }
 
+    if (!EventManager::isEmptyTray()) {
+      EventManager::Event event = EventManager::popFromTray();
+
+      DynamicJsonDocument eventJson(1024);
+      eventJson["method"] = "event";
+      eventJson["data"]["topic"] = event.getTopic();
+      eventJson["data"]["data"] = event.getData();
+
+      String eventString;
+      serializeJson(eventJson, eventString);
+      rpiEndpoint->unleash(eventString);
+      serialEndpoint->unleash(eventString);
+    }
+
     if (!Log::getLoggerTray()->isEmpty()) {
       DynamicJsonDocument logJson(1024);
       Logger log = Log::getLoggerTray()->pop();
@@ -131,7 +152,8 @@ void loop1(void *pvParameters) {
       notiJson["method"] = "notification";
       JsonArray notiArray = notiJson.createNestedArray("data");
       std::vector<Notification *> lNotifications = NotificationManager::getNotificationTray()->getList();
-      for (int i = 0; i < notificationFrame && currentNotificationIndex < lNotifications.size(); i++, currentNotificationIndex++) {
+      for (int i = 0;
+           i < notificationFrame && currentNotificationIndex < lNotifications.size(); i++, currentNotificationIndex++) {
         JsonObject notiObj = notiArray.createNestedObject();
         notiObj["id"] = lNotifications[currentNotificationIndex]->getNotificationId();
         notiObj["type"] = NotificationTypeToString(lNotifications[currentNotificationIndex]->getNotificationType());
@@ -143,7 +165,8 @@ void loop1(void *pvParameters) {
             notiObj["data"]["ch"] = gpioNotification->getChannel();
             notiObj["data"]["state"] = gpioNotification->getStatus() == HIGH;
           }
-          default: {;}
+          default: { ;
+          }
         }
       }
 
@@ -191,5 +214,3 @@ void loop() {
   controlScheduler.execute();
   backgroundScheduler.execute();
 }
-
-

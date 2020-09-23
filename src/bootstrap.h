@@ -18,6 +18,8 @@
 #define MAINCORE 1
 #define EEPROM_SIZE 4096
 
+static RTC_NOINIT_ATTR int bootCount = 0;
+
 Scheduler controlScheduler, gpioScheduler, backgroundScheduler;
 HardwareSerial &entryPort = Serial1;
 HardwareSerial &stationPort = Serial2;
@@ -30,11 +32,11 @@ HardwareSerial &stationPort = Serial2;
 #include "deviceEndpoint.h"
 #include "loraEndpoint.h"
 #include "initModel.h"
+
 DeviceEndpoint *rpiEndpoint, *serialEndpoint;
 LoraEndpoint *loraEndpoint;
 CombineResolvers *resolvers;
 CombineContext *context;
-
 
 void bootstrap() {
   EEPROM.begin(EEPROM_SIZE);
@@ -54,15 +56,19 @@ void bootstrap() {
   entryPort.begin(rpiBaudRate, SERIAL_8N1, SG_MPU_RX, SG_MPU_TX);
   stationPort.begin(9600, SERIAL_8N1, SG_STATION_RX, SG_STATION_TX);
 
+  // send init message
+  if (bootCount <= 0 || bootCount >= 10000) bootCount = 0;
+  bootCount++;
+
   Serial.println();
   Serial.println("VERSION: " + String(VERSION));
+  Serial.println("BOOT_COUNT: " + String(bootCount));
   Serial.println("PROJECT: " + String(PROJECT));
   Serial.println("UPLOAD_DATE: " + String(UPLOADDATE));
   Serial.println("SG_MODEL: " + String(SG_MODEL));
 #ifdef SG_MODE_DEVELOPMENT
   Serial.println("SG_MODE: DEVELOPMENT");
 #endif
-
 }
 
 #endif
