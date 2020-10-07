@@ -23,6 +23,9 @@
 #include "domain/sensor/context.h"
 #include "domain/station/context.h"
 
+// temporary
+#include "domain/p_station/context.h"
+
 #ifndef SG_MCU_COMBINE_CONTEXT_H
 #define SG_MCU_COMBINE_CONTEXT_H
 
@@ -52,6 +55,7 @@ public:
 
   StationContext *station;
   SensorContext *sensor;
+  PStationContext *pstation;
 
   CombineContext();
 };
@@ -78,8 +82,9 @@ CombineContext::CombineContext() {
   sequenceRange = new SequenceRangeContext;
   sequencePar = new SequenceParContext;
 
-  station = new StationContext;
+//  station = new StationContext;
   sensor = new SensorContext;
+  pstation = new PStationContext;
 }
 
 #endif //SG_MCU_COMBINECONTEXT_H

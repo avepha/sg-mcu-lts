@@ -79,6 +79,8 @@ public:
     return sch;
   }
 
+  virtual void initModel() {}
+
 protected:
   uint16_t INIT_ADDR, WRITE_OP_ADDR, SCHEMA_ADDR;
   int writeOpTime;

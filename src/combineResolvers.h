@@ -34,6 +34,7 @@
 #include "domain/sensor/resolvers.h"
 
 #include "domain/notification/resolvers.h"
+#include "domain/p_station/resolvers.h"
 
 class CombineResolvers {
 public:
@@ -183,6 +184,9 @@ void CombineResolvers::CombineQuery() {
   auto *stations = new query_stations;
   queryMap[stations->getName()] = stations;
 
+  auto *pstations = new query_pstations;
+  queryMap[pstations->getName()] = pstations;
+
   auto *station = new query_station;
   queryMap[station->getName()] = station;
 
@@ -264,6 +268,12 @@ void CombineResolvers::CombineMutation() {
 
   auto *notification_ack = new mutation_notification_ack;
   mutationMap[notification_ack->getName()] = notification_ack;
+
+  auto *pstation_remove = new mutation_pstation_remove;
+  mutationMap[pstation_remove->getName()] = pstation_remove;
+
+  auto *pstation_add = new mutation_pstation_add;
+  mutationMap[pstation_add->getName()] = pstation_add;
 
 
 }
