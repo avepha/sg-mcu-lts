@@ -30,6 +30,10 @@ public:
     vStations.push_back(station);
   }
 
+  void removeAllStations() {
+    vStations.clear();
+  }
+
   bool Callback() override {
     switch (state) {
       case WAITING_RESPONSE: {
@@ -204,6 +208,11 @@ private:
 
   PModbusTask() : Task(0, TASK_FOREVER, &backgroundScheduler, false) {
     setInterval(intervalTime);
+  }
+
+  ~PModbusTask() {
+    disable();
+    vStations.clear();
   }
 
   uint16_t waitingCycle = 0;

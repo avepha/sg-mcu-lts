@@ -6,7 +6,7 @@
 
 #include "domain/configuration/resolvers.h"
 #include "domain/rtc/resolvers.h"
-#include "domain/nvmemory/resolvers.h"
+#include "domain/low-lv-command/resolvers.h"
 #include "domain/info/resolvers.h"
 
 #include "domain/rtc/resolvers.h"
@@ -184,11 +184,17 @@ void CombineResolvers::CombineQuery() {
   auto *stations = new query_stations;
   queryMap[stations->getName()] = stations;
 
-  auto *pstations = new query_pstations;
-  queryMap[pstations->getName()] = pstations;
+  auto *station_data = new query_station_data;
+  queryMap[station_data->getName()] = station_data;
 
   auto *station = new query_station;
   queryMap[station->getName()] = station;
+
+  auto *pstation = new query_pstation;
+  queryMap[pstation->getName()] = pstation;
+
+  auto *pstations = new query_pstations;
+  queryMap[pstations->getName()] = pstations;
 
   auto *sensor = new query_sensor;
   queryMap[sensor->getName()] = sensor;
@@ -230,6 +236,9 @@ void CombineResolvers::CombineMutation() {
   auto *clear_nvmemory = new mutation_clear_nvmemory;
   mutationMap[clear_nvmemory->getName()] = clear_nvmemory;
 
+  auto *restart = new mutation_restart;
+  mutationMap[restart->getName()] = restart;
+
   auto *precondition_criteria_save = new mutation_precondition_criteria_save;
   mutationMap[precondition_criteria_save->getName()] = precondition_criteria_save;
 
@@ -269,11 +278,11 @@ void CombineResolvers::CombineMutation() {
   auto *notification_ack = new mutation_notification_ack;
   mutationMap[notification_ack->getName()] = notification_ack;
 
-  auto *pstation_remove = new mutation_pstation_remove;
-  mutationMap[pstation_remove->getName()] = pstation_remove;
+  auto *station_data_remove = new mutation_station_data_remove;
+  mutationMap[station_data_remove->getName()] = station_data_remove;
 
-  auto *pstation_add = new mutation_pstation_add;
-  mutationMap[pstation_add->getName()] = pstation_add;
+  auto *station_data_add = new mutation_station_data_add;
+  mutationMap[station_data_add->getName()] = station_data_add;
 
 
 }

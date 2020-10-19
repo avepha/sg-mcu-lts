@@ -52,5 +52,4 @@ public:
   };
 };
 
-
 #endif //SG_MCU_STATION_RESOLVERS_H

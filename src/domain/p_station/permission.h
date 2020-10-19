@@ -97,4 +97,34 @@ public:
   }
 };
 
+class permission_pstation : public Permission {
+public:
+  explicit permission_pstation() : Permission() {};
+
+  void resolve(JsonObject reqData, CombineContext *context) override {
+    if (reqData["address"].isNull()) {
+      InvalidInputError err("address must not be null");
+      throw err;
+    }
+
+    if (!reqData["address"].is<int>()) {
+      InvalidInputError err("address must be an integer");
+      throw err;
+    }
+
+    byte address = reqData["address"];
+    bool flag = false;
+    std::vector<PStation*> stations = context->pstation->core->getStations();
+    for (auto station: stations) {
+      if (station->getAddress() == address) {
+        flag = true;
+      }
+    }
+    if (!flag) {
+      StationNotFoundError err;
+      throw err;
+    }
+  }
+};
+
 #endif //SG_MCU_PERMISSION_H

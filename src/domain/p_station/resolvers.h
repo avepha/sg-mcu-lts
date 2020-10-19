@@ -5,9 +5,9 @@
 #ifndef SG_MCU_PSTATION_RESOLVERS_H
 #define SG_MCU_PSTATION_RESOLVERS_H
 
-class query_pstations : public Query {
+class query_station_data : public Query {
 public:
-  explicit query_pstations() : Query("pstations") {};
+  explicit query_station_data() : Query("station_data") {};
 
   DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(1024);
@@ -27,9 +27,56 @@ public:
   }
 };
 
-class mutation_pstation_remove : public Mutation {
+class query_pstations : public Query {
 public:
-  explicit mutation_pstation_remove() : Mutation("pstation_remove", new permission_pstation_remove) {};
+  explicit query_pstations() : Query("pstations") {};
+
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    std::vector<PStation*> stations = context->pstation->core->getStations();
+    DynamicJsonDocument data(1024);
+    for (int i = 0 ; i < stations.size(); i++) {
+      JsonObject stationObject = data.createNestedObject();
+      stationObject["type"] = PStationTypeEnumToString(stations[i]->getType());
+      stationObject["address"] = stations[i]->getAddress();
+      stationObject["lastSeen"] = stations[i]->getLastSeen();
+      stationObject["available"] = stations[i]->isAvailable();
+    }
+    return data;
+  }
+};
+
+class query_pstation : public Query {
+public:
+  explicit query_pstation() : Query("pstation", new permission_pstation) {};
+
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    std::vector<PStation*> stations = context->pstation->core->getStations();
+    uint8_t address = reqData["address"];
+
+    DynamicJsonDocument data(1024);
+    for(auto station: stations) {
+      if (station->getAddress() == address) {
+        data["type"] = PStationTypeEnumToString(station->getType());
+        data["address"] = station->getAddress();
+        data["lastSeen"] = station->getLastSeen();
+        data["available"] = station->isAvailable();
+        JsonArray sensors = data.createNestedArray("sensors");
+        for (auto sensorId : station->getSensorIds()) {
+          JsonObject sensor = sensors.createNestedObject();
+          sensor["id"] = sensorId;
+          sensor["isValid"] = station->getSensorMap()[sensorId]->isValid();
+          sensor["value"] = (float)station->getSensorMap()[sensorId]->getValue();
+        }
+        break;
+      }
+    }
+    return data;
+  }
+};
+
+class mutation_station_data_remove : public Mutation {
+public:
+  explicit mutation_station_data_remove() : Mutation("station_data_remove", new permission_pstation_remove) {};
 
   DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     uint8_t address = reqData["address"];
@@ -67,9 +114,9 @@ public:
   }
 };
 
-class mutation_pstation_add : public Mutation {
+class mutation_station_data_add : public Mutation {
 public:
-  explicit mutation_pstation_add() : Mutation("pstation_add", new permission_pstation_add) {};
+  explicit mutation_station_data_add() : Mutation("station_data_add", new permission_pstation_add) {};
 
   DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     uint8_t address = reqData["address"];
