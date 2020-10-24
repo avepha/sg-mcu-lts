@@ -1,0 +1,5 @@
+{
+  "topic": "station_data",
+  "method": "query",
+  "reqId": "req-1"
+}

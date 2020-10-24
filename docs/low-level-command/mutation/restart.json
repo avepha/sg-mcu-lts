@@ -1,0 +1,5 @@
+{
+  "topic": "clear_nvmemory",
+  "method": "mutation",
+  "reqId": "req-1"
+}

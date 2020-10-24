@@ -1,0 +1,15 @@
+{
+  "topic": "station_data_add",
+  "method": "mutation",
+  "reqId": "req-1",
+  "data": {
+    "type": "solution",
+    "enable": false,
+    "address": 16,
+    "sensors": [
+      11,
+      12,
+      13
+    ]
+  }
+}
