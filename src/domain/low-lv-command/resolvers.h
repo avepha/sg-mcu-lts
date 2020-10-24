@@ -5,8 +5,8 @@
 #include "../resolvers.h"
 #include "util/util.h"
 
-#ifndef SG_MCU_MEMORY_RESOLVERS_H
-#define SG_MCU_MEMORY_RESOLVERS_H
+#ifndef SG_MCU_LOW_LEVEL_COMMAND_H
+#define SG_MCU_LOW_LEVEL_COMMAND_H
 
 // @mutation: date_save
 class mutation_clear_nvmemory : public Mutation {
@@ -26,4 +26,17 @@ public:
   };
 };
 
-#endif //SG_MCU_RESOLVERS_H
+class mutation_restart : public Mutation {
+public:
+  explicit mutation_restart() : Mutation("restart") {};
+
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    bootCount = 0;
+    ESP.restart();
+    DynamicJsonDocument data(64);
+    data["status"] = "success";
+    return data;
+  };
+};
+
+#endif //SG_MCU_LOW_LEVEL_COMMAND_H

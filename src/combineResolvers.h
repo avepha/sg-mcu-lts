@@ -6,7 +6,7 @@
 
 #include "domain/configuration/resolvers.h"
 #include "domain/rtc/resolvers.h"
-#include "domain/nvmemory/resolvers.h"
+#include "domain/low-lv-command/resolvers.h"
 #include "domain/info/resolvers.h"
 
 #include "domain/rtc/resolvers.h"
@@ -30,10 +30,10 @@
 #include "domain/precondition/timer/resolvers.h"
 #include "domain/precondition/range/resolvers.h"
 
-#include "domain/station/resolvers.h"
 #include "domain/sensor/resolvers.h"
 
 #include "domain/notification/resolvers.h"
+#include "domain/station/resolvers.h"
 
 class CombineResolvers {
 public:
@@ -180,11 +180,14 @@ void CombineResolvers::CombineQuery() {
   auto *configuration = new query_configuration;
   queryMap[configuration->getName()] = configuration;
 
-  auto *stations = new query_stations;
-  queryMap[stations->getName()] = stations;
+  auto *station_data = new query_station_data;
+  queryMap[station_data->getName()] = station_data;
 
   auto *station = new query_station;
   queryMap[station->getName()] = station;
+
+  auto *stations = new query_stations;
+  queryMap[stations->getName()] = stations;
 
   auto *sensor = new query_sensor;
   queryMap[sensor->getName()] = sensor;
@@ -226,6 +229,9 @@ void CombineResolvers::CombineMutation() {
   auto *clear_nvmemory = new mutation_clear_nvmemory;
   mutationMap[clear_nvmemory->getName()] = clear_nvmemory;
 
+  auto *restart = new mutation_restart;
+  mutationMap[restart->getName()] = restart;
+
   auto *precondition_criteria_save = new mutation_precondition_criteria_save;
   mutationMap[precondition_criteria_save->getName()] = precondition_criteria_save;
 
@@ -264,6 +270,12 @@ void CombineResolvers::CombineMutation() {
 
   auto *notification_ack = new mutation_notification_ack;
   mutationMap[notification_ack->getName()] = notification_ack;
+
+  auto *station_data_remove = new mutation_station_data_remove;
+  mutationMap[station_data_remove->getName()] = station_data_remove;
+
+  auto *station_data_add = new mutation_station_data_add;
+  mutationMap[station_data_add->getName()] = station_data_add;
 
 
 }
