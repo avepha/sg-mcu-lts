@@ -1,13 +1,13 @@
-#include "./core.h"
 #include "./model.h"
+#include "./core.h"
 
 #ifndef SG_MCU_STATION_CONTEXT_H
 #define SG_MCU_STATION_CONTEXT_H
 
 class StationContext {
 public:
-  StationCore *core;
   StationModel *model;
+  StationCore *core;
   StationContext();
 };
 

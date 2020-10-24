@@ -30,11 +30,10 @@
 #include "domain/precondition/timer/resolvers.h"
 #include "domain/precondition/range/resolvers.h"
 
-#include "domain/station/resolvers.h"
 #include "domain/sensor/resolvers.h"
 
 #include "domain/notification/resolvers.h"
-#include "domain/p_station/resolvers.h"
+#include "domain/station/resolvers.h"
 
 class CombineResolvers {
 public:
@@ -181,20 +180,14 @@ void CombineResolvers::CombineQuery() {
   auto *configuration = new query_configuration;
   queryMap[configuration->getName()] = configuration;
 
-  auto *stations = new query_stations;
-  queryMap[stations->getName()] = stations;
-
   auto *station_data = new query_station_data;
   queryMap[station_data->getName()] = station_data;
 
   auto *station = new query_station;
   queryMap[station->getName()] = station;
 
-  auto *pstation = new query_pstation;
-  queryMap[pstation->getName()] = pstation;
-
-  auto *pstations = new query_pstations;
-  queryMap[pstations->getName()] = pstations;
+  auto *stations = new query_stations;
+  queryMap[stations->getName()] = stations;
 
   auto *sensor = new query_sensor;
   queryMap[sensor->getName()] = sensor;

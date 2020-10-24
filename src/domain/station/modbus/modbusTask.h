@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "./modbusPacket.h"
-#include "domain/station/util/resolveStationTypeEnum.h"
+#include "../util/resolveStationTypeEnum.h"
 #include "./util/generateModbusResponse.h"
 #include "logger/log.h"
 
@@ -28,6 +28,10 @@ public:
 
   void registerStation(Station *station) {
     vStations.push_back(station);
+  }
+
+  void removeAllStations() {
+    vStations.clear();
   }
 
   bool Callback() override {
@@ -115,6 +119,16 @@ public:
           return true;
         }
 
+        // detect all enable=false loop
+        uint8_t checkingLoopIndex = currentStationIndex;
+        while (!vStations[checkingLoopIndex]->getEnable()) {
+          checkingLoopIndex = checkingLoopIndex >= vStations.size() - 1 ? 0 : checkingLoopIndex + 1;
+          if (checkingLoopIndex == currentStationIndex) {
+            return true; // all enable = false;
+          }
+        }
+        currentStationIndex = checkingLoopIndex; // found enable loop
+
         ModbusPacket *requestPacket = vStations[currentStationIndex]->getRequest();
         std::vector<byte> requestByte = requestPacket->getVectorPacket();
 
@@ -194,6 +208,11 @@ private:
 
   ModbusTask() : Task(0, TASK_FOREVER, &backgroundScheduler, false) {
     setInterval(intervalTime);
+  }
+
+  ~ModbusTask() {
+    disable();
+    vStations.clear();
   }
 
   uint16_t waitingCycle = 0;

@@ -7,7 +7,7 @@ void initModel(CombineContext *context) {
 
   ConfigurationSchema configurationSchema = context->config->model->get();
   if (configurationSchema.isPresetInit == 0) {
-    context->pstation->model->initModel();
+    context->station->model->initModel();
     configurationSchema.isPresetInit = true;
     context->config->model->save(configurationSchema);
     delay(100);
