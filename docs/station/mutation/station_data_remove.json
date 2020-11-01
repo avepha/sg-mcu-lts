@@ -1,5 +1,8 @@
 {
-  "topic": "restart",
+  "topic": "station_data_remove",
   "method": "mutation",
-  "reqId": "req-1"
+  "reqId": "req-1",
+  "data": {
+    "address": 1
+  }
 }

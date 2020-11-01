@@ -274,7 +274,7 @@ void CombineResolvers::CombineMutation() {
   auto *station_data_remove = new mutation_station_data_remove;
   mutationMap[station_data_remove->getName()] = station_data_remove;
 
-  auto *station_data_add = new mutation_station_data_add;
+  auto *station_data_add = new mutation_station_data_save;
   mutationMap[station_data_add->getName()] = station_data_add;
 
 

@@ -12,9 +12,8 @@ public:
   DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     DynamicJsonDocument data(1024);
     StationSchema stationSchema = context->station->model->get();
-    JsonArray stations = data.createNestedArray();
     for (int i = 0; i < stationSchema.stationSize; i++) {
-      JsonObject object = stations.createNestedObject();
+      JsonObject object = data.createNestedObject();
       object["type"] = StationTypeEnumToString(stationSchema.stations[i].type);
       object["address"] = stationSchema.stations[i].address;
       object["enable"] = stationSchema.stations[i].enable;
@@ -99,9 +98,8 @@ public:
 
     DynamicJsonDocument data(1024);
     StationSchema newModel = context->station->model->get();
-    JsonArray stations = data.createNestedArray();
     for (int i = 0; i < newModel.stationSize; i++) {
-      JsonObject object = stations.createNestedObject();
+      JsonObject object = data.createNestedObject();
       object["type"] = StationTypeEnumToString(newModel.stations[i].type);
       object["address"] = newModel.stations[i].address;
       object["enable"] = newModel.stations[i].enable;
@@ -114,9 +112,9 @@ public:
   }
 };
 
-class mutation_station_data_add : public Mutation {
+class mutation_station_data_save : public Mutation {
 public:
-  explicit mutation_station_data_add() : Mutation("station_data_add", new permission_station_add) {};
+  explicit mutation_station_data_save() : Mutation("station_data_save", new permission_station_add) {};
 
   DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
     uint8_t address = reqData["address"];
@@ -144,9 +142,9 @@ public:
 
     DynamicJsonDocument data(1024);
     StationSchema newModel = context->station->model->get();
-    JsonArray stations = data.createNestedArray();
+
     for (int i = 0; i < newModel.stationSize; i++) {
-      JsonObject object = stations.createNestedObject();
+      JsonObject object = data.createNestedObject();
       object["type"] = StationTypeEnumToString(newModel.stations[i].type);
       object["address"] = newModel.stations[i].address;
       object["enable"] = newModel.stations[i].enable;
