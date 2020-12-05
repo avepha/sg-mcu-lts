@@ -14,7 +14,7 @@ public:
   explicit mutation_clear_nvmemory() : Mutation("clear_nvmemory") {};
 
   DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
-    for(int i = 0 ; i < EEPROM_SIZE; i++) {
+    for (int i = 0; i < EEPROM_SIZE; i++) {
       EEPROM.put(i, 255);
     }
     EEPROM.commit();
@@ -34,6 +34,23 @@ public:
     bootCount = 0;
     ESP.restart();
     DynamicJsonDocument data(64);
+    data["status"] = "success";
+    return data;
+  };
+};
+
+
+class query_timeout : public Query {
+public:
+  explicit query_timeout() : Query("timeout") {};
+
+  DynamicJsonDocument resolve(JsonObject reqData, CombineContext *context) override {
+    DynamicJsonDocument data(64);
+    int delayInMs = 2000;
+    if (!reqData["delay"].isNull()) {
+      delayInMs = reqData["delay"];
+    }
+    delay(delayInMs);
     data["status"] = "success";
     return data;
   };

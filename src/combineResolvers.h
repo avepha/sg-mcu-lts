@@ -198,6 +198,9 @@ void CombineResolvers::CombineQuery() {
   auto *sequence_par = new query_sequence_par;
   queryMap[sequence_par->getName()] = sequence_par;
 
+  auto *timeout = new query_timeout;
+  queryMap[timeout->getName()] = timeout;
+
 
 }
 
