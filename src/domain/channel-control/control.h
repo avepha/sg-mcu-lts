@@ -4,6 +4,7 @@
 #include "./controlTypeEnum.h"
 #include "domain/channel-control/state.h"
 #include "domain/precondition/precondition.h"
+#include "domain/p_gpio/gpioTask.h"
 
 #ifndef SG_MCU_CONTROL_H
 #define SG_MCU_CONTROL_H
@@ -17,13 +18,14 @@ public:
       type(type)
       {
         taskName = (ChannelControlEnumToShortString(type) + String(channel)).c_str();
-        gpioCore = GpioCore::instance();
+        gpioTask = new PGpioTask(channel);
       }
 
   ~Control() {
     for (int i = 0; i < precSize; i++) {
       delete preconditions[i];
     }
+    delete gpioTask;
   };
 
   virtual bool controlTask(bool isPrecPass) {
@@ -32,6 +34,7 @@ public:
 
   bool Callback() override {
     if (deactivationFlag) {
+      gpioTask->low();
       delete this;
       return false;
     }
@@ -74,7 +77,7 @@ public:
 
 protected:
   bool deactivationFlag = false;
-  GpioCore *gpioCore = nullptr;
+  PGpioTask *gpioTask = nullptr;
   std::string taskName;
 
 private:

@@ -4,6 +4,7 @@
 
 #include "domain/precondition/preconditionFactory.h"
 #include "domain/channel-control/controlFactory.h"
+#include "domain/p_gpio/gpioTask.h"
 
 #ifndef SG_MCU_CHANNEL_CORE_H
 #define SG_MCU_CHANNEL_CORE_H
@@ -17,7 +18,6 @@ public:
   }
 
   ChannelCore() {
-    gpioCore = GpioCore::instance();
     for (int i = 0; i < sizeof(CHANNEL_GPIO_MAP) / sizeof(CHANNEL_GPIO_MAP[0]); i++) {
       pinMode(CHANNEL_GPIO_MAP[i], OUTPUT);
     }
@@ -35,7 +35,7 @@ public:
     }
 
     if (!channelData.isActive) {
-      gpioCore->removeGpioTaskByChannel(channel);
+        PGpioTask::setState(channel, LOW);
       return;
     }
 
@@ -43,10 +43,10 @@ public:
       std::string manualTaskName = String("CHMNL" + String(channel)).c_str();
       switch (channelData.control.value) {
         case 1:
-          gpioCore->createGpioTaskForever(manualTaskName, channel);
+          PGpioTask::setState(channel, HIGH);
           break;
         default:
-          gpioCore->removeGpioTaskByUid(manualTaskName);
+          PGpioTask::setState(channel, LOW);
           break;
       }
 
@@ -67,7 +67,7 @@ public:
       channelControl[channel]->enableDelayed();
     }
     else {
-      gpioCore->removeGpioTaskByChannel(channel);
+      PGpioTask::setState(channel, LOW);
     }
   }
 
@@ -92,7 +92,6 @@ public:
 private:
   static ChannelCore *s_instance;
   std::array<Control *, 8> channelControl{};
-  GpioCore *gpioCore;
 };
 
 ChannelCore *ChannelCore::s_instance = nullptr;

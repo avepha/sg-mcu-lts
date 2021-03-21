@@ -59,7 +59,8 @@ public:
       // set state to zero
       Log::debug("ch-criteria", "not-pass-prec " + String(channel));
       state.isReachThreshold = false;
-      gpioCore->removeGpioTaskByChannel(channel);
+      gpioTask->low();
+
       return true; // stop if precondition is not pass
     }
 
@@ -87,7 +88,7 @@ public:
 
           if (state.isReachThreshold) {
             // go to working state
-            gpioCore->createGpioTaskTimeout(taskName, channel, criteria.timing.workingTimeInSecond * 1000);
+            gpioTask->high();
             state.criteriaState = CriteriaState::CRITERIA_STATE_WORKING;
           }
           else {
@@ -103,7 +104,7 @@ public:
           }
 
           // go to waiting state
-          gpioCore->removeGpioTaskByChannel(channel);
+          gpioTask->low();
           timeStamp = millis();
           state.criteriaState = CriteriaState::CRITERIA_STATE_WAITING;
         }
@@ -111,10 +112,10 @@ public:
     }
     else { // if timing is disable
       if (state.isReachThreshold) {
-        gpioCore->createGpioTaskForever(taskName, channel);
+        gpioTask->high();
       }
       else {
-        gpioCore->removeGpioTaskByChannel(channel);
+        gpioTask->low();
       }
     }
 

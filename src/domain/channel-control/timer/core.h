@@ -94,10 +94,10 @@ public:
         }
 
         if (flag) {
-          gpioCore->createGpioTaskForever(taskName, channel);
+          gpioTask->high();
         }
         else {
-          gpioCore->removeGpioTaskByChannel(channel);
+          gpioTask->low();
         }
         break;
       }
@@ -113,7 +113,6 @@ public:
             flag = true;
             state.currentWorkingTimerInSeconds[0] = timer.timePair[i].start * 60; // start time
             state.currentWorkingTimerInSeconds[1] = timer.timePair[i].workingInSecond;
-            workingTimeout = timer.timePair[i].workingInSecond * 1000; // for running task
           }
 
           // if isReachThreshold = false, store next coming timer in state.nextIntervalTimerInSeconds
@@ -124,7 +123,10 @@ public:
         }
 
         if (flag) {
-          gpioCore->createGpioTaskTimeout(taskName, channel, workingTimeout);
+          gpioTask->high();
+        }
+        else {
+          gpioTask->low();
         }
       }
     }

@@ -60,7 +60,7 @@ public:
       // set state to zero
       Log::debug("ch-par", "not-pass-prec " + String(channel));
       state.isReachThreshold = false;
-      gpioCore->removeGpioTaskByChannel(channel);
+      gpioTask->low();
       return true; // stop if precondition is not pass
     }
 
@@ -78,7 +78,7 @@ public:
         state.currentParSumInKJ += (state.sensorValue / 1000);
         state.isReachThreshold = state.currentParSumInKJ >= par.parSumInKJ;
         if (state.isReachThreshold) {
-          gpioTask = gpioCore->createGpioTaskTimeout(taskName, channel, par.timing.workingTimeInSecond * 1000);
+          gpioTask->high();
 
           state.currentParSumInKJ = 0;
           state.parState = ParState::PAR_STATE_WORKING;
@@ -88,6 +88,7 @@ public:
       case ParState::PAR_STATE_WORKING: {
         state.currentWorkingTimeInSecond = (millis() - timestamp) / 1000;
         if (state.currentWorkingTimeInSecond >= par.timing.workingTimeInSecond) {
+          gpioTask->low();
           state.parState = ParState::PAR_STATE_ACCUMULATING;
         }
       }
@@ -101,7 +102,6 @@ private:
   ParState state;
   ParSchema::Par par;
   SensorPool *sensorPool;
-  GpioTask *gpioTask = nullptr;
 };
 
 #endif //SG_MCU_CORE_H
