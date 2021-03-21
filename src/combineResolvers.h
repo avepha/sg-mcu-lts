@@ -10,7 +10,7 @@
 #include "domain/info/resolvers.h"
 
 #include "domain/rtc/resolvers.h"
-#include "domain/gpio/resolvers.h"
+#include "domain/p_gpio/resolvers.h"
 
 #include "domain/control/resolvers.h"
 

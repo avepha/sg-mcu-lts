@@ -58,7 +58,7 @@ public:
       // set state to zero
       Log::debug("ch-range", "not-pass-prec " + String(channel));
       state.isReachThreshold = false;
-      gpioCore->removeGpioTaskByChannel(channel);
+      gpioTask->low();
       return true; // stop if precondition is not pass
     }
 
@@ -83,7 +83,7 @@ public:
 
           if (state.isReachThreshold) {
             // go to working state
-            gpioCore->createGpioTaskTimeout(taskName, channel, range.timing.workingTimeInSecond * 1000);
+            gpioTask->high();
             state.rangeState = RangeState::RANGE_STATE_WORKING;
           }
 
@@ -101,7 +101,7 @@ public:
             return true;
           }
 
-          gpioCore->removeGpioTaskByChannel(channel);
+          gpioTask->low();
           timeStamp = millis();
           state.rangeState = RangeState::RANGE_STATE_WAITING;
         }
@@ -109,10 +109,10 @@ public:
     }
     else {
       if (state.isReachThreshold) {
-        gpioCore->createGpioTaskForever(taskName, channel);
+        gpioTask->high();
       }
       else {
-        gpioCore->removeGpioTaskByChannel(channel);
+        gpioTask->low();
       }
     }
 
