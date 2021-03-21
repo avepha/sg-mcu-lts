@@ -15,7 +15,7 @@ public:
   uint8_t state = LOW;
 
   static uint8_t setState(uint8_t ch, uint8_t state) {
-    digitalWrite(ch, state);
+    digitalWrite(CHANNEL_GPIO_MAP[ch], state);
     GpioState::instance()->setState(ch, state);
     Log::info("gpio", "gpio channel " + String(ch) + " -> " + String(state == HIGH ? "HIGH" : "LOW"));
   }
@@ -29,7 +29,7 @@ public:
 
   void high() {
     state = HIGH;
-    digitalWrite(channel, state);
+    digitalWrite(CHANNEL_GPIO_MAP[channel], state);
     gpioState->setState(channel, state);
     Log::info("gpio", "gpio channel " + String(channel) + " -> HIGH");
 
@@ -37,7 +37,7 @@ public:
 
   void low() {
     state = LOW;
-    digitalWrite(channel, state);
+    digitalWrite(CHANNEL_GPIO_MAP[channel], state);
     gpioState->setState(channel, state);
     Log::info("gpio", "gpio channel " + String(channel) + " -> LOW");
   }
