@@ -16,7 +16,7 @@ const int CHANNEL_GPIO_MAP[8] = {
     26, //ch 4
     27, //ch 5
     13, //ch 6
-    24, //ch 7 should be pin 2
+    2, //ch 7 should be pin 2
     23, //ch 8
 };
 
