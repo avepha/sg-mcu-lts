@@ -1,4 +1,6 @@
 ## Latest version 2.0.2
+- Fixed unexpected gpio output
+- Remove notification feature
 
 ## Usage
 * Unit test
