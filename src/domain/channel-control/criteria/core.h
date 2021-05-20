@@ -67,6 +67,7 @@ public:
     if (sensorPool->getAvailableStationBySensorId(criteria.sensor) <= 0) {
       Log::warn("ch-criteria", "No station available." + String(channel));
       state.sensorValue = -1;
+      gpioTask->low();
       return true;
     }
 
@@ -83,6 +84,7 @@ public:
         case CriteriaState::CRITERIA_STATE_WAITING: {
           state.currentWaitingTimeInSecond = (millis() - timeStamp) / 1000;
           if (state.currentWaitingTimeInSecond < criteria.timing.waitingTimeInSecond) {
+            gpioTask->low();
             return true;
           }
 
@@ -100,6 +102,7 @@ public:
         case CriteriaState::CRITERIA_STATE_WORKING: {
           state.currentWorkingTimeInSecond = (millis() - timeStamp) / 1000;
           if (state.currentWorkingTimeInSecond < criteria.timing.workingTimeInSecond) {
+            gpioTask->high();
             return true;
           }
 
