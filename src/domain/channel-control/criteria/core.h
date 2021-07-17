@@ -98,6 +98,7 @@ public:
             state.criteriaState = CriteriaState::CRITERIA_STATE_WAITING;
           }
           timeStamp = millis();
+          return true;
         }
         case CriteriaState::CRITERIA_STATE_WORKING: {
           state.currentWorkingTimeInSecond = (millis() - timeStamp) / 1000;
@@ -110,6 +111,8 @@ public:
           gpioTask->low();
           timeStamp = millis();
           state.criteriaState = CriteriaState::CRITERIA_STATE_WAITING;
+
+          return true;
         }
       }
     }
