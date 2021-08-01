@@ -78,6 +78,7 @@ public:
         case RangeState::RANGE_STATE_WAITING : {
           state.currentWaitingTimeInSecond = (millis() - timeStamp) / 1000;
           if (state.currentWaitingTimeInSecond < range.timing.waitingTimeInSecond) {
+            gpioTask->low();
             return true;
           }
 
@@ -88,10 +89,12 @@ public:
           }
 
           timeStamp = millis();
+          return true;
         }
         case RangeState::RANGE_STATE_WORKING : {
           state.currentWorkingTimeInSecond = (millis() - timeStamp) / 1000;
           if (state.currentWorkingTimeInSecond < range.timing.workingTimeInSecond) {
+            gpioTask->high();
             return true;
           }
 
@@ -104,6 +107,7 @@ public:
           gpioTask->low();
           timeStamp = millis();
           state.rangeState = RangeState::RANGE_STATE_WAITING;
+          return true;
         }
       }
     }
