@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <TaskScheduler.h>
+#include <vector>
 #include "./config.h"
 
 #ifndef SG_MCU_BOOTSTRAP_H
@@ -38,7 +39,8 @@ LoraEndpoint *loraEndpoint;
 CombineResolvers *resolvers;
 CombineContext *context;
 
-void bootstrap() {
+void bootstrap()
+{
   EEPROM.begin(EEPROM_SIZE);
   pinMode(RS485_DIR_PIN, OUTPUT);
   digitalWrite(RS485_DIR_PIN, RS485_RECV_MODE);
@@ -57,7 +59,8 @@ void bootstrap() {
   stationPort.begin(9600, SERIAL_8N1, SG_STATION_RX, SG_STATION_TX);
 
   // send init message
-  if (bootCount <= 0 || bootCount >= 10000) bootCount = 0;
+  if (bootCount <= 0 || bootCount >= 10000)
+    bootCount = 0;
   bootCount++;
 
   Serial.println();
