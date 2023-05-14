@@ -4,24 +4,29 @@
 #ifndef SG_MCU_RTCTASK_H
 #define SG_MCU_RTCTASK_H
 
-class RtcTask : public Task {
+class RtcTask : public Task
+{
 public:
-  RtcTask(RTC_DS1307 *_hwRtc, RTC_Millis *_swRtc) : Task(TASK_SECOND, TASK_FOREVER, &backgroundScheduler, true) {
+  RtcTask(RTC_DS1307 *_hwRtc, RTC_Millis *_swRtc) : Task(TASK_SECOND, TASK_FOREVER, &backgroundScheduler, true)
+  {
     hwRtc = _hwRtc;
     swRtc = _swRtc;
     this->update();
   }
 
-  bool Callback() override {
+  bool Callback() override
+  {
     this->update();
     return true;
   }
 
-  DateTime getNow() {
+  DateTime getNow()
+  {
     return now;
   }
 
-  bool isHwRunning() {
+  bool isHwRunning()
+  {
     return hwRtcStatus;
   }
 
@@ -31,18 +36,20 @@ private:
   DateTime now;
   bool hwRtcStatus = false;
 
-  void update() {
+  void update()
+  {
     hwRtcStatus = hwRtc->isrunning();
 
-    if (hwRtcStatus) {
+    if (hwRtcStatus)
+    {
       now = hwRtc->now();
       swRtc->adjust(now);
     }
-    else {
+    else
+    {
       now = swRtc->now();
     }
   }
 };
 
-
-#endif //SG_MCU_RTCTASK_H
+#endif // SG_MCU_RTCTASK_H

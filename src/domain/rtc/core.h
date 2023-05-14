@@ -5,16 +5,17 @@
 #include "./util/RtcUtil.h"
 #include "logger/log.h"
 
-
 #ifndef SG_MCU_RTC_CORE_H
 #define SG_MCU_RTC_CORE_H
 
-class RtcCore {
+class RtcCore
+{
 public:
   static RTC_DS1307 hwRtc;
   static RTC_Millis swRtc;
 
-  static RtcCore *instance() {
+  static RtcCore *instance()
+  {
     if (!s_instance)
       s_instance = new RtcCore;
     return s_instance;
@@ -38,14 +39,16 @@ private:
 
 RtcCore *RtcCore::s_instance = nullptr;
 
-RtcCore::RtcCore() {
+RtcCore::RtcCore()
+{
   hwRtc.begin();
   swRtc.adjust(DateTime(2019, 01, 01));
   rtcTask = new RtcTask(&hwRtc, &swRtc);
   rtcModel = new RtcModel;
 }
 
-DateTime RtcCore::getDate() {
+DateTime RtcCore::getDate()
+{
   RtcSchema rtcSchema = rtcModel->get();
   DateTime utcDt = rtcTask->getNow();
   TimeSpan tzTimeSpan(rtcSchema.tzOffsetHour * 3600 + rtcSchema.tzOffsetMin * 30);
@@ -54,12 +57,14 @@ DateTime RtcCore::getDate() {
   return utcDt + tzTimeSpan;
 }
 
-DateTime RtcCore::getUtcDate() {
+DateTime RtcCore::getUtcDate()
+{
   Log::trace("rtc", "call func getUtcDate " + DateTimeToIsoString(rtcTask->getNow()));
   return rtcTask->getNow();
 }
 
-DateTime RtcCore::setDate(DateTime dt) {
+DateTime RtcCore::setDate(DateTime dt)
+{
   hwRtc.adjust(dt);
   swRtc.adjust(dt);
 
@@ -67,10 +72,11 @@ DateTime RtcCore::setDate(DateTime dt) {
   return dt;
 }
 
-bool RtcCore::isHwRunning() {
+bool RtcCore::isHwRunning()
+{
   return rtcTask->isHwRunning();
 }
 
 RTC_DS1307 RtcCore::hwRtc;
 RTC_Millis RtcCore::swRtc;
-#endif //SG_MCU_RTC_CORE_H
+#endif // SG_MCU_RTC_CORE_H
