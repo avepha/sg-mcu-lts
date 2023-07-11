@@ -69,6 +69,7 @@ void bootstrap()
   Serial.println("PROJECT: " + String(PROJECT));
   Serial.println("UPLOAD_DATE: " + String(UPLOADDATE));
   Serial.println("SG_MODEL: " + String(SG_MODEL));
+  Serial.println("SERIAL_PIN: " + String(SG_MPU_RX) + " " + String(SG_MPU_TX));
 #ifdef SG_MODE_DEVELOPMENT
   Serial.println("SG_MODE: DEVELOPMENT");
 #endif

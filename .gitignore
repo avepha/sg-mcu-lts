@@ -10,3 +10,4 @@
 /cmake-build-*
 .DS_Store
 .fake
+build
