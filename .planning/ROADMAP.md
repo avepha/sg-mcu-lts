@@ -2,7 +2,7 @@
 
 ## Overview
 
-This roadmap moves the firmware from newline-delimited JSON to a compact binary request/response protocol by locking the wire contract first, making the serial boundary safe under malformed traffic, defining a canonical typed schema, and then proving the design with one real backend-to-firmware operation.
+This roadmap introduces a compact binary request/response protocol alongside the existing newline-delimited JSON path. Phase 1 must deliver a fully working new protocol implementation for one real backend-to-firmware operation while keeping the current JSON communication fully operational and untouched until replacement is explicitly approved.
 
 ## Phases
 
@@ -12,24 +12,29 @@ This roadmap moves the firmware from newline-delimited JSON to a compact binary 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Framing & Runtime Safety** - Establish a safe binary transport boundary with explicit framing, validation, bounds, and retry rules.
+- [ ] **Phase 1: Coexistent Binary Vertical Slice** - Deliver one fully working binary request/response operation end to end while keeping the current JSON communication fully operational.
 - [ ] **Phase 2: Request/Response Envelope** - Standardize the compact envelope used to route, correlate, and report binary operations.
 - [ ] **Phase 3: Typed Schema Contract** - Define the canonical payload schema and evolution rules for future-safe protocol growth.
-- [ ] **Phase 4: First End-to-End Binary Operation** - Prove the protocol with one real backend-to-firmware request/response flow.
+- [ ] **Phase 4: Broader Protocol Rollout** - Expand the new protocol beyond the first proven operation once coexistence is stable and replacement remains explicitly controlled.
 
 ## Phase Details
 
-### Phase 1: Framing & Runtime Safety
-**Goal**: Firmware can safely receive and reject binary traffic over the existing serial boundary without ambiguity or runtime instability.
+### Phase 1: Coexistent Binary Vertical Slice
+**Goal**: Firmware ships a fully working new protocol path for one production-relevant operation while the existing JSON communication continues to work unchanged.
 **Depends on**: Nothing (first phase)
-**Requirements**: TRAN-01, TRAN-02, TRAN-03, RUNT-01, RUNT-02
+**Requirements**: TRAN-01, TRAN-02, TRAN-03, ENVP-01, ENVP-02, ENVP-03, ENVP-04, SCMA-01, SCMA-02, SCMA-03, SCMA-04, RUNT-01, RUNT-02, COMP-01, SLCE-01, SLCE-02
 **Success Criteria** (what must be TRUE):
-  1. A backend client can send framed binary requests and the device can detect exact frame boundaries without relying on newline-delimited JSON.
-  2. Corrupted packets are rejected with integrity failure handling instead of reaching operation handlers.
-  3. Oversize requests or responses fail predictably at defined size limits rather than consuming unbounded memory.
-  4. Malformed frames or payloads are rejected without crashing the firmware or corrupting runtime state.
+  1. A backend client can send one real framed binary request, the device can execute it, and the client can decode the expected typed response successfully.
+  2. The current JSON request/response communication remains fully operational and behaviorally unchanged while the new protocol path is enabled.
+  3. Corrupted, oversize, and malformed binary traffic is rejected safely without crashing the firmware or corrupting runtime state.
+  4. The new protocol path includes explicit framing, bounded payload handling, correlation, versioning, routing, and canonical failure reporting for the delivered operation.
   5. Backend implementers have a defined timeout and retry contract for request handling on the wire.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Define the binary envelope/schema contract and native protocol test harness
+- [ ] 01-02-PLAN.md — Implement framed binary transport and route operation `0x01` through existing info logic
+- [ ] 01-03-PLAN.md — Publish backend wire docs and finish coexistence/malformed regression coverage
 
 ### Phase 2: Request/Response Envelope
 **Goal**: Firmware and backend share a stable compact envelope for versioning, routing, correlation, and canonical failure reporting.
@@ -53,14 +58,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. The canonical schema source is organized so Rust, Go, and TypeScript SDK generation can be added later without redefining the protocol contract.
 **Plans**: TBD
 
-### Phase 4: First End-to-End Binary Operation
-**Goal**: One production-relevant operation works end to end between the new backend and firmware using the new protocol.
+### Phase 4: Broader Protocol Rollout
+**Goal**: Expand the new protocol beyond the first proven operation while preserving the coexistence requirement with the current JSON path.
 **Depends on**: Phase 3
-**Requirements**: SLCE-01, SLCE-02
+**Requirements**: PROT-03
 **Success Criteria** (what must be TRUE):
-  1. The backend can encode one real production-relevant request, send it to firmware, and decode the typed response successfully.
-  2. The firmware can execute that operation through the new protocol path and return the expected success response.
-  3. The backend can detect and handle protocol-level failures for that operation using the new binary contract.
+  1. The team has a defined path to expand the new protocol across the major existing JSON operation families after the first coexistent implementation is proven.
+  2. Additional rollout work preserves backward compatibility with the current JSON communication until replacement is explicitly approved.
+  3. Broader operation coverage builds on the same framing, envelope, and schema rules proven in earlier phases.
 **Plans**: TBD
 
 ## Progress
@@ -70,7 +75,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Framing & Runtime Safety | 0/TBD | Not started | - |
+| 1. Coexistent Binary Vertical Slice | 0/TBD | Not started | - |
 | 2. Request/Response Envelope | 0/TBD | Not started | - |
 | 3. Typed Schema Contract | 0/TBD | Not started | - |
-| 4. First End-to-End Binary Operation | 0/TBD | Not started | - |
+| 4. Broader Protocol Rollout | 0/TBD | Not started | - |
