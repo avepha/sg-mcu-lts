@@ -66,27 +66,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TRAN-01 | Unmapped | Pending |
-| TRAN-02 | Unmapped | Pending |
-| TRAN-03 | Unmapped | Pending |
-| ENVP-01 | Unmapped | Pending |
-| ENVP-02 | Unmapped | Pending |
-| ENVP-03 | Unmapped | Pending |
-| ENVP-04 | Unmapped | Pending |
-| SCMA-01 | Unmapped | Pending |
-| SCMA-02 | Unmapped | Pending |
-| SCMA-03 | Unmapped | Pending |
-| SCMA-04 | Unmapped | Pending |
-| RUNT-01 | Unmapped | Pending |
-| RUNT-02 | Unmapped | Pending |
-| SLCE-01 | Unmapped | Pending |
-| SLCE-02 | Unmapped | Pending |
+| TRAN-01 | Phase 1 | Pending |
+| TRAN-02 | Phase 1 | Pending |
+| TRAN-03 | Phase 1 | Pending |
+| ENVP-01 | Phase 2 | Pending |
+| ENVP-02 | Phase 2 | Pending |
+| ENVP-03 | Phase 2 | Pending |
+| ENVP-04 | Phase 2 | Pending |
+| SCMA-01 | Phase 3 | Pending |
+| SCMA-02 | Phase 3 | Pending |
+| SCMA-03 | Phase 3 | Pending |
+| SCMA-04 | Phase 3 | Pending |
+| RUNT-01 | Phase 1 | Pending |
+| RUNT-02 | Phase 1 | Pending |
+| SLCE-01 | Phase 4 | Pending |
+| SLCE-02 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 15 total
-- Mapped to phases: 0
-- Unmapped: 15 ⚠
+- Mapped to phases: 15
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-15*
-*Last updated: 2026-04-15 after initial definition*
+*Last updated: 2026-04-15 after roadmap creation*
