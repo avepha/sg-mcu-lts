@@ -13,6 +13,8 @@ extern "C" {
 }
 
 #include "protocol/binaryFrame.h"
+#include "protocol/binaryEndpoint.h"
+#include "protocol/binaryRouter.h"
 
 static std::vector<uint8_t> makeInfoQueryRequestBody() {
   std::vector<uint8_t> body(SG_BINARY_ENVELOPE_SIZE, 0);
@@ -135,6 +137,77 @@ void testBinaryFrameMapsUnsupportedVersionAndUnknownOperation() {
       payload.size());
   BinaryFrameDecodeResult badOperation = binaryFrameDecode(binaryFrameEncode(badOperationEnvelope, payload));
   TEST_ASSERT_EQUAL_UINT8(SG_BINARY_STATUS_UNKNOWN_OPERATION, badOperation.status);
+}
+
+void testBinaryEndpointKeepsJsonTrafficOnLegacyPath() {
+  TEST_ASSERT_EQUAL_UINT8(SG_BINARY_TRANSPORT_JSON, binarySelectTransport('{'));
+}
+
+void testBinaryEndpointRoutesSyncBytesToBinaryResponse() {
+  Phase1InfoQueryRequest request = Phase1InfoQueryRequest_init_default;
+  std::vector<uint8_t> requestPayload = binaryEncodeInfoQueryRequestPayload(request);
+  BinaryEnvelope envelope = binaryMakeEnvelope(
+      SG_BINARY_PROTOCOL_VERSION,
+      SG_BINARY_MESSAGE_TYPE_REQUEST,
+      SG_BINARY_OPERATION_INFO_QUERY,
+      0x2222,
+      SG_BINARY_STATUS_OK,
+      requestPayload.size());
+  std::vector<uint8_t> requestFrame = binaryFrameEncode(envelope, requestPayload);
+
+  BinaryInfoSnapshot snapshot = binaryMakeInfoSnapshot(
+      "2.2.4",
+      "v2",
+      Phase1Info_DeviceEnvironment_DEVICE_ENVIRONMENT_DEVELOPMENT);
+  BinaryRouterResult result = binaryRouteFrame(requestFrame, snapshot);
+
+  TEST_ASSERT_EQUAL_UINT8(SG_BINARY_TRANSPORT_BINARY, binarySelectTransport(SG_BINARY_SYNC_1));
+  TEST_ASSERT_EQUAL_UINT8(SG_BINARY_STATUS_OK, result.status);
+  TEST_ASSERT_TRUE(result.responseFrame.size() > 0);
+}
+
+void testBinaryRouterReturnsInfoPayloadFromAdapterSnapshot() {
+  std::vector<uint8_t> requestPayload;
+  BinaryEnvelope requestEnvelope = binaryMakeEnvelope(
+      SG_BINARY_PROTOCOL_VERSION,
+      SG_BINARY_MESSAGE_TYPE_REQUEST,
+      SG_BINARY_OPERATION_INFO_QUERY,
+      0x2223,
+      SG_BINARY_STATUS_OK,
+      requestPayload.size());
+  std::vector<uint8_t> requestFrame = binaryFrameEncode(requestEnvelope, requestPayload);
+
+  BinaryInfoSnapshot snapshot = binaryMakeInfoSnapshot(
+      "2.2.4",
+      "v2_lora",
+      Phase1Info_DeviceEnvironment_DEVICE_ENVIRONMENT_DEVELOPMENT);
+  BinaryRouterResult result = binaryRouteFrame(requestFrame, snapshot);
+  BinaryFrameDecodeResult response = binaryFrameDecode(result.responseFrame);
+
+  TEST_ASSERT_EQUAL_UINT8(SG_BINARY_STATUS_OK, response.status);
+  TEST_ASSERT_EQUAL_UINT16(0x2223, response.envelope.requestId);
+  TEST_ASSERT_EQUAL_UINT8(SG_BINARY_MESSAGE_TYPE_RESPONSE, response.envelope.messageType);
+
+  Phase1InfoQueryResponse payload = Phase1InfoQueryResponse_init_default;
+  TEST_ASSERT_TRUE(binaryDecodeInfoQueryResponsePayload(response.payload, &payload));
+  TEST_ASSERT_EQUAL_STRING("2.2.4", payload.version);
+  TEST_ASSERT_EQUAL_STRING("v2_lora", payload.model);
+  TEST_ASSERT_EQUAL_UINT8(
+      Phase1Info_DeviceEnvironment_DEVICE_ENVIRONMENT_DEVELOPMENT,
+      payload.device_environment);
+}
+
+void testBinaryEndpointRejectsMalformedTrafficWithoutTakingJsonPath() {
+  TEST_ASSERT_EQUAL_UINT8(SG_BINARY_TRANSPORT_DISCARD, binarySelectTransport(0x00));
+
+  BinaryInfoSnapshot snapshot = binaryMakeInfoSnapshot(
+      "2.2.4",
+      "v2",
+      Phase1Info_DeviceEnvironment_DEVICE_ENVIRONMENT_DEVELOPMENT);
+  BinaryRouterResult result = binaryRouteFrame({SG_BINARY_SYNC_1, SG_BINARY_SYNC_2, 0xFF}, snapshot);
+
+  TEST_ASSERT_EQUAL_UINT8(SG_BINARY_STATUS_BAD_FRAME, result.status);
+  TEST_ASSERT_TRUE(result.responseFrame.size() > 0);
 }
 
 #endif

@@ -38,6 +38,10 @@ int main(int argc, char **argv) {
   RUN_TEST(testBinaryFrameRejectsCrcMismatchWithoutPayloadDecode);
   RUN_TEST(testBinaryFrameRejectsOversizeDeclaredBodyLength);
   RUN_TEST(testBinaryFrameMapsUnsupportedVersionAndUnknownOperation);
+  RUN_TEST(testBinaryEndpointKeepsJsonTrafficOnLegacyPath);
+  RUN_TEST(testBinaryEndpointRoutesSyncBytesToBinaryResponse);
+  RUN_TEST(testBinaryRouterReturnsInfoPayloadFromAdapterSnapshot);
+  RUN_TEST(testBinaryEndpointRejectsMalformedTrafficWithoutTakingJsonPath);
 
   return UNITY_END();
 }
