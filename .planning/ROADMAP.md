@@ -75,7 +75,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Coexistent Binary Vertical Slice | 0/TBD | Not started | - |
+| 1. Coexistent Binary Vertical Slice | 0/3 | Planned | - |
 | 2. Request/Response Envelope | 0/TBD | Not started | - |
 | 3. Typed Schema Contract | 0/TBD | Not started | - |
 | 4. Broader Protocol Rollout | 0/TBD | Not started | - |

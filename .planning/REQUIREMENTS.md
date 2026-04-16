@@ -32,6 +32,10 @@ Requirements for the initial protocol milestone.
 - [ ] **RUNT-01**: Firmware defines timeout behavior for request handling and documents retry expectations for the backend
 - [ ] **RUNT-02**: Firmware safely rejects malformed frames and malformed payloads without crashing or corrupting runtime state
 
+### Compatibility
+
+- [ ] **COMP-01**: The new protocol coexists with the current JSON communication, and enabling the new path does not break or change existing JSON behavior before explicit replacement approval
+
 ### Vertical Slice
 
 - [ ] **SLCE-01**: The system implements one real production-relevant request/response operation end to end using the new protocol
@@ -55,7 +59,7 @@ Requirements for the initial protocol milestone.
 
 | Feature | Reason |
 |---------|--------|
-| Backward compatibility with the current JSON backend | A new in-house backend will be built, so migration compatibility is not required |
+| Removing or changing the current JSON communication in the first milestone | The new protocol must ship alongside the existing JSON path for backward compatibility until replacement is explicitly approved |
 | Full replacement of all existing JSON operations in the first milestone | Initial scope is a proving milestone for one real operation, not a complete rollout |
 | Mandatory multi-language SDK generation in the first milestone | The schema should be codegen-ready now, but full SDK delivery would slow the initial protocol proof |
 | Protocol-layer authentication or crypto redesign | Important only if a later threat model requires it; not core to this milestone |
@@ -69,24 +73,25 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TRAN-01 | Phase 1 | Pending |
 | TRAN-02 | Phase 1 | Pending |
 | TRAN-03 | Phase 1 | Pending |
-| ENVP-01 | Phase 2 | Pending |
-| ENVP-02 | Phase 2 | Pending |
-| ENVP-03 | Phase 2 | Pending |
-| ENVP-04 | Phase 2 | Pending |
-| SCMA-01 | Phase 3 | Pending |
-| SCMA-02 | Phase 3 | Pending |
-| SCMA-03 | Phase 3 | Pending |
-| SCMA-04 | Phase 3 | Pending |
+| ENVP-01 | Phase 1 | Pending |
+| ENVP-02 | Phase 1 | Pending |
+| ENVP-03 | Phase 1 | Pending |
+| ENVP-04 | Phase 1 | Pending |
+| SCMA-01 | Phase 1 | Pending |
+| SCMA-02 | Phase 1 | Pending |
+| SCMA-03 | Phase 1 | Pending |
+| SCMA-04 | Phase 1 | Pending |
 | RUNT-01 | Phase 1 | Pending |
 | RUNT-02 | Phase 1 | Pending |
-| SLCE-01 | Phase 4 | Pending |
-| SLCE-02 | Phase 4 | Pending |
+| COMP-01 | Phase 1 | Pending |
+| SLCE-01 | Phase 1 | Pending |
+| SLCE-02 | Phase 1 | Pending |
 
 **Coverage:**
-- v1 requirements: 15 total
-- Mapped to phases: 15
+- v1 requirements: 16 total
+- Mapped to phases: 16
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-15*
-*Last updated: 2026-04-15 after roadmap creation*
+*Last updated: 2026-04-16 after Phase 1 planning coverage was finalized*

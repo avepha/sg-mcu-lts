@@ -13,7 +13,7 @@ Use the local `rtk` wrapper for shell commands in this workspace.
 - `rtk pio test`: run PlatformIO Unity tests from `test/`.
 - `rtk pio device monitor -b 345600`: open the serial monitor with the configured baud rate.
 
-Run commands from the repository root. Do not commit `.pio/` build artifacts.
+Run commands from the repository root. Flashing or uploading firmware to the physical ESP32 is a manual user-owned checkpoint because it requires a sequence of physical button pushes on the device, so upload cannot be assumed as part of the normal automated developer loop. Do not commit `.pio/` build artifacts.
 
 ## Coding Style & Naming Conventions
 Follow the existing C++ style: 2-space indentation, opening braces on the same line, and short inline comments only where logic is not obvious. Keep feature code scoped to its domain directory instead of adding cross-cutting utilities to unrelated modules.
@@ -28,6 +28,7 @@ No formatter or linter is checked in, so consistency with nearby files is the st
 
 ## Testing Guidelines
 Tests use PlatformIO's Unity support. Add new MCU tests under `test/` and register them in `test/test_main.cpp` with `RUN_TEST(...)`. Prefer small hardware-focused tests that validate packet parsing, transport behavior, and domain rules independently where possible.
+Treat firmware upload to the physical ESP32 as a separate manual user-owned checkpoint rather than part of routine automated validation.
 
 ## Commit & Pull Request Guidelines
 Recent history follows short, imperative messages with conventional prefixes when useful, for example `fix(espressif): ...`, `fix: ...`, and `chore: ...`. Keep commits focused on one change.
@@ -39,7 +40,7 @@ Pull requests should describe the target environment (`v1`, `v2`, `v2_dev`, etc.
 
 **SG MCU LTS Protocol Rework**
 
-This project is an ESP32 firmware codebase for a controller device that currently exposes a JSON request/response protocol over its serial transport boundary. The next project milestone is to design and implement a more efficient custom binary protocol for communication with a new in-house backend, starting with one end-to-end request/response operation and expanding from there.
+This project is an ESP32 firmware codebase for a controller device that currently exposes a JSON request/response protocol over its serial transport boundary. The next project milestone is to introduce a more efficient custom binary protocol alongside the existing JSON path, starting with one end-to-end request/response operation while keeping the current JSON communication fully operational until replacement is explicitly approved.
 
 **Core Value:** The firmware must support a compact, reliable, evolvable request/response protocol that is materially better suited to embedded constraints than the current JSON API.
 
@@ -47,9 +48,9 @@ This project is an ESP32 firmware codebase for a controller device that currentl
 
 - **Tech stack**: Must fit the current ESP32 firmware environment in `platformio.ini` and the existing C++/Arduino codebase under `src/` — the protocol design must work within embedded runtime and memory constraints
 - **Brownfield architecture**: The new protocol should integrate with the existing request routing and domain model structure centered in `src/main.cpp`, `src/deviceEndpoint.h`, and `src/combineResolvers.h` — the firmware is not being rewritten from scratch
-- **Initial milestone**: First release only needs at least one production-relevant request/response operation implemented end to end — this is a proving milestone, not a full replacement
+- **Initial milestone**: Phase 1 must deliver a 100% working new protocol implementation for at least one production-relevant request/response operation while the existing JSON communication remains fully operational and untouched
 - **Interoperability**: The protocol should be designed with a schema definition approach that can later support generated types for Rust, Go, and TypeScript — even if code generation is deferred initially
-- **Compatibility**: No backward compatibility requirement with the old JSON backend — this allows protocol and backend decisions to optimize for the new design
+- **Compatibility**: The new protocol must coexist with the current JSON communication for backward compatibility until replacement is explicitly approved
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:codebase/STACK.md -->

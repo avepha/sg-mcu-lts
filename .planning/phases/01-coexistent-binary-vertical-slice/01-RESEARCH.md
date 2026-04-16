@@ -197,14 +197,15 @@ This satisfies `RUNT-01` without pretending the protocol supports long-running o
 
 ## Testing Strategy
 
-Current `test/` coverage is hardware-oriented. Phase 1 needs fast protocol tests that do not depend on attached hardware.
+Current `test/` coverage is hardware-oriented. Phase 1 should move protocol and utility coverage toward isolated standard C++ tests that do not depend on Arduino runtime, board uploads, or attached hardware.
 
 Recommended approach:
 
-1. add a **native PlatformIO test environment** for protocol-only tests
-2. keep frame parsing / encoding in platform-light files that compile under native C++
-3. run native tests for parser, CRC, oversize, malformed, and schema round-trip cases
-4. still run at least one firmware build (`rtk pio run -e v2_dev`) to verify ESP32 compatibility
+1. add a **native PlatformIO test environment** for a dedicated `end-to-end` host-side standard C++ suite
+2. keep frame parsing / encoding and transport discrimination in platform-light files that compile under standard C++ without Arduino runtime
+3. run native tests for parser, CRC, oversize, malformed, schema round-trip, and coexistence classification cases
+4. migrate existing utility/protocol tests toward the host-side suite where feasible instead of growing Arduino-only coverage
+5. still run at least one firmware build (`rtk pio run -e v2_dev`) to verify ESP32 compatibility, but treat that as compile verification rather than the main developer test path
 
 ## Don’t Hand-Roll
 
@@ -230,7 +231,7 @@ Recommended approach:
 | Binary protocol boundary | `src/protocol/binaryProtocol.h`, `src/protocol/binaryFrame.h`, `src/protocol/binaryEndpoint.h`, `src/protocol/binaryRouter.h` | frame validation, CRC, envelope parsing, status mapping, request/response encoding |
 | Typed contract | `schema/binary/phase1_info.proto`, `schema/binary/phase1_info.options`, `src/protocol/schema/*` | request/response payload schema and generated bindings |
 | Domain logic | `src/domain/info/resolvers.h` | actual `info` query data production |
-| Verification/docs | `test/protocol/*`, `docs/protocol/*` | automated checks and backend-facing contract docs |
+| Verification/docs | `test/end-to-end/*`, `docs/protocol/*` | automated checks and backend-facing contract docs |
 
 ## Validation Architecture
 
@@ -246,6 +247,7 @@ Recommended validation contract for execution:
   - unknown operation rejected canonically
   - `info.query` payload round-trips through schema bindings
   - JSON discriminator still routes `{` traffic to the legacy path
+  - tests run without Arduino runtime or board upload as the primary developer loop
 
 ## Planning Implications
 
