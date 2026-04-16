@@ -5,6 +5,8 @@
 
 #include <stdint.h>
 
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -12,8 +14,68 @@
 #include "protocol/binaryFrame.h"
 #include "protocol/binaryRouter.h"
 
-static std::vector<uint8_t> loadFixtureFrame(const char *filePath, const char *heading);
-static std::vector<uint8_t> buildUnknownOperationRequest(uint16_t requestId, uint8_t operationId);
+static std::vector<uint8_t> parseHexBytes(const std::string &hex) {
+  std::vector<uint8_t> bytes;
+  std::stringstream stream(hex);
+  std::string token;
+
+  while (stream >> token) {
+    if (token.size() != 2) {
+      continue;
+    }
+    bytes.push_back(static_cast<uint8_t>(strtoul(token.c_str(), nullptr, 16)));
+  }
+
+  return bytes;
+}
+
+static std::vector<uint8_t> loadFixtureFrame(const char *filePath, const char *heading) {
+  std::ifstream input(filePath);
+  if (!input.is_open()) {
+    return {};
+  }
+
+  std::string line;
+  bool foundHeading = false;
+  bool inCodeBlock = false;
+  std::string hexLine;
+
+  while (std::getline(input, line)) {
+    if (!foundHeading) {
+      if (line == heading) {
+        foundHeading = true;
+      }
+      continue;
+    }
+
+    if (line == "```text") {
+      inCodeBlock = true;
+      continue;
+    }
+
+    if (inCodeBlock && line == "```") {
+      break;
+    }
+
+    if (inCodeBlock && !line.empty()) {
+      hexLine = line;
+      break;
+    }
+  }
+
+  return parseHexBytes(hexLine);
+}
+
+static std::vector<uint8_t> buildUnknownOperationRequest(uint16_t requestId, uint8_t operationId) {
+  BinaryEnvelope envelope = binaryMakeEnvelope(
+      SG_BINARY_PROTOCOL_VERSION,
+      SG_BINARY_MESSAGE_TYPE_REQUEST,
+      operationId,
+      requestId,
+      SG_BINARY_STATUS_OK,
+      0);
+  return binaryFrameEncode(envelope, {});
+}
 
 void testBinaryCoexistenceClassifiesJsonTrafficWithoutBinaryConsumption() {
   TEST_ASSERT_EQUAL_UINT8(SG_BINARY_TRANSPORT_JSON, binarySelectTransport('{'));
