@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <vector>
 
 static constexpr uint8_t SG_BINARY_SYNC_1 = 0xA5;
 static constexpr uint8_t SG_BINARY_SYNC_2 = 0x5A;
@@ -16,6 +17,10 @@ static constexpr size_t SG_BINARY_MAX_PAYLOAD_SIZE = 120;
 static constexpr size_t SG_BINARY_MAX_BODY_SIZE = SG_BINARY_ENVELOPE_SIZE + SG_BINARY_MAX_PAYLOAD_SIZE;
 static constexpr size_t SG_BINARY_MAX_FRAME_SIZE = SG_BINARY_FRAME_SYNC_SIZE + SG_BINARY_FRAME_LENGTH_SIZE +
                                                    SG_BINARY_MAX_BODY_SIZE + SG_BINARY_FRAME_CRC_SIZE;
+static constexpr size_t SG_BINARY_INFO_QUERY_REQUEST_FIXTURE_SIZE = 0;
+static constexpr size_t SG_BINARY_INFO_QUERY_RESPONSE_VERSION_MAX_LENGTH = 32;
+static constexpr size_t SG_BINARY_INFO_QUERY_RESPONSE_MODEL_MAX_LENGTH = 32;
+static constexpr size_t SG_BINARY_INFO_QUERY_RESPONSE_FIXTURE_SIZE = 68;
 
 enum BinaryMessageType : uint8_t {
   SG_BINARY_MESSAGE_TYPE_UNSPECIFIED = 0x00,
@@ -62,6 +67,38 @@ static inline uint16_t binaryProtocolCrc16(const uint8_t *data, size_t length) {
   }
 
   return crc;
+}
+
+static inline size_t binaryProtocolFrameSize(size_t bodyLength) {
+  return SG_BINARY_FRAME_SYNC_SIZE + SG_BINARY_FRAME_LENGTH_SIZE + bodyLength + SG_BINARY_FRAME_CRC_SIZE;
+}
+
+static inline bool binaryProtocolBodyLengthIsValid(size_t bodyLength) {
+  return bodyLength >= SG_BINARY_ENVELOPE_SIZE && bodyLength <= SG_BINARY_MAX_BODY_SIZE;
+}
+
+static inline uint16_t binaryProtocolFrameCrc(const std::vector<uint8_t> &body) {
+  if (body.empty()) {
+    return binaryProtocolCrc16(nullptr, 0);
+  }
+
+  return binaryProtocolCrc16(body.data(), body.size());
+}
+
+static inline bool binaryProtocolVerifyFrame(const std::vector<uint8_t> &body, uint16_t frameCrc) {
+  if (!binaryProtocolBodyLengthIsValid(body.size())) {
+    return false;
+  }
+
+  return binaryProtocolFrameCrc(body) == frameCrc;
+}
+
+static inline size_t binaryProtocolInfoQueryRequestFixtureSize() {
+  return SG_BINARY_INFO_QUERY_REQUEST_FIXTURE_SIZE;
+}
+
+static inline size_t binaryProtocolInfoQueryResponseFixtureSize() {
+  return SG_BINARY_INFO_QUERY_RESPONSE_FIXTURE_SIZE;
 }
 
 #endif // SG_MCU_BINARY_PROTOCOL_H
