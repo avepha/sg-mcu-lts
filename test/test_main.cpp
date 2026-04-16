@@ -34,6 +34,10 @@ int main(int argc, char **argv) {
   RUN_TEST(testBinaryProtocolRejectsCrcMismatch);
   RUN_TEST(testBinaryProtocolRejectsOversizeBodyBeforeDecode);
   RUN_TEST(testBinaryProtocolInfoFixturesFitDeclaredBounds);
+  RUN_TEST(testBinaryFrameRoundTripsInfoQueryRequest);
+  RUN_TEST(testBinaryFrameRejectsCrcMismatchWithoutPayloadDecode);
+  RUN_TEST(testBinaryFrameRejectsOversizeDeclaredBodyLength);
+  RUN_TEST(testBinaryFrameMapsUnsupportedVersionAndUnknownOperation);
 
   return UNITY_END();
 }
