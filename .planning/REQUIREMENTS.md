@@ -9,9 +9,9 @@ Requirements for the initial protocol milestone.
 
 ### Transport
 
-- [ ] **TRAN-01**: Device accepts binary requests using explicit packet framing with unambiguous frame boundaries
-- [ ] **TRAN-02**: Device validates each frame with CRC/FCS and rejects corrupted packets safely
-- [ ] **TRAN-03**: Device enforces bounded request and response frame size limits and fails oversize traffic predictably
+- [x] **TRAN-01**: Device accepts binary requests using explicit packet framing with unambiguous frame boundaries
+- [x] **TRAN-02**: Device validates each frame with CRC/FCS and rejects corrupted packets safely
+- [x] **TRAN-03**: Device enforces bounded request and response frame size limits and fails oversize traffic predictably
 
 ### Envelope
 
@@ -30,15 +30,15 @@ Requirements for the initial protocol milestone.
 ### Runtime
 
 - [ ] **RUNT-01**: Firmware defines timeout behavior for request handling and documents retry expectations for the backend
-- [ ] **RUNT-02**: Firmware safely rejects malformed frames and malformed payloads without crashing or corrupting runtime state
+- [x] **RUNT-02**: Firmware safely rejects malformed frames and malformed payloads without crashing or corrupting runtime state
 
 ### Compatibility
 
-- [ ] **COMP-01**: The new protocol coexists with the current JSON communication, and enabling the new path does not break or change existing JSON behavior before explicit replacement approval
+- [x] **COMP-01**: The new protocol coexists with the current JSON communication, and enabling the new path does not break or change existing JSON behavior before explicit replacement approval
 
 ### Vertical Slice
 
-- [ ] **SLCE-01**: The system implements one real production-relevant request/response operation end to end using the new protocol
+- [x] **SLCE-01**: The system implements one real production-relevant request/response operation end to end using the new protocol
 - [ ] **SLCE-02**: The new in-house backend can encode a request, send it to firmware, decode the response, and handle protocol-level failures for that first operation
 
 ## v2 Requirements
@@ -70,9 +70,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TRAN-01 | Phase 1 | Pending |
-| TRAN-02 | Phase 1 | Pending |
-| TRAN-03 | Phase 1 | Pending |
+| TRAN-01 | Phase 1 | Complete |
+| TRAN-02 | Phase 1 | Complete |
+| TRAN-03 | Phase 1 | Complete |
 | ENVP-01 | Phase 1 | Complete |
 | ENVP-02 | Phase 1 | Complete |
 | ENVP-03 | Phase 1 | Complete |
@@ -82,9 +82,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCMA-03 | Phase 1 | Complete |
 | SCMA-04 | Phase 1 | Complete |
 | RUNT-01 | Phase 1 | Pending |
-| RUNT-02 | Phase 1 | Pending |
-| COMP-01 | Phase 1 | Pending |
-| SLCE-01 | Phase 1 | Pending |
+| RUNT-02 | Phase 1 | Complete |
+| COMP-01 | Phase 1 | Complete |
+| SLCE-01 | Phase 1 | Complete |
 | SLCE-02 | Phase 1 | Pending |
 
 **Coverage:**
