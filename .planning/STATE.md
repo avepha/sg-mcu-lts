@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-04-16T05:31:02.063Z"
+status: verifying
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-04-16T05:36:23.513Z"
 last_activity: 2026-04-16
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
-  percent: 67
+  completed_plans: 3
+  percent: 100
 ---
 
 # Project State
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-04-16)
 
 Phase: 01 (coexistent-binary-vertical-slice) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
-Last activity: 2026-04-16 -- Completed Phase 01 Plan 02
+Status: Phase complete — ready for verification
+Last activity: 2026-04-16
 
 Progress: [███████░░░] 67%
 
@@ -53,6 +53,7 @@ Progress: [███████░░░] 67%
 
 | Phase 01-coexistent-binary-vertical-slice P01 | 4min | 2 tasks | 6 files |
 | Phase 01-coexistent-binary-vertical-slice P02 | 9min | 2 tasks | 8 files |
+| Phase 01-coexistent-binary-vertical-slice P03 | 2min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -70,6 +71,8 @@ Recent decisions affecting current work:
 - [Phase 01]: The binary contract is locked first with a native Unity suite so framing and size drift are caught before firmware transport wiring.
 - [Phase 01-coexistent-binary-vertical-slice]: Transport selection now peeks the first byte so JSON and binary coexist safely on the same serial ports.
 - [Phase 01-coexistent-binary-vertical-slice]: Binary operation 0x01 reuses query_info output through a narrow adapter to keep JSON and binary info responses aligned.
+- [Phase 01]: Published the Phase 1 binary backend contract with a 250 ms timeout, one retry on silence only, and canonical non-retryable protocol failures.
+- [Phase 01]: Native coexistence tests now load markdown wire fixtures from docs/protocol/examples so binary documentation stays synchronized with firmware helpers.
 
 ### Pending Todos
 
@@ -89,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-16T05:31:02.060Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-04-16T05:36:23.510Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None

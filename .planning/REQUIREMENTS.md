@@ -29,7 +29,7 @@ Requirements for the initial protocol milestone.
 
 ### Runtime
 
-- [ ] **RUNT-01**: Firmware defines timeout behavior for request handling and documents retry expectations for the backend
+- [x] **RUNT-01**: Firmware defines timeout behavior for request handling and documents retry expectations for the backend
 - [x] **RUNT-02**: Firmware safely rejects malformed frames and malformed payloads without crashing or corrupting runtime state
 
 ### Compatibility
@@ -39,7 +39,7 @@ Requirements for the initial protocol milestone.
 ### Vertical Slice
 
 - [x] **SLCE-01**: The system implements one real production-relevant request/response operation end to end using the new protocol
-- [ ] **SLCE-02**: The new in-house backend can encode a request, send it to firmware, decode the response, and handle protocol-level failures for that first operation
+- [x] **SLCE-02**: The new in-house backend can encode a request, send it to firmware, decode the response, and handle protocol-level failures for that first operation
 
 ## v2 Requirements
 
@@ -81,11 +81,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCMA-02 | Phase 1 | Complete |
 | SCMA-03 | Phase 1 | Complete |
 | SCMA-04 | Phase 1 | Complete |
-| RUNT-01 | Phase 1 | Pending |
+| RUNT-01 | Phase 1 | Complete |
 | RUNT-02 | Phase 1 | Complete |
 | COMP-01 | Phase 1 | Complete |
 | SLCE-01 | Phase 1 | Complete |
-| SLCE-02 | Phase 1 | Pending |
+| SLCE-02 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 16 total

@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md — Define the binary envelope/schema contract and native protocol test harness
 - [x] 01-02-PLAN.md — Implement framed binary transport and route operation `0x01` through existing info logic
-- [ ] 01-03-PLAN.md — Publish backend wire docs and finish coexistence/malformed regression coverage
+- [x] 01-03-PLAN.md — Publish backend wire docs and finish coexistence/malformed regression coverage
 
 ### Phase 2: Request/Response Envelope
 **Goal**: Firmware and backend share a stable compact envelope for versioning, routing, correlation, and canonical failure reporting.
