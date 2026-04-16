@@ -8,12 +8,16 @@ using namespace std;
 #include "./logger/log.h"
 #include "./logger/event.h"
 
+#include "./protocol/binaryEndpoint.h"
+#include "./protocol/binaryRouter.h"
+
 #include "./domain/notification/notificationManager.h"
 
 #include "./dev/devSimplexStationTask.h"
 
 LoggerTray *loggerTray;
 NotificationTray *notificationTray;
+BinaryEndpoint *rpiBinaryEndpoint, *serialBinaryEndpoint;
 
 void loop1(void *pvParameters);
 
@@ -36,12 +40,42 @@ void setup() {
 
   serialEndpoint = new DeviceEndpoint(&Serial); // for laptop
   rpiEndpoint = new DeviceEndpoint(&entryPort);
+  serialBinaryEndpoint = new BinaryEndpoint(&Serial);
+  rpiBinaryEndpoint = new BinaryEndpoint(&entryPort);
   loraEndpoint = new LoraEndpoint(&stationPort);
   context = new CombineContext();
   resolvers = new CombineResolvers(context);
   initModel(context); // init model for each mode
 
   xTaskCreatePinnedToCore(loop1, "loop1", 4096 * 8, NULL, 1, NULL, COMCORE);
+}
+
+bool handleJsonTraffic(DeviceEndpoint *endpoint, String *requestString) {
+  return endpoint->embrace(requestString);
+}
+
+bool handleBinaryTraffic(BinaryEndpoint *endpoint) {
+  std::vector<uint8_t> requestFrame;
+  if (!endpoint->embrace(&requestFrame)) {
+    return false;
+  }
+
+  BinaryRouterResult result = binaryRouteFrame(requestFrame, context);
+  endpoint->unleash(result.responseFrame);
+  if (result.status != SG_BINARY_STATUS_OK) {
+    Log::warn("binary-router", "Rejected binary request with status " + String(result.status));
+  }
+  return true;
+}
+
+bool discardUnknownTransport(HardwareSerial *serialPort, const String &portName) {
+  if (!serialPort->available()) {
+    return false;
+  }
+
+  uint8_t unknownByte = static_cast<uint8_t>(serialPort->read());
+  Log::warn("transport", portName + " discarded unknown byte " + String(unknownByte, HEX));
+  return true;
 }
 
 void loop1(void *pvParameters) {
@@ -56,8 +90,39 @@ void loop1(void *pvParameters) {
 
   while (true) {
     String requestString;
-    bool isDeviceDataComing = rpiEndpoint->embrace(&requestString);
-    bool isEndpointDataComing = serialEndpoint->embrace(&requestString);
+    uint8_t rpiTransport = binarySelectTransport(entryPort.available() ? entryPort.peek() : -1);
+    uint8_t serialTransport = binarySelectTransport(Serial.available() ? Serial.peek() : -1);
+
+    bool isDeviceDataComing = false;
+    bool isEndpointDataComing = false;
+
+    if (rpiTransport == SG_BINARY_TRANSPORT_BINARY) {
+      if (handleBinaryTraffic(rpiBinaryEndpoint)) {
+        continue;
+      }
+    }
+    else if (rpiTransport == SG_BINARY_TRANSPORT_JSON) {
+      isDeviceDataComing = handleJsonTraffic(rpiEndpoint, &requestString);
+    }
+    else if (rpiTransport == SG_BINARY_TRANSPORT_DISCARD) {
+      if (discardUnknownTransport(&entryPort, "entry")) {
+        continue;
+      }
+    }
+
+    if (serialTransport == SG_BINARY_TRANSPORT_BINARY) {
+      if (handleBinaryTraffic(serialBinaryEndpoint)) {
+        continue;
+      }
+    }
+    else if (serialTransport == SG_BINARY_TRANSPORT_JSON) {
+      isEndpointDataComing = handleJsonTraffic(serialEndpoint, &requestString);
+    }
+    else if (serialTransport == SG_BINARY_TRANSPORT_DISCARD) {
+      if (discardUnknownTransport(&Serial, "serial")) {
+        continue;
+      }
+    }
 
     if (isEndpointDataComing || isDeviceDataComing) {
       Log::trace("device-endpoint", "got request " + requestString);
