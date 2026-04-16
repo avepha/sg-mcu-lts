@@ -1,0 +1,2 @@
+InfoQueryResponse.version max_length:32
+InfoQueryResponse.model max_length:32

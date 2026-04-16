@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sg.binary.phase1;
+
+message InfoQueryRequest {
+  reserved 16 to 31;
+  reserved "legacy_debug", "legacy_trace_id";
+
+  optional uint32 client_capabilities = 1;
+}
+
+enum DeviceEnvironment {
+  DEVICE_ENVIRONMENT_UNSPECIFIED = 0;
+  DEVICE_ENVIRONMENT_PRODUCTION = 1;
+  DEVICE_ENVIRONMENT_DEVELOPMENT = 2;
+}
+
+message InfoQueryResponse {
+  reserved 16 to 31;
+  reserved "legacy_build_label", "legacy_device_name";
+
+  string version = 1;
+  string model = 2;
+  DeviceEnvironment device_environment = 3;
+}
