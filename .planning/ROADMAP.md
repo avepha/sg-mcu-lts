@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Define the binary envelope/schema contract and native protocol test harness
+- [x] 01-01-PLAN.md — Define the binary envelope/schema contract and native protocol test harness
 - [ ] 01-02-PLAN.md — Implement framed binary transport and route operation `0x01` through existing info logic
 - [ ] 01-03-PLAN.md — Publish backend wire docs and finish coexistence/malformed regression coverage
 
@@ -75,7 +75,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Coexistent Binary Vertical Slice | 0/3 | Planned | - |
+| 1. Coexistent Binary Vertical Slice | 1/3 | In Progress | 2026-04-16 |
 | 2. Request/Response Envelope | 0/TBD | Not started | - |
 | 3. Typed Schema Contract | 0/TBD | Not started | - |
 | 4. Broader Protocol Rollout | 0/TBD | Not started | - |

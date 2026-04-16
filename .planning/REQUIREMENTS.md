@@ -15,17 +15,17 @@ Requirements for the initial protocol milestone.
 
 ### Envelope
 
-- [ ] **ENVP-01**: Every request and response includes a protocol version field
-- [ ] **ENVP-02**: Device routes requests using compact numeric operation identifiers instead of JSON topic/method strings
-- [ ] **ENVP-03**: Every request and response includes a small correlation/request ID for matching replies to requests
-- [ ] **ENVP-04**: Device returns canonical machine-readable status and error codes for protocol and operation failures
+- [x] **ENVP-01**: Every request and response includes a protocol version field
+- [x] **ENVP-02**: Device routes requests using compact numeric operation identifiers instead of JSON topic/method strings
+- [x] **ENVP-03**: Every request and response includes a small correlation/request ID for matching replies to requests
+- [x] **ENVP-04**: Device returns canonical machine-readable status and error codes for protocol and operation failures
 
 ### Schema
 
-- [ ] **SCMA-01**: Request and response payloads use typed binary schemas instead of ad hoc byte layouts
-- [ ] **SCMA-02**: The protocol defines additive-only field evolution rules and reserves retired identifiers from reuse
-- [ ] **SCMA-03**: The schema can represent optional/presence semantics where omitted differs from zero, false, or empty
-- [ ] **SCMA-04**: The schema source is structured so Rust, Go, and TypeScript SDK/code generation can be added later
+- [x] **SCMA-01**: Request and response payloads use typed binary schemas instead of ad hoc byte layouts
+- [x] **SCMA-02**: The protocol defines additive-only field evolution rules and reserves retired identifiers from reuse
+- [x] **SCMA-03**: The schema can represent optional/presence semantics where omitted differs from zero, false, or empty
+- [x] **SCMA-04**: The schema source is structured so Rust, Go, and TypeScript SDK/code generation can be added later
 
 ### Runtime
 
@@ -73,14 +73,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TRAN-01 | Phase 1 | Pending |
 | TRAN-02 | Phase 1 | Pending |
 | TRAN-03 | Phase 1 | Pending |
-| ENVP-01 | Phase 1 | Pending |
-| ENVP-02 | Phase 1 | Pending |
-| ENVP-03 | Phase 1 | Pending |
-| ENVP-04 | Phase 1 | Pending |
-| SCMA-01 | Phase 1 | Pending |
-| SCMA-02 | Phase 1 | Pending |
-| SCMA-03 | Phase 1 | Pending |
-| SCMA-04 | Phase 1 | Pending |
+| ENVP-01 | Phase 1 | Complete |
+| ENVP-02 | Phase 1 | Complete |
+| ENVP-03 | Phase 1 | Complete |
+| ENVP-04 | Phase 1 | Complete |
+| SCMA-01 | Phase 1 | Complete |
+| SCMA-02 | Phase 1 | Complete |
+| SCMA-03 | Phase 1 | Complete |
+| SCMA-04 | Phase 1 | Complete |
 | RUNT-01 | Phase 1 | Pending |
 | RUNT-02 | Phase 1 | Pending |
 | COMP-01 | Phase 1 | Pending |
