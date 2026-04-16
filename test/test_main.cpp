@@ -26,6 +26,7 @@ void loop() {
 #include <unity.h>
 
 #include "./end-to-end/test_binary_protocol.cpp"
+#include "./end-to-end/test_binary_coexistence.cpp"
 
 int main(int argc, char **argv) {
   UNITY_BEGIN();
@@ -42,6 +43,10 @@ int main(int argc, char **argv) {
   RUN_TEST(testBinaryEndpointRoutesSyncBytesToBinaryResponse);
   RUN_TEST(testBinaryRouterReturnsInfoPayloadFromAdapterSnapshot);
   RUN_TEST(testBinaryEndpointRejectsMalformedTrafficWithoutTakingJsonPath);
+  RUN_TEST(testBinaryCoexistenceClassifiesJsonTrafficWithoutBinaryConsumption);
+  RUN_TEST(testBinaryCoexistenceClassifiesSyncPrefixedTrafficAsBinary);
+  RUN_TEST(testBinaryCoexistenceRejectsMalformedFramesCanonically);
+  RUN_TEST(testBinaryCoexistenceDocumentationFixturesMatchProtocolHelpers);
 
   return UNITY_END();
 }
